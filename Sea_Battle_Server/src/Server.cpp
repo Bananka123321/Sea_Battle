@@ -1,6 +1,6 @@
 #include "Server.h"
 
-TCPServer::TCPServer(int port, Handler handler) : port(port), serverSocket(-1), handler_(handler) {}
+TCPServer::TCPServer(int port) : port(port), serverSocket(-1), sessionManager_(), handler_(sessionManager_) {}
 
 TCPServer::~TCPServer() {
     stop();
@@ -26,6 +26,7 @@ void TCPServer::stop() {
     }
 }
 
+//Создание сервера прослушивателя 
 bool TCPServer::setupSocket() {
     serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (serverSocket == -1) {
@@ -33,6 +34,9 @@ bool TCPServer::setupSocket() {
         return false;
     }
 
+    //Функция убирающая проблемы с быстрым перезапуском сервера(я не помню в чем там была проблема)
+    //В общем сервер просто как-то долго закрывается и зачищает порты с какими-то
+    //проверками, и эта функция просто в лоб закрывает всё
     int opt = 1;
     if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) { //Forced sestart server
         std::cerr << "setsockopt failed\n";

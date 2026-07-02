@@ -1,0 +1,44 @@
+///Сам по себе файл предназначен для полноценного списка людей, а именно их имён и айди
+///Пока что пусть будет, возможно в будущем можно будет сделать для списка лобби
+
+#pragma once
+
+#include <string>
+#include <QObject>
+#include <unordered_map>
+
+class AppState : public QObject {
+    Q_OBJECT
+
+private:
+    struct User {
+        std::string username;
+        int user_id;
+        std::string token;
+    };
+
+public:
+    AppState();
+
+    const std::unordered_map<int, std::string>& getUsers() const;
+    void setUsers(const std::unordered_map<int, std::string>& newUsers);
+
+    const std::string& getCurrentUsername() const;
+    void setCurrentUsername(const std::string& login);
+
+    const int& getCurrentUserId() const;
+    void setCurrentUserId(const int& user_id);
+
+    const std::string getCurrentToken() const;
+    void setCurrentToken(const std::string& token);
+
+    const std::string getUsername(const int& id) const;
+
+    User user;
+
+signals:
+    void usersChanged(const std::unordered_map<int, std::string>& users);
+
+private:
+    std::unordered_map<int, std::string> users;
+};

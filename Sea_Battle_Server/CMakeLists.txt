@@ -8,6 +8,7 @@ set(SERVER_SOURCES
     src/SessionManager.cpp
     src/Handler.cpp
     src/MessageDispatcher.cpp
+    src/SignalHandler.cpp
 
     ../common/Validator.cpp
     ../common/PacketIO.cpp

@@ -1,0 +1,58 @@
+#include "MessageRouter.h"
+
+MessageRouter::MessageRouter() {}
+\
+void MessageRouter::setSocket(int socket) {
+    std::lock_guard<std::mutex> lock(mutex);
+    socket_ = socket;
+}
+
+void MessageRouter::setReconnecting(bool value) {
+    isReconnecting.store(value);
+}
+
+void MessageRouter::loginRequest(const std::string& login, const std::string& password) {
+    std::string request = protocol::loginRequest(login, password);
+    sendPacket(request);
+}
+
+void MessageRouter::registerRequest(const std::string& login, const std::string& password) {
+    std::string request = protocol::registerRequest(login, password);
+    sendPacket(request);
+}
+
+void MessageRouter::sendMessage(const int& from, const int& to, const std::string& text) {
+    std::string request = protocol::privateMessage(from, to, text);
+    sendPacket(request);
+}
+
+void MessageRouter::searchUser(const std::string& text) {
+    std::string request = protocol::searchUserRequest(text);
+    sendPacket(request);
+}
+
+void MessageRouter::ping() {
+    std::string request = protocol::ping();
+    sendPacket(request);
+}
+
+void MessageRouter::resumeConnectionRequest(const std::string& token) {
+    std::string request = protocol::resumeConnectionRequest(token);
+    sendPacket(request, true);
+}
+
+void MessageRouter::sendPacket(const std::string& msg, bool force) {
+    if(!force && isReconnecting.load()) {
+        return;
+    }
+
+    std::lock_guard<std::mutex> lock(mutex);
+    if(!force && isReconnecting.load()) {
+        return;
+    }
+
+    if(!socket_) {
+        return;
+    }
+    PacketIO::sendPacket(socket_, msg);
+}

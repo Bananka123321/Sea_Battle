@@ -1,0 +1,65 @@
+cmake_minimum_required(VERSION 3.5)
+project(Sea_Battle_Client)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
+
+set(PROJECT_SOURCES
+    main.cpp
+    Network/tcp_client.cpp
+    Network/MessageRouter.cpp
+
+    App/AppState.cpp
+    App/Handler.cpp
+    App/appcontroller.cpp
+    App/StateBinder.cpp
+
+
+    UI/mainwindow.cpp
+
+    ../common/PacketIO.cpp
+    ../common/Validator.cpp
+)
+
+set(PROJECT_HEADERS
+    Network/tcp_client.h
+    Network/MessageRouter.h
+
+    App/AppState.h
+    App/Handler.h
+    App/appcontroller.h
+    App/StateBinder.h
+
+
+    UI/mainwindow.h
+
+    ../common/PacketIO.h
+    ../common/Message.h
+    ../common/protocol.h
+    ../common/Validator.h
+)
+
+qt_add_executable(Sea_Battle_Client
+    ${PROJECT_SOURCES}
+    ${PROJECT_HEADERS}
+
+    UI/mainwindow.ui
+)
+
+target_include_directories(Sea_Battle_Client PRIVATE
+    Network
+    App
+    UI
+    ../common
+)
+
+target_link_libraries(Sea_Battle_Client PRIVATE
+    Qt6::Widgets
+)
+
+if (WIN32)
+    target_link_libraries(Sea_Battle_Client PRIVATE ws2_32)
+endif()

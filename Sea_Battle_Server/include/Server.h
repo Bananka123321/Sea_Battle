@@ -20,7 +20,7 @@ static int64_t SESSION_TIMEOUT_MS = 90000; //Период за который к
 
 class TCPServer {
 public:
-    TCPServer(int port, Handler handler);
+    TCPServer(int port);
     ~TCPServer();
 
     bool start();
