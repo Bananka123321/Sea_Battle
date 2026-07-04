@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QResizeEvent>
+#include <QGraphicsScene>
 
 #include "Message.h"
 
@@ -25,6 +27,12 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene *scene;
+
+    static const int CELL_SIZE = 40;
+
+    void createField();
+    void createShips();
 
     void refreshChat();
 

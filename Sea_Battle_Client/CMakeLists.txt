@@ -47,6 +47,8 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
+    resources.qrc
+    shipitem.h shipitem.cpp
 )
 
 target_include_directories(Sea_Battle_Client PRIVATE

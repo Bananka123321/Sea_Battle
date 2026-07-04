@@ -3,6 +3,7 @@
 #include "Handler.h"
 #include "appcontroller.h"
 #include "StateBinder.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 #include <QMetaObject>
@@ -10,6 +11,9 @@
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+
+    MainWindow window;
+    window.show();
 
     AppState* state = new AppState();
     MessageRouter* router = new MessageRouter();
