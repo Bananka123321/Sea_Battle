@@ -12,9 +12,6 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    MainWindow window;
-    window.show();
-
     AppState* state = new AppState();
     MessageRouter* router = new MessageRouter();
     Handler* handler = new Handler();
@@ -29,6 +26,9 @@ int main(int argc, char *argv[]) {
     };
 
     std::thread([client]() { client->start(); }).detach();
+
+    MainWindow window;
+    window.show();
 
     a.exec();
     delete client;

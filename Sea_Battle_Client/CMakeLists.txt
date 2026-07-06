@@ -16,7 +16,7 @@ set(PROJECT_SOURCES
     App/Handler.cpp
     App/appcontroller.cpp
     App/StateBinder.cpp
-
+    App/shipitem.cpp
 
     UI/mainwindow.cpp
 
@@ -32,7 +32,7 @@ set(PROJECT_HEADERS
     App/Handler.h
     App/appcontroller.h
     App/StateBinder.h
-
+    App/shipitem.h
 
     UI/mainwindow.h
 
@@ -47,8 +47,7 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
-    resources.qrc
-    shipitem.h shipitem.cpp
+    # resources.qrc
 )
 
 target_include_directories(Sea_Battle_Client PRIVATE
