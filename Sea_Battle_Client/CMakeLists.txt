@@ -17,6 +17,7 @@ set(PROJECT_SOURCES
     App/appcontroller.cpp
     App/StateBinder.cpp
     App/shipitem.cpp
+    App/board.cpp
 
     UI/mainwindow.cpp
 
@@ -33,6 +34,7 @@ set(PROJECT_HEADERS
     App/appcontroller.h
     App/StateBinder.h
     App/shipitem.h
+    App/board.h
 
     UI/mainwindow.h
 

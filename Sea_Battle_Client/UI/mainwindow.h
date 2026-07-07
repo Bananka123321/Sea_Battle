@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 
 #include "Message.h"
+#include "board.h"
+#include "shipitem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,6 +22,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+
+    void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
+
 signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void searchUser(const std::string& text);
@@ -29,10 +35,11 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
 
-    static const int CELL_SIZE = 40;
+    board board_;
 
     void createField();
     void createShips();
+    void addShip(ShipItem *ship, int x, int y);
 
     void refreshChat();
 
