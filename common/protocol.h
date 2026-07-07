@@ -107,6 +107,32 @@ inline std::string resumeConnectionRequest(const std::string& token) {
     return j.dump();
 }
 
+inline std::string createLobby(const std::string& username) {
+    nlohmann::json j;
+    j["type"] = "createLobby";
+    j["username"] = username;
+    return j.dump();
+}
+
+inline std::string joinLobby(const std::string& LobbyCode) {
+    nlohmann::json j;
+    j["type"] = "joinLobby";
+    j["LobbyCode"] = LobbyCode;
+    return j.dump();
+}
+
+inline std::string leaveLobby() {
+    nlohmann::json j;
+    j["type"] = "leaveLobby";
+    return j.dump();
+}
+
+inline std::string ready() {
+    nlohmann::json j;
+    j["type"] = "ready";
+    return j.dump();
+}
+
 //      SERVER --> CLIENT
 //=================================================================================================================================================================
 
@@ -164,6 +190,27 @@ inline std::string resumeConnectionResponse(bool success) {
     nlohmann::json j;
     j["type"] = "resumeConnectionResponse";
     j["success"] = success;
+    return j.dump();
+}
+
+inline std::string lobbyCreated(bool success) {
+    nlohmann::json j;
+    j["type"] = "lobbyCreated";
+    j["success"] = success;
+    return j.dump();
+}
+
+inline std::string playerJoined(const std::string& player_name) {
+    nlohmann::json j;
+    j["type"] = "playerJoined";
+    j["player_name"] = player_name;
+    return j.dump();
+}
+
+inline std::string playerLeft(const std::string& player_name) {
+    nlohmann::json j;
+    j["type"] = "playerLeft";
+    j["player_name"] = player_name;
     return j.dump();
 }
 

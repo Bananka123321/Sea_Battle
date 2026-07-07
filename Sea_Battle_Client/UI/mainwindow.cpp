@@ -3,10 +3,7 @@
 #include "shipitem.h"
 #include <cmath>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     scene = new QGraphicsScene(this);
@@ -18,19 +15,15 @@ MainWindow::MainWindow(QWidget *parent)
     createShips();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::createField()
-{
+void MainWindow::createField() {
     QPen pen(Qt::black);
 
-    for (int row = 0; row < 10; row++)
-    {
-        for (int col = 0; col < 10; col++)
-        {
+    for (int row = 0; row < 10; row++) {
+        for (int col = 0; col < 10; col++) {
             scene->addRect(
                 col * CELL_SIZE,
                 row * CELL_SIZE,
@@ -42,8 +35,7 @@ void MainWindow::createField()
     }
 }
 
-void MainWindow::createShips()
-{
+void MainWindow::createShips() {
     ShipItem *ship1 = new ShipItem(4);
     ship1->setPos(450, 50);
     scene->addItem(ship1);

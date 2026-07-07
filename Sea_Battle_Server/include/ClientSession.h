@@ -3,8 +3,10 @@
 #include <string>
 #include <atomic>
 #include <chrono>
+#include <memory>
 
 #include "../common/PacketIO.h"
+#include "lobby.h"
 
 class ClientSession {
 public:
@@ -29,6 +31,9 @@ public:
     bool getConnected() const;
     void setConnected(const bool& newState);
 
+    void setCurrentLobby(std::shared_ptr<Lobby> lobby);
+    std::shared_ptr<Lobby> getCurrentLobby() const;
+
 private:
     int socket;
     int user_id;
@@ -37,4 +42,6 @@ private:
     bool isAuthentificated;
     std::atomic<int64_t> last_activity_time{0};
     std::atomic<bool> connected{false};
+
+    std::shared_ptr<Lobby> currentLobby;
 };

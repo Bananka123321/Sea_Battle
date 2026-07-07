@@ -52,3 +52,11 @@ bool ClientSession::getConnected() const {
 void ClientSession::setConnected(const bool& newState) {
     connected.store(newState);
 }
+
+void ClientSession::setCurrentLobby(std::shared_ptr<Lobby> lobby) {
+    currentLobby = lobby;
+}
+
+std::shared_ptr<Lobby> ClientSession::getCurrentLobby() const {
+    return currentLobby;
+}

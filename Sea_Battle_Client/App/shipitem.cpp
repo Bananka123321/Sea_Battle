@@ -8,7 +8,7 @@ ShipItem::ShipItem(int size) : shipSize_(size)
 {
     setRect(0, 0, size * CELL_SIZE, CELL_SIZE);
 
-    setBrush(Qt::darkGray);
+    setBrush(Qt::red);
 
     setFlags(
         QGraphicsItem::ItemIsMovable |

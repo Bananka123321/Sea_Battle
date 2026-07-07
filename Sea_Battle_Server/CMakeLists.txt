@@ -9,6 +9,8 @@ set(SERVER_SOURCES
     src/Handler.cpp
     src/MessageDispatcher.cpp
     src/SignalHandler.cpp
+    src/LobbyManager.cpp
+    src/lobby.cpp
 
     ../common/Validator.cpp
     ../common/PacketIO.cpp
