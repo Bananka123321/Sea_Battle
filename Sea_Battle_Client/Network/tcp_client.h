@@ -41,12 +41,12 @@ private:
     int clientSocket;
     MessageRouter* router_;
 
-    bool setupSocket();
-    void run();
-
     std::thread work;
 
     std::atomic<bool> bConnected{false};
 
+private:
+    bool setupSocket();
+    void run();
     void runLoop();
 };

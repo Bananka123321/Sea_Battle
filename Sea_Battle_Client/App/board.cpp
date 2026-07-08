@@ -1,5 +1,5 @@
 #include "board.h"
-#include <qDebug>
+#include <QDebug>
 
 board::board()
 {
