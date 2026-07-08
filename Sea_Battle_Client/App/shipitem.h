@@ -1,11 +1,13 @@
-#ifndef SHIPITEM_H
-#define SHIPITEM_H
-
+#pragma once
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QObject>
 #include <QPointF>
+#include <QtMath>
+#include <QBrush>
+#include <QColor>
+#include <QKeyEvent>
 
 static const int CELL_SIZE = 20;
 
@@ -16,20 +18,10 @@ class ShipItem : public QObject, public QGraphicsRectItem
 public:
     ShipItem(int size);
 
-    QPointF oldPosition()
-    {
-        return oldPos_;
-    }
+    QPointF oldPosition();
+    bool isHorizontal();
 
-    bool isHorizontal()
-    {
-        return horizontal_;
-    }
-
-    int size()
-    {
-        return shipSize_;
-    }
+    int size();
 
     void setDirection(bool horizontal);
     void rotate();
@@ -51,5 +43,3 @@ signals:
     void placed(ShipItem *ship, int row, int col, int size, bool horizontal);
     void requestRotate(ShipItem *ship);
 };
-
-#endif // SHIPITEM_H

@@ -8,6 +8,7 @@
 #include "../common/Validator.h"
 #include "SessionManager.h"
 #include "MessageDispatcher.h"
+#include "LobbyManager.h"
 
 class Handler {
 public:
@@ -23,6 +24,9 @@ private:
 
     std::unordered_map<std::string, std::function<void(std::shared_ptr<ClientSession>, const nlohmann::json&)>> handlers;
 
+    LobbyManager lobbyManager;
+
+private:
     void loginRequest(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
     void registerRequest(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
     void privateMessage(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
@@ -33,4 +37,9 @@ private:
     void authSuccess(std::shared_ptr<ClientSession> client, const int& id, const std::string& username);
 
     std::string generateToken();
+
+    void createLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
+    void leaveLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
+    void readyLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
+    void joinLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
 };

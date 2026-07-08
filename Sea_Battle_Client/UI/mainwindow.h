@@ -1,8 +1,12 @@
 #pragma once
 
+#include "./ui_mainwindow.h"
+
 #include <QMainWindow>
 #include <QResizeEvent>
 #include <QGraphicsScene>
+#include <cmath>
+#include <QDebug>
 
 #include "Message.h"
 #include "board.h"
@@ -37,6 +41,7 @@ private:
 
     board board_;
 
+private:
     void createField();
     void createShips();
     void addShip(ShipItem *ship, int x, int y);
