@@ -83,7 +83,7 @@ void TCPServer::handleClient(std::shared_ptr<ClientSession> client) {
     try {
         std::string msg;
         client->setConnected(true);
-        while(serverRunning.load() && client->receive(msg))
+        while(client->receive(msg))
             handler_.handleMessage(client, msg);
         clientDisconnect(client);
     } catch(std::exception& e){

@@ -21,10 +21,10 @@ public:
     void registerRequest(const std::string& login, const std::string& password);
     void sendMessage(const int& from, const int& to, const std::string& text);
     void searchUser(const std::string& text);
-    void historyRequest(int peer_id, int last_msg_id);
-    void getDialogsRequest();
     void ping();
     void resumeConnectionRequest(const std::string& token);
+
+    void createLobbyRequest(const std::string& username);
 
     void setReconnecting(bool value);
 

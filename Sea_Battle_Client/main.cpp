@@ -27,8 +27,9 @@ int main(int argc, char *argv[]) {
 
     std::thread([client]() { client->start(); }).detach();
 
-    MainWindow window;
-    window.show();
+    MainWindow* mainW = new MainWindow(nullptr);
+    AController->AttachUI(mainW);
+    mainW->show();
 
     a.exec();
     delete client;

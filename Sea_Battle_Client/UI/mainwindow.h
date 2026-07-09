@@ -11,6 +11,7 @@
 #include "Message.h"
 #include "board.h"
 #include "shipitem.h"
+#include "Validator.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,8 +19,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -32,8 +32,8 @@ private slots:
 
 signals:
     void sendMessageRequest(const int& to, const std::string& text);
+    void createLobbyRequest(const std::string& username);
     void searchUser(const std::string& text);
-    void loadHistoryRequest(int peer_id, int last_msg_id);
 
 private:
     Ui::MainWindow *ui;
@@ -52,4 +52,6 @@ private:
 
     QString formatTime(int64_t timestamp);
     QString buildMessageHtml(const Message& msg);
+
+    void tryCreateLobby();
 };

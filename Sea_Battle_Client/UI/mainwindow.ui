@@ -73,6 +73,9 @@ border-image: url(:/images/background.jpg)
         </property>
         <item row="0" column="1">
          <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
@@ -83,6 +86,9 @@ border-image: url(:/images/background.jpg)
         </item>
         <item row="1" column="0">
          <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>311</width>
@@ -108,6 +114,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item row="6" column="0">
            <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -144,6 +153,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item row="2" column="0">
            <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -170,6 +182,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item row="8" column="0">
            <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -189,7 +204,7 @@ border-image: url(:/images/background.jpg)
            </widget>
           </item>
           <item row="9" column="0">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="CreateLobbyPushButton">
             <property name="text">
              <string>Create Lobby</string>
             </property>
@@ -199,6 +214,9 @@ border-image: url(:/images/background.jpg)
         </item>
         <item row="1" column="2">
          <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>311</width>
@@ -209,6 +227,9 @@ border-image: url(:/images/background.jpg)
         </item>
         <item row="2" column="1">
          <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
@@ -237,18 +258,10 @@ border-image: url(:/images/background.jpg)
          <number>0</number>
         </property>
         <item row="3" column="0">
-         <widget class="QFrame" name="frame_2">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-         </widget>
+         <widget class="QFrame" name="frame_2"/>
         </item>
         <item row="0" column="0" rowspan="3">
-         <widget class="QFrame" name="frame">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-         </widget>
+         <widget class="QFrame" name="frame"/>
         </item>
         <item row="0" column="1" rowspan="4" colspan="2">
          <widget class="QFrame" name="frame_3">

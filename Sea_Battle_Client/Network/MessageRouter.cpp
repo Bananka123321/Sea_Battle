@@ -41,18 +41,21 @@ void MessageRouter::resumeConnectionRequest(const std::string& token) {
     sendPacket(request, true);
 }
 
+void MessageRouter::createLobbyRequest(const std::string& username) {
+    std::string request = protocol::createLobby(username);
+    sendPacket(request);
+}
+
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
-    if(!force && isReconnecting.load()) {
+    if(!force && isReconnecting.load())
         return;
-    }
 
     std::lock_guard<std::mutex> lock(mutex);
-    if(!force && isReconnecting.load()) {
+    if(!force && isReconnecting.load())
         return;
-    }
 
-    if(!socket_) {
+    if(!socket_)
         return;
-    }
+
     PacketIO::sendPacket(socket_, msg);
 }
