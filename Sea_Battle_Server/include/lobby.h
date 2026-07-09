@@ -2,11 +2,6 @@
 #include <string>
 #include <memory>
 
-enum class LobbyState {
-    WAITING_FOR_PLAYERS,
-    BOTH_READY
-};
-
 class ClientSession;
 
 class Lobby {
@@ -14,7 +9,6 @@ public:
     Lobby(const std::string& code, std::shared_ptr<ClientSession> creator);
 
     const std::string& getCode() const;
-    LobbyState getState() const;
 
     bool addPlayer(std::shared_ptr<ClientSession> player);
     void removePlayer(std::shared_ptr<ClientSession> player);
@@ -30,7 +24,6 @@ public:
 
 private:
     std::string code;
-    LobbyState state;
     std::shared_ptr<ClientSession> player1;  //Создатель
     std::shared_ptr<ClientSession> player2;  //Второй игрок
     bool player1Ready;
