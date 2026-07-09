@@ -5,3 +5,4 @@ Makefile
 .vscode/
 config.json
 server.key
+CMakeLists.txt.user

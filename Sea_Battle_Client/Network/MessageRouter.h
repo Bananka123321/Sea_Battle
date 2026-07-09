@@ -32,5 +32,7 @@ private:
     int socket_;
     std::mutex mutex;
     std::atomic<bool> isReconnecting{false};
+
+private:
     void sendPacket(const std::string& msg, bool force = false);
 };
