@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     createField();
     createShips();
+
+    connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
+        tryCreateLobby();
+    });
 }
 
 MainWindow::~MainWindow() {
@@ -89,4 +93,12 @@ void MainWindow::shipPlaced(ShipItem *ship, int row, int col, int size, bool hor
     } else {
         ship->restoreState();
     }
+}
+
+void MainWindow::tryCreateLobby() {
+    std::string username = ui->ConnectUserNameLineEdit->text().toStdString();
+
+    if(auto err = Validator::username(username)) return;
+
+    emit createLobbyRequest(username);
 }

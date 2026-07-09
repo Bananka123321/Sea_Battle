@@ -12,6 +12,11 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->searchUser(text);
     });
 
+    connect(mainW, &MainWindow::createLobbyRequest, this, [this](const std::string& username){
+        std::cerr << "LOBBYCREATE\n";
+        router_->createLobbyRequest(username);
+    });
+
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
 
     connect(handler_, &Handler::S_loginSuccess, this, [this](const std::string&, int, const std::string&){

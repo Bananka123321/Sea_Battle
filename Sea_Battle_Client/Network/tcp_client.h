@@ -46,6 +46,7 @@ private:
     std::atomic<bool> bConnected{false};
 
 private:
+    void handoverSocket();
     bool setupSocket();
     void run();
     void runLoop();

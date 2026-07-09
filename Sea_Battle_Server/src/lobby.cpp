@@ -2,16 +2,11 @@
 #include "ClientSession.h"
 
 Lobby::Lobby(const std::string& code, std::shared_ptr<ClientSession> creator)
-    : code(code), state(LobbyState::WAITING_FOR_PLAYERS),
-    player1(creator), player2(nullptr), player1Ready(false), player2Ready(false) {
+    : code(code), player1(creator), player2(nullptr), player1Ready(false), player2Ready(false) {
 }
 
 const std::string& Lobby::getCode() const {
     return code;
-}
-
-LobbyState Lobby::getState() const {
-    return state;
 }
 
 bool Lobby::addPlayer(std::shared_ptr<ClientSession> player) {
@@ -29,9 +24,6 @@ void Lobby::removePlayer(std::shared_ptr<ClientSession> player) {
         player2 = nullptr;
         player2Ready = false;
     }
-
-    if (player1 != nullptr && player2 == nullptr)
-        state = LobbyState::WAITING_FOR_PLAYERS;
 }
 
 void Lobby::setReady(std::shared_ptr<ClientSession> player) {
@@ -39,9 +31,6 @@ void Lobby::setReady(std::shared_ptr<ClientSession> player) {
         player1Ready = true;
     else if (player2 == player)
         player2Ready = true;
-
-    if (player1Ready && player2Ready)
-        state = LobbyState::BOTH_READY;
 }
 
 bool Lobby::isBothReady() const {

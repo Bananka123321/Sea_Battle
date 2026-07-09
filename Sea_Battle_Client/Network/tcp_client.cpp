@@ -71,7 +71,13 @@ bool TCPClient::setupSocket() {
         return false;
     }
 
+    handoverSocket();
+
     return true;
+}
+
+void TCPClient::handoverSocket() {
+    router_->setSocket(clientSocket);
 }
 
 void TCPClient::runLoop() {
