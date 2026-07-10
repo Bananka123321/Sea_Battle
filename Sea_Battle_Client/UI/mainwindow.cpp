@@ -102,3 +102,16 @@ void MainWindow::tryCreateLobby() {
 
     emit createLobbyRequest(username);
 }
+
+void MainWindow::on_CreateLobbyPushButton_clicked()
+{
+
+}
+
+
+void MainWindow::on_ReadyPushButton_clicked()
+{
+    ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
+    ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
+}
+
