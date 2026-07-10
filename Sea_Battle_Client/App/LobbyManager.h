@@ -12,10 +12,13 @@ public:
 
 private:
     void lobbyCreated(const std::string& code);
-    void lobbyJoined();
+    void lobbyJoined(bool success);
+    void playerJoined(const std::string& username);
+    void playerLeft();
+    void playerReady(bool success);
 
 private:
     Handler* handler_;
     MainWindow* window_;
-    QStackedWidget* sWidget;
+    Ui::MainWindow* UI_;
 };

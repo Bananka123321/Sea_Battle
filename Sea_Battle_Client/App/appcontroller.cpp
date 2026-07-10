@@ -20,6 +20,10 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->joinLobbyRequest(username, code);
     });
 
+    connect(mainW, &MainWindow::playerReady, this, [this](){
+        router_->playerReady();
+    });
+
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
 
     connect(handler_, &Handler::S_loginSuccess, this, [this](const std::string&, int, const std::string&){

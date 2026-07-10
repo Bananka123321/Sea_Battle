@@ -16,6 +16,13 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
+
+enum class PlayerState {
+    NOT_PLAYER,
+    PLAYER_NOT_READY,
+    PLAYER_READY
+};
+
 }
 QT_END_NAMESPACE
 
@@ -26,12 +33,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QStackedWidget* getStackedWidget() const;
+    Ui::MainWindow* getUI() const;
+    void setPlayerState(Ui::PlayerState state, const std::string& username = "");
 
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
-
-    void on_CreateLobbyPushButton_clicked();
 
     void on_ReadyPushButton_clicked();
 
@@ -40,12 +46,14 @@ signals:
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
     void searchUser(const std::string& text);
+    void playerReady();
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
 
     board board_;
+    Ui::PlayerState state_;
 
 private:
     void createField();

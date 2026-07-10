@@ -51,6 +51,11 @@ void MessageRouter::joinLobbyRequest(const std::string& username, const std::str
     sendPacket(request);
 }
 
+void MessageRouter::playerReady() {
+    std::string request = protocol::playerReadyRequest();
+    sendPacket(request);
+}
+
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
     if(!force && isReconnecting.load())
         return;

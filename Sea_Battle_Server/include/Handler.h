@@ -17,6 +17,9 @@ public:
 
     void handleMessage(std::shared_ptr<ClientSession> client, std::string& msg);
     void setDisconnectHandler(std::function<void(std::shared_ptr<ClientSession>)> cb);
+
+    void notifyPlayerLeft(std::shared_ptr<ClientSession> client, const std::string& playerName);
+    void removeEmptyLobby(const std::string& code);
     
 private:
     SessionManager& sessionManager;
@@ -40,6 +43,6 @@ private:
 
     void createLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
     void leaveLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
-    void readyLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
     void joinLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
+    void playerReadyRequest(std::shared_ptr<ClientSession> client, const nlohmann::json& j);
 };
