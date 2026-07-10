@@ -53,6 +53,7 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
+    gameboard.h gameboard.cpp
     # resources.qrc
 )
 

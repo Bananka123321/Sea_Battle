@@ -37,7 +37,7 @@ border-image: url(:/images/background.jpg)
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="ConnectPage">
        <layout class="QGridLayout" name="gridLayout_2">
@@ -127,7 +127,7 @@ border-image: url(:/images/background.jpg)
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
+             <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
               <item>
                <spacer name="horizontalSpacer">
                 <property name="orientation">
@@ -152,13 +152,13 @@ border-image: url(:/images/background.jpg)
                 <property name="minimumSize">
                  <size>
                   <width>200</width>
-                  <height>0</height>
+                  <height>28</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>200</width>
-                  <height>16777215</height>
+                  <height>28</height>
                  </size>
                 </property>
                 <property name="placeholderText">
@@ -323,8 +323,14 @@ border-image: url(:/images/background.jpg)
                     <height>28</height>
                    </size>
                   </property>
+                  <property name="maxLength">
+                   <number>6</number>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
                   <property name="placeholderText">
-                   <string>1234</string>
+                   <string>123456</string>
                   </property>
                  </widget>
                 </item>
@@ -612,33 +618,53 @@ border-image: url(:/images/background.jpg)
          </widget>
         </item>
         <item row="0" column="1" rowspan="4" colspan="2">
-         <widget class="QFrame" name="frame">
+         <widget class="QFrame" name="ShipsFrame">
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QGraphicsView" name="graphicsView">
-               <property name="toolTip">
-                <string/>
+             <item row="2" column="1">
+              <widget class="QLabel" name="CodeRoomLabel">
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>16777215</height>
+                </size>
                </property>
-               <property name="lineWidth">
-                <number>1</number>
+               <property name="font">
+                <font>
+                 <pointsize>15</pointsize>
+                </font>
                </property>
-               <property name="backgroundBrush">
-                <brush brushstyle="NoBrush">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>255</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
+               <property name="text">
+                <string>????</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="2" column="0">
+              <widget class="QLabel" name="Static_RoomLabel">
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>15</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Код комнаты:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
                 <widget class="QLabel" name="RHintLabel">
@@ -684,8 +710,27 @@ border-image: url(:/images/background.jpg)
                </item>
               </layout>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label">
+             <item row="0" column="0" colspan="3">
+              <widget class="QGraphicsView" name="graphicsView">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="lineWidth">
+                <number>1</number>
+               </property>
+               <property name="backgroundBrush">
+                <brush brushstyle="NoBrush">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="OPConnectLabel">
                <property name="minimumSize">
                 <size>
                  <width>0</width>

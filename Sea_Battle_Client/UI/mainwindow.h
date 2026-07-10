@@ -31,6 +31,10 @@ public:
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
 
+    void on_CreateLobbyPushButton_clicked();
+
+    void on_ReadyPushButton_clicked();
+
 signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void createLobbyRequest(const std::string& username);
