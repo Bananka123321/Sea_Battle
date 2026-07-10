@@ -326,9 +326,6 @@ border-image: url(:/images/background.jpg)
                   <property name="maxLength">
                    <number>6</number>
                   </property>
-                  <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignCenter</set>
-                  </property>
                   <property name="placeholderText">
                    <string>123456</string>
                   </property>
@@ -572,6 +569,29 @@ border-image: url(:/images/background.jpg)
              <property name="spacing">
               <number>7</number>
              </property>
+             <property name="mouseTracking">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLineEdit" name="SendMessageLineEdit">
+             <property name="minimumSize">
+              <size>
+               <width>235</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>235</width>
+               <height>35</height>
+              </size>
+             </property>
+            </widget>
              <item>
               <widget class="QLabel" name="Static_NameOPLabel">
                <property name="minimumSize">
@@ -691,6 +711,9 @@ border-image: url(:/images/background.jpg)
                <property name="text">
                 <string>????</string>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -709,8 +732,8 @@ border-image: url(:/images/background.jpg)
                <property name="text">
                 <string>Код комнаты:</string>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               <property name="textInteractionFlags">
+                <set>Qt::NoTextInteraction</set>
                </property>
               </widget>
              </item>
@@ -807,6 +830,9 @@ border-image: url(:/images/background.jpg)
                </property>
                <property name="text">
                 <string>Оппонент не подключился</string>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::NoTextInteraction</set>
                </property>
               </widget>
              </item>

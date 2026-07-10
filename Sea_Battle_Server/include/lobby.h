@@ -13,7 +13,7 @@ public:
     bool addPlayer(std::shared_ptr<ClientSession> player);
     void removePlayer(std::shared_ptr<ClientSession> player);
 
-    void setReady(std::shared_ptr<ClientSession> player);
+    bool setReady(std::shared_ptr<ClientSession> player);
     bool isBothReady() const;
 
     std::shared_ptr<ClientSession> getPlayer1() const;
@@ -21,6 +21,9 @@ public:
 
     bool isFull() const;
     bool containsPlayer(std::shared_ptr<ClientSession> player) const;
+
+    bool getPlayer1Ready() const;
+    bool getPlayer2Ready() const;
 
 private:
     std::string code;

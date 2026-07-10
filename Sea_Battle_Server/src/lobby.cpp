@@ -10,10 +10,15 @@ const std::string& Lobby::getCode() const {
 }
 
 bool Lobby::addPlayer(std::shared_ptr<ClientSession> player) {
-    if (player2 != nullptr) return false;
-
-    player2 = player;
-    return true;
+    if (player1 == nullptr) {
+        player1 = player;
+        return true;
+    }
+    if (player2 == nullptr) {
+        player2 = player;
+        return true;
+    }
+    return false;
 }
 
 void Lobby::removePlayer(std::shared_ptr<ClientSession> player) {
@@ -26,11 +31,16 @@ void Lobby::removePlayer(std::shared_ptr<ClientSession> player) {
     }
 }
 
-void Lobby::setReady(std::shared_ptr<ClientSession> player) {
-    if (player1 == player)
-        player1Ready = true;
-    else if (player2 == player)
-        player2Ready = true;
+bool Lobby::setReady(std::shared_ptr<ClientSession> player) {
+    if (player1 == player) {
+        player1Ready = !player1Ready;
+        return player1Ready;
+    }
+    else if (player2 == player) {
+        player2Ready = !player2Ready;
+        return player2Ready;
+    }
+    return false; //Игрок не найден
 }
 
 bool Lobby::isBothReady() const {
@@ -51,4 +61,12 @@ bool Lobby::isFull() const {
 
 bool Lobby::containsPlayer(std::shared_ptr<ClientSession> player) const {
     return player1 == player || player2 == player;
+}
+
+bool Lobby::getPlayer1Ready() const {
+    return player1Ready;
+}
+
+bool Lobby::getPlayer2Ready() const {
+    return player2Ready;
 }

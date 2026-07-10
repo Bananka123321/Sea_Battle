@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->ConnectLobbyPushButton, &QPushButton::clicked, this, [this](){
         tryJoinLobby();
     });
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow() {
@@ -107,24 +109,16 @@ void MainWindow::tryCreateLobby() {
     emit createLobbyRequest(username);
 }
 
-void MainWindow::on_CreateLobbyPushButton_clicked()
-{
 
-}
-
-
-void MainWindow::on_ReadyPushButton_clicked()
-{
+void MainWindow::on_ReadyPushButton_clicked() {
     ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
     ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
+
+    emit playerReady();
     if (ui->graphicsView->isEnabled() == false)
-    {
         ui->ReadyPushButton->setText("Отмена");
-    }
     else
-    {
         ui->ReadyPushButton->setText("Готов");
-    }
 }
 
 void MainWindow::tryJoinLobby() {
@@ -134,9 +128,26 @@ void MainWindow::tryJoinLobby() {
     if(auto err = Validator::username(username)) return;
     if(auto err = Validator::username(code)) return;
 
+    ui->CodeRoomLabel->setText(QString::fromStdString(code));
+
     emit joinLobbyRequest(username, code);
 }
 
-QStackedWidget* MainWindow::getStackedWidget() const {
-    return ui->stackedWidget;
+Ui::MainWindow* MainWindow::getUI() const {
+    return ui;
+}
+
+void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& username) {
+    QLabel* enemy = ui->OPConnectLabel;
+    switch (state) {
+    case Ui::PlayerState::NOT_PLAYER:
+        enemy->setText("Оппонент не подключился");
+        break;
+    case Ui::PlayerState::PLAYER_NOT_READY:
+        enemy->setText("Оппонент не готов");
+        break;
+    case Ui::PlayerState::PLAYER_READY:
+        enemy->setText("Оппонент готов!");
+        break;
+    }
 }
