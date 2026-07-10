@@ -28,6 +28,14 @@ Handler::Handler() {
     handlers["resumeConnectionResponse"] = [this] (const nlohmann::json& j) {
         onConnectionResponse(j["success"]);
     };
+
+    handlers["lobbyCreated"] = [this] (const nlohmann::json& j) {
+        onLobbyCreated(j["lobbyCode"]);
+    };
+
+    handlers["lobbyJoined"] = [this] (const nlohmann::json& j) {
+        onLobbyJoined();
+    };
 }
 
 
@@ -82,4 +90,12 @@ void Handler::onError(const std::string& text) {
 void Handler::onConnectionResponse(const bool& success) {
     if(success)
         emit S_ConnectionSucess();
+}
+
+void Handler::onLobbyCreated(const std::string& code) {
+    emit S_LobbyCreated(code);
+}
+
+void Handler::onLobbyJoined() {
+    emit S_LobbyJoined();
 }

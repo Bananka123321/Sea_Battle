@@ -4,6 +4,8 @@
 #include "appcontroller.h"
 #include "StateBinder.h"
 #include "mainwindow.h"
+#include "LobbyManager.h"
+#include "GameManager.h"
 
 #include <QApplication>
 #include <QMetaObject>
@@ -29,6 +31,9 @@ int main(int argc, char *argv[]) {
 
     MainWindow* mainW = new MainWindow(nullptr);
     AController->AttachUI(mainW);
+    LobbyManager* lManager = new LobbyManager(handler, mainW);
+    GameManager* gManager = new GameManager(handler, mainW);
+
     mainW->show();
 
     a.exec();
