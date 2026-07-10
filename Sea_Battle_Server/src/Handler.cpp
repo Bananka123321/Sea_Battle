@@ -201,6 +201,7 @@ void Handler::resumeConnectionRequest(std::shared_ptr<ClientSession> client, con
 
 void Handler::createLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
     std::string code = lobbyManager.generateLobbyCode();
+    std::cerr << "LobbyCode: " << code << '\n';
     auto lobby = lobbyManager.createLobby(code, client);
 
     client->setCurrentLobby(lobby);
@@ -241,15 +242,11 @@ void Handler::readyLobby(std::shared_ptr<ClientSession> client, const nlohmann::
 }
 
 void Handler::joinLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
-    std::string lobby_code = j["lobby_code"];
-    std::string player_name = j.value("player_name", "Player");
-    
-    if (lobby_code.empty()) {
-        dispatcher.sendTo(client, protocol::errorMessage("Lobby code is empty"));
-        return;
-    }
+    std::string lobby_code = j["LobbyCode"];
+    std::string player_name = j["username"];
     
     auto lobby = lobbyManager.getLobby(lobby_code);
+    
     if (!lobby) {
         dispatcher.sendTo(client, protocol::errorMessage("Lobby not found"));
         return;

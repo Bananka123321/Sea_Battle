@@ -114,9 +114,10 @@ inline std::string createLobby(const std::string& username) {
     return j.dump();
 }
 
-inline std::string joinLobby(const std::string& LobbyCode) {
+inline std::string joinLobby(const std::string& username, const std::string& LobbyCode) {
     nlohmann::json j;
     j["type"] = "joinLobby";
+    j["username"] = username;
     j["LobbyCode"] = LobbyCode;
     return j.dump();
 }
@@ -200,13 +201,13 @@ inline std::string lobbyCreated(const std::string& lobbyCode) {
     return j.dump();
 }
 
-inline std::string lobbyJoined() {
+inline std::string lobbyJoined() {//Для подключившегося игрока
     nlohmann::json j;
     j["type"] = "lobbyJoined";
     return j.dump();
 }
 
-inline std::string playerJoined(const std::string& player_name) {
+inline std::string playerJoined(const std::string& player_name) {//Уведомление для хоста
     nlohmann::json j;
     j["type"] = "playerJoined";
     j["player_name"] = player_name;
