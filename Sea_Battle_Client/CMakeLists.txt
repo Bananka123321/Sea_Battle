@@ -20,6 +20,7 @@ set(PROJECT_SOURCES
     App/board.cpp
     App/GameManager.cpp
     App/LobbyManager.cpp
+    App/gameboard.cpp
 
     UI/mainwindow.cpp
 
@@ -39,6 +40,7 @@ set(PROJECT_HEADERS
     App/board.h
     App/GameManager.h
     App/LobbyManager.h
+    App/gameboard.h
 
     UI/mainwindow.h
 
@@ -53,7 +55,6 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
-    gameboard.h gameboard.cpp
     # resources.qrc
 )
 

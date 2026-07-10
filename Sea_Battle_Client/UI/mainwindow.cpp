@@ -117,6 +117,14 @@ void MainWindow::on_ReadyPushButton_clicked()
 {
     ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
     ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
+    if (ui->graphicsView->isEnabled() == false)
+    {
+        ui->ReadyPushButton->setText("Отмена");
+    }
+    else
+    {
+        ui->ReadyPushButton->setText("Готов");
+    }
 }
 
 void MainWindow::tryJoinLobby() {
