@@ -15,6 +15,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
         tryCreateLobby();
     });
+
+    connect(ui->ConnectLobbyPushButton, &QPushButton::clicked, this, [this](){
+        tryJoinLobby();
+    });
 }
 
 MainWindow::~MainWindow() {
@@ -101,4 +105,18 @@ void MainWindow::tryCreateLobby() {
     if(auto err = Validator::username(username)) return;
 
     emit createLobbyRequest(username);
+}
+
+void MainWindow::tryJoinLobby() {
+    std::string username = ui->ConnectUserNameLineEdit->text().toStdString();
+    std::string code = ui->ConnectCodeRoomLineEdit->text().toStdString();
+
+    if(auto err = Validator::username(username)) return;
+    if(auto err = Validator::username(code)) return;
+
+    emit joinLobbyRequest(username, code);
+}
+
+QStackedWidget* MainWindow::getStackedWidget() const {
+    return ui->stackedWidget;
 }

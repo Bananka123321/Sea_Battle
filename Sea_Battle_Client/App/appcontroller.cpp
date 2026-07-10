@@ -13,8 +13,11 @@ void AppController::AttachUI(MainWindow* mainW) {
     });
 
     connect(mainW, &MainWindow::createLobbyRequest, this, [this](const std::string& username){
-        std::cerr << "LOBBYCREATE\n";
         router_->createLobbyRequest(username);
+    });
+
+    connect(mainW, &MainWindow::joinLobbyRequest, this, [this](const std::string& username, const std::string& code){
+        router_->joinLobbyRequest(username, code);
     });
 
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);

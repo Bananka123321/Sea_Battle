@@ -27,6 +27,9 @@ private:
     void onError(const std::string& text);
     void onConnectionResponse(const bool& success);
 
+    void onLobbyCreated(const std::string& code);
+    void onLobbyJoined();
+
 signals:
     void S_loginSuccess(const std::string& login, const int& user_id, const std::string& token);
     void S_loginFailed(const std::string& reason);
@@ -40,5 +43,8 @@ signals:
     void S_UserSearch(const std::vector<User>& users);
 
     void S_ConnectionSucess();
+
+    void S_LobbyCreated(const std::string& code);
+    void S_LobbyJoined();
 
 };

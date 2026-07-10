@@ -25,6 +25,7 @@ public:
     void resumeConnectionRequest(const std::string& token);
 
     void createLobbyRequest(const std::string& username);
+    void joinLobbyRequest(const std::string& username, const std::string& code);
 
     void setReconnecting(bool value);
 

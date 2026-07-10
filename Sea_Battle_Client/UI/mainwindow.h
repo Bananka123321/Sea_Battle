@@ -26,13 +26,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+    QStackedWidget* getStackedWidget() const;
 
+private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
 
 signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void createLobbyRequest(const std::string& username);
+    void joinLobbyRequest(const std::string& username, const std::string& code);
     void searchUser(const std::string& text);
 
 private:
@@ -54,4 +56,5 @@ private:
     QString buildMessageHtml(const Message& msg);
 
     void tryCreateLobby();
+    void tryJoinLobby();
 };

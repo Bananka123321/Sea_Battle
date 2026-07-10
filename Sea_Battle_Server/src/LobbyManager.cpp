@@ -1,6 +1,5 @@
 #include "LobbyManager.h"
 #include <random>
-#include <sstream>
 #include <iomanip>
 
 std::shared_ptr<Lobby> LobbyManager::createLobby(const std::string& code, std::shared_ptr<ClientSession> host) {
@@ -47,12 +46,15 @@ void LobbyManager::removePlayerFromLobby(std::shared_ptr<ClientSession> player) 
 }
 
 std::string LobbyManager::generateLobbyCode() {
+    static const std::string chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<> dis(0, 35);
+    static std::uniform_int_distribution<> dis(0, chars.size() - 1);
     
-    const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::stringstream ss;
-    //Надо доделать, пока хз как правильнее будет
-    return ss.str();
+    std::string code;
+    code.reserve(6);
+    for (int i = 0; i < 6; i++)
+        code += chars[dis(gen)];
+
+    return code;
 }
