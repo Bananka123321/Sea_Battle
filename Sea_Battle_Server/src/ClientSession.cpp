@@ -29,6 +29,10 @@ void ClientSession::setUser(const int& new_id, const std::string& new_username) 
     user_id = new_id;
 }
 
+void ClientSession::setUsername(const std::string& newUsername) {
+    username = newUsername;
+}
+
 bool ClientSession::getIsAuthentificated() const {
     return isAuthentificated;
 }

@@ -12,7 +12,7 @@ public:
 
 private:
     void lobbyCreated(const std::string& code);
-    void lobbyJoined(bool success);
+    void lobbyJoined(bool success, const std::string& username);
     void playerJoined(const std::string& username);
     void playerLeft();
     void playerReady(bool success);

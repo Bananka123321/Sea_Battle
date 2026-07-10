@@ -18,6 +18,7 @@ public:
 
     const int& getUserId() const;
     void setUser(const int& new_id, const std::string& new_username);
+    void setUsername(const std::string& newUsername);
 
     bool getIsAuthentificated() const;
     void setIsAuthentificated(bool value);

@@ -34,7 +34,7 @@ Handler::Handler() {
     };
 
     handlers["lobbyJoined"] = [this] (const nlohmann::json& j) {
-        onLobbyJoined(j["success"]);
+        onLobbyJoined(j["success"], j["username"]);
     };
 
     handlers["playerJoined"] = [this] (const nlohmann::json& j) {
@@ -108,8 +108,8 @@ void Handler::onLobbyCreated(const std::string& code) {
     emit S_LobbyCreated(code);
 }
 
-void Handler::onLobbyJoined(bool success) {
-    emit S_LobbyJoined(success);
+void Handler::onLobbyJoined(bool success, const std::string& username) {
+    emit S_LobbyJoined(success, username);
 }
 
 void Handler::onPlayerJoined(const std::string& username) {

@@ -201,10 +201,11 @@ inline std::string lobbyCreated(const std::string& lobbyCode) {
     return j.dump();
 }
 
-inline std::string lobbyJoined(bool success) {//Для подключившегося игрока
+inline std::string lobbyJoined(bool success, const std::string& username = "") {//Для подключившегося игрока
     nlohmann::json j;
     j["type"] = "lobbyJoined";
     j["success"] = success;
+    j["username"] = username;
     return j.dump();
 }
 

@@ -15,19 +15,20 @@ void LobbyManager::lobbyCreated(const std::string& code) {
     UI_->CodeRoomLabel->setText(QString::fromStdString(code));
 }
 
-void LobbyManager::lobbyJoined(bool success) {
+void LobbyManager::lobbyJoined(bool success, const std::string& username) {
     UI_->stackedWidget->setCurrentIndex(1);
     success ? window_->setPlayerState(Ui::PlayerState::PLAYER_READY) : window_->setPlayerState(Ui::PlayerState::PLAYER_NOT_READY);
+    UI_->NameOPLabel->setText(QString::fromStdString(username));
 }
 
 void LobbyManager::playerJoined(const std::string& username) {
     window_->setPlayerState(Ui::PlayerState::PLAYER_NOT_READY);
-    // UI_->PlayerName->setText(QString::fromStdString(username));//Для смены ника в чате
+    UI_->NameOPLabel->setText(QString::fromStdString(username));//Для смены ника в чате
 }
 
 void LobbyManager::playerLeft() {
     window_->setPlayerState(Ui::PlayerState::NOT_PLAYER);
-    // UI_->PlayerName->setText("");//Для смены ника в чате
+    UI_->NameOPLabel->setText("???");//Для смены ника в чате
 }
 
 void LobbyManager::playerReady(bool success) {
