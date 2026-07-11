@@ -4,10 +4,27 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setScene(scene);
+    scene_ = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene_);
 
-    scene->setSceneRect(0, 0, 400, 400);
+    ownScene_ = new QGraphicsScene(this);
+    ui->ownGraphicsView->setScene(ownScene_);
+
+    enemyScene_ = new ClickableScene(this);
+    ui->enemyGraphicsView->setScene(enemyScene_);
+
+    ui->ownGraphicsView->setAlignment(Qt::AlignCenter);
+    ui->enemyGraphicsView->setAlignment(Qt::AlignCenter);
+
+    scene_->setSceneRect(0, 0, 400, 400);
+    ownScene_->setSceneRect(0, 0, 400, 400);
+    enemyScene_->setSceneRect(0, 0, 400, 400);
+
+    ownBoard_ = new GameBoard(ownScene_);
+    enemyBoard_ = new GameBoard(enemyScene_);
+
+    ownBoard_->draw();
+    enemyBoard_->draw();
 
     createField();
     createShips();
@@ -19,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->ConnectLobbyPushButton, &QPushButton::clicked, this, [this](){
         tryJoinLobby();
     });
+
+    connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
+
+    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
@@ -32,7 +53,7 @@ void MainWindow::createField() {
 
     for (int row = 0; row < 10; row++) {
         for (int col = 0; col < 10; col++) {
-            scene->addRect(
+            scene_->addRect(
                 col * CELL_SIZE,
                 row * CELL_SIZE,
                 CELL_SIZE,
@@ -64,7 +85,7 @@ void MainWindow::addShip(ShipItem *ship, int x, int y)
 
     ship->setPos(x,y);
 
-    scene->addItem(ship);
+    scene_->addItem(ship);
 }
 
 void MainWindow::createShips() {
@@ -107,24 +128,28 @@ void MainWindow::tryCreateLobby() {
     emit createLobbyRequest(username);
 }
 
-void MainWindow::on_CreateLobbyPushButton_clicked()
-{
 
-}
-
-
-void MainWindow::on_ReadyPushButton_clicked()
-{
+void MainWindow::on_ReadyPushButton_clicked() {
     ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
     ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
+
+    emit playerReady();
     if (ui->graphicsView->isEnabled() == false)
-    {
         ui->ReadyPushButton->setText("Отмена");
-    }
     else
-    {
         ui->ReadyPushButton->setText("Готов");
+
+    for(auto ship : board_.getShip())
+    {
+        ownBoard_->addShip(
+            ship.row,
+            ship.col,
+            ship.size,
+            ship.horizontal
+            );
     }
+
+    ui->stackedWidget->setCurrentWidget(ui->GamePage);
 }
 
 void MainWindow::tryJoinLobby() {
@@ -134,9 +159,31 @@ void MainWindow::tryJoinLobby() {
     if(auto err = Validator::username(username)) return;
     if(auto err = Validator::username(code)) return;
 
+    ui->CodeRoomLabel->setText(QString::fromStdString(code));
+
     emit joinLobbyRequest(username, code);
 }
 
-QStackedWidget* MainWindow::getStackedWidget() const {
-    return ui->stackedWidget;
+Ui::MainWindow* MainWindow::getUI() const {
+    return ui;
+}
+
+void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& username) {
+    QLabel* enemy = ui->OPConnectLabel;
+    switch (state) {
+    case Ui::PlayerState::NOT_PLAYER:
+        enemy->setText("Оппонент не подключился");
+        break;
+    case Ui::PlayerState::PLAYER_NOT_READY:
+        enemy->setText("Оппонент не готов");
+        break;
+    case Ui::PlayerState::PLAYER_READY:
+        enemy->setText("Оппонент готов!");
+        break;
+    }
+}
+
+void MainWindow::enemyCellClicked(int row, int col)
+{
+    qDebug() << "Hit: " << row << " " << col;
 }

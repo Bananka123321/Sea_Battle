@@ -37,8 +37,8 @@ Handler::Handler(SessionManager& sm) : sessionManager(sm), dispatcher(sessionMan
         leaveLobby(client, j);
     };
 
-    handlers["readyLobby"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
-        readyLobby(client, j);
+    handlers["playerReadyRequest"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+        playerReadyRequest(client, j);
     };
 }
 
@@ -205,6 +205,7 @@ void Handler::createLobby(std::shared_ptr<ClientSession> client, const nlohmann:
     auto lobby = lobbyManager.createLobby(code, client);
 
     client->setCurrentLobby(lobby);
+    client->setUsername(j["username"]);
 
     dispatcher.sendTo(client, protocol::lobbyCreated(code));
     sessionManager.add(client);
@@ -218,19 +219,23 @@ void Handler::leaveLobby(std::shared_ptr<ClientSession> client, const nlohmann::
     if(secondPlayer)
         dispatcher.sendTo(secondPlayer, protocol::playerLeft());
     
-    lobbyManager.removePlayerFromLobby(client);
+    lobby->removePlayer(client);
     client->setCurrentLobby(nullptr);
+    
+    if (!lobby->getPlayer1() && !lobby->getPlayer2())
+        lobbyManager.removeLobby(lobby->getCode());
 }
 
-void Handler::readyLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+void Handler::playerReadyRequest(std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
     auto lobby = lobbyManager.getPlayerLobby(client);
     if(!lobby) return;
 
-    lobby->setReady(client);
+    auto secondPlayer = lobby->getPlayer1() == client ? lobby->getPlayer2() : lobby->getPlayer1();
+    dispatcher.sendTo(secondPlayer, protocol::playerReadyResponse(lobby->setReady(client)));
 
     if(lobby->isBothReady()) {
-        dispatcher.sendTo(lobby->getPlayer1(), protocol::readyLobby());
-        dispatcher.sendTo(lobby->getPlayer2(), protocol::readyLobby());
+        dispatcher.sendTo(lobby->getPlayer1(), protocol::lobbyReady());
+        dispatcher.sendTo(lobby->getPlayer2(), protocol::lobbyReady());
     }
     // else {
     //     auto secondPlayer = lobby->getPlayer1() == client ? lobby->getPlayer2() : lobby->getPlayer1();
@@ -243,8 +248,9 @@ void Handler::readyLobby(std::shared_ptr<ClientSession> client, const nlohmann::
 
 void Handler::joinLobby(std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
     std::string lobby_code = j["LobbyCode"];
-    std::string player_name = j["username"];
-    
+    std::string username = j["username"];
+    client->setUsername(username);
+
     auto lobby = lobbyManager.getLobby(lobby_code);
     
     if (!lobby) {
@@ -260,7 +266,18 @@ void Handler::joinLobby(std::shared_ptr<ClientSession> client, const nlohmann::j
     lobby->addPlayer(client);
     client->setCurrentLobby(lobby);
     
-    dispatcher.sendTo(lobby->getPlayer1(), protocol::playerJoined(client->getUsername()));
+    auto secondPlayer = lobby->getPlayer1() == client ? lobby->getPlayer2() : lobby->getPlayer1();
+    bool secondPlayerReady = lobby->getPlayer1() == client ? lobby->getPlayer2Ready() : lobby->getPlayer1Ready();
+
+    dispatcher.sendTo(secondPlayer, protocol::playerJoined(username));
     
-    dispatcher.sendTo(client, protocol::lobbyJoined());
+    dispatcher.sendTo(client, protocol::lobbyJoined(secondPlayerReady, secondPlayer->getUsername()));
+}
+
+void Handler::notifyPlayerLeft(std::shared_ptr<ClientSession> client, const std::string& playerName) {
+    dispatcher.sendTo(client, protocol::playerLeft());
+}
+
+void Handler::removeEmptyLobby(const std::string& code) {
+    lobbyManager.removeLobby(code);
 }

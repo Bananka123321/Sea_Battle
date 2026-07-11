@@ -128,9 +128,9 @@ inline std::string leaveLobby() {
     return j.dump();
 }
 
-inline std::string readyLobby() {
+inline std::string playerReadyRequest() {
     nlohmann::json j;
-    j["type"] = "readyLobby";
+    j["type"] = "playerReadyRequest";
     return j.dump();
 }
 
@@ -201,22 +201,37 @@ inline std::string lobbyCreated(const std::string& lobbyCode) {
     return j.dump();
 }
 
-inline std::string lobbyJoined() {//Для подключившегося игрока
+inline std::string lobbyJoined(bool success, const std::string& username = "") {//Для подключившегося игрока
     nlohmann::json j;
     j["type"] = "lobbyJoined";
+    j["success"] = success;
+    j["username"] = username;
     return j.dump();
 }
 
-inline std::string playerJoined(const std::string& player_name) {//Уведомление для хоста
+inline std::string playerJoined(const std::string& username) {//Уведомление для хоста
     nlohmann::json j;
     j["type"] = "playerJoined";
-    j["player_name"] = player_name;
+    j["username"] = username;
     return j.dump();
 }
 
 inline std::string playerLeft() {
     nlohmann::json j;
     j["type"] = "playerLeft";
+    return j.dump();
+}
+
+inline std::string playerReadyResponse(bool success) {
+    nlohmann::json j;
+    j["type"] = "playerReadyResponse";
+    j["success"] = success;
+    return j.dump();
+}
+
+inline std::string lobbyReady() {
+    nlohmann::json j;
+    j["type"] = "lobbyReady";
     return j.dump();
 }
 

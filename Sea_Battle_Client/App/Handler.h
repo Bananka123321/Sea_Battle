@@ -28,7 +28,10 @@ private:
     void onConnectionResponse(const bool& success);
 
     void onLobbyCreated(const std::string& code);
-    void onLobbyJoined();
+    void onLobbyJoined(bool success, const std::string& username);
+    void onPlayerJoined(const std::string& username);
+    void onPlayerLeft();
+    void onPlayerReadyResponse(bool success);
 
 signals:
     void S_loginSuccess(const std::string& login, const int& user_id, const std::string& token);
@@ -45,6 +48,9 @@ signals:
     void S_ConnectionSucess();
 
     void S_LobbyCreated(const std::string& code);
-    void S_LobbyJoined();
+    void S_LobbyJoined(bool success, const std::string& username);
+    void S_PlayerJoined(const std::string& username);
+    void S_PlayerLeft();
+    void S_EnemyReady(bool success);
 
 };

@@ -34,7 +34,19 @@ Handler::Handler() {
     };
 
     handlers["lobbyJoined"] = [this] (const nlohmann::json& j) {
-        onLobbyJoined();
+        onLobbyJoined(j["success"], j["username"]);
+    };
+
+    handlers["playerJoined"] = [this] (const nlohmann::json& j) {
+        onPlayerJoined(j["username"]);
+    };
+
+    handlers["playerLeft"] = [this] (const nlohmann::json& j) {
+        onPlayerLeft();
+    };
+
+    handlers["playerReadyResponse"] = [this] (const nlohmann::json& j) {
+        onPlayerReadyResponse(j["success"]);
     };
 }
 
@@ -96,6 +108,18 @@ void Handler::onLobbyCreated(const std::string& code) {
     emit S_LobbyCreated(code);
 }
 
-void Handler::onLobbyJoined() {
-    emit S_LobbyJoined();
+void Handler::onLobbyJoined(bool success, const std::string& username) {
+    emit S_LobbyJoined(success, username);
+}
+
+void Handler::onPlayerJoined(const std::string& username) {
+    emit S_PlayerJoined(username);
+}
+
+void Handler::onPlayerLeft() {
+    emit S_PlayerLeft();
+}
+
+void Handler::onPlayerReadyResponse(bool success) {
+    emit S_EnemyReady(success);
 }

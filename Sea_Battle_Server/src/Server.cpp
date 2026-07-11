@@ -96,11 +96,22 @@ void TCPServer::clientDisconnect(std::shared_ptr<ClientSession> client) {
     if(!client->getConnected()) return;
 
     client->setConnected(false);
-
+    
+    auto lobby = client->getCurrentLobby();
+    if (lobby) {
+        auto secondPlayer = lobby->getPlayer1() == client ? lobby->getPlayer2() : lobby->getPlayer1();
+        if (secondPlayer)
+            handler_.notifyPlayerLeft(secondPlayer, client->getUsername());
+        
+        lobby->removePlayer(client);
+        client->setCurrentLobby(nullptr);
+        
+        if (!lobby->getPlayer1() && !lobby->getPlayer2())
+            handler_.removeEmptyLobby(lobby->getCode());
+    }
+    
     shutdown(client->getSocket(), SHUT_RDWR);
-
     sessionManager_.remove(client);
-
     close(client->getSocket());
 }
 
