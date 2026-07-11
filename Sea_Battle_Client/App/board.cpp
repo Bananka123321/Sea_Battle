@@ -1,12 +1,12 @@
 #include "board.h"
 #include <QDebug>
 
-board::board()
+Board::Board()
 {
     clear();
 }
 
-void board::clear()
+void Board::clear()
 {
     for (int row = 0; row < 10; row++)
     {
@@ -17,7 +17,7 @@ void board::clear()
     }
 }
 
-bool board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
+bool Board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
 {
     rebuildCells(ship);
 
@@ -51,7 +51,7 @@ bool board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizo
     return true;
 }
 
-void board::placeShip(int row, int col, int size, bool horizontal)
+void Board::placeShip(int row, int col, int size, bool horizontal)
 {
     if (horizontal)
     {
@@ -70,7 +70,7 @@ void board::placeShip(int row, int col, int size, bool horizontal)
     qDebug() << cells[row][col];
 }
 
-void board::rebuildCells(ShipItem* ignoreShip)
+void Board::rebuildCells(ShipItem* ignoreShip)
 {
     clear();
 
@@ -92,7 +92,7 @@ void board::rebuildCells(ShipItem* ignoreShip)
     }
 }
 
-void board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
+void Board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
 {
     for(auto &ship : ships)
     {
@@ -116,4 +116,9 @@ void board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
             horizontal
         }
         );
+}
+
+const QList<Board::ShipData>& Board::getShip()
+{
+    return ships;
 }

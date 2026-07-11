@@ -1,38 +1,41 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
+#include <QObject>
+#include <QGraphicsRectItem>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QMouseEvent>
 
 #include "board.h"
-#include "shipitem.h"
+#include "gameshipitem.h"
+#include "clickablescene.h"
 
-class GameBoard : public QGraphicsView
+static const int OFFSET = 25;
+
+class GameBoard : public QObject
 {
     Q_OBJECT
 
 public:
-    enum class Mode
-    {
-        Placement,
-        View,
-        Attack
-    };
 
+    GameBoard(QGraphicsScene *scene);
 
-    GameBoard(Mode mode, QWidget *parent = nullptr);
+    void draw();
+    void addShip(int row, int col, int size, bool horizontal);
 
-    // board &board();
+private slots:
+
+    void onClick(QPointF pos);
+
+signals:
+
+    void cellClicked(int row, int col);
 
 private:
-    void createField();
-    void createShips();
-    void addShip(ShipItem *ship, int x, int y);
 
-    Mode mode_;
+    void addCoord();
+    QGraphicsScene* scene_;
 
-    QGraphicsScene *scene_;
-    board board_;
 };
-
 #endif // GAMEBOARD_H
