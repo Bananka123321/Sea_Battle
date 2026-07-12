@@ -1,12 +1,14 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <QList>
+
 #include "shipitem.h"
 
-class board
+class Board
 {
 public:
-    board();
+    Board();
 
     bool canPlaceShip(ShipItem *ship,int row, int col, int size, bool horizontal);
     void placeShip(int row, int col, int size, bool horizontal);
@@ -22,6 +24,8 @@ public:
         int size;
         bool horizontal;
     };
+
+    const QList<ShipData>& getShip();
 
 private:
     int cells[10][10];

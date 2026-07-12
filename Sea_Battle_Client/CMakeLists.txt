@@ -55,6 +55,8 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
+    App/gameshipitem.h App/gameshipitem.cpp
+    App/clickablescene.h App/clickablescene.cpp
     # resources.qrc
 )
 

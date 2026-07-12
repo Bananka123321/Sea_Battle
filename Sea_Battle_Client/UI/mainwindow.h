@@ -11,7 +11,9 @@
 #include "Message.h"
 #include "board.h"
 #include "shipitem.h"
+#include "gameboard.h"
 #include "Validator.h"
+#include "clickablescene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -50,9 +52,16 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    QGraphicsScene *scene_;
 
-    board board_;
+    QGraphicsScene *ownScene_;
+    ClickableScene *enemyScene_;
+
+    GameBoard *ownBoard_;
+    GameBoard *enemyBoard_;
+
+
+    Board board_;
     Ui::PlayerState state_;
 
 private:
@@ -69,4 +78,7 @@ private:
 
     void tryCreateLobby();
     void tryJoinLobby();
+
+    void enemyCellClicked(int row,int col);
 };
+
