@@ -37,7 +37,7 @@ border-image: url(:/images/background.jpg)
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="ConnectPage">
        <layout class="QGridLayout" name="gridLayout_2">
@@ -47,6 +47,9 @@ border-image: url(:/images/background.jpg)
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -57,6 +60,9 @@ border-image: url(:/images/background.jpg)
             </item>
             <item>
              <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -67,6 +73,9 @@ border-image: url(:/images/background.jpg)
             </item>
             <item>
              <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -77,6 +86,9 @@ border-image: url(:/images/background.jpg)
             </item>
             <item>
              <spacer name="verticalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -87,6 +99,9 @@ border-image: url(:/images/background.jpg)
             </item>
             <item>
              <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -106,12 +121,18 @@ border-image: url(:/images/background.jpg)
               <property name="text">
                <string>Your Name</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
              </widget>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
               <item>
                <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -147,6 +168,9 @@ border-image: url(:/images/background.jpg)
               </item>
               <item>
                <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -161,6 +185,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item>
            <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -175,6 +202,9 @@ border-image: url(:/images/background.jpg)
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -185,6 +215,9 @@ border-image: url(:/images/background.jpg)
               </item>
               <item>
                <spacer name="horizontalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -195,6 +228,9 @@ border-image: url(:/images/background.jpg)
               </item>
               <item>
                <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -205,6 +241,9 @@ border-image: url(:/images/background.jpg)
               </item>
               <item>
                <spacer name="horizontalSpacer_10">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -234,6 +273,9 @@ border-image: url(:/images/background.jpg)
               </item>
               <item>
                <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -250,6 +292,9 @@ border-image: url(:/images/background.jpg)
                <layout class="QHBoxLayout" name="horizontalLayout_2">
                 <item>
                  <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -288,6 +333,9 @@ border-image: url(:/images/background.jpg)
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -302,6 +350,9 @@ border-image: url(:/images/background.jpg)
                <layout class="QHBoxLayout" name="horizontalLayout_3">
                 <item>
                  <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -340,6 +391,9 @@ border-image: url(:/images/background.jpg)
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -355,10 +409,16 @@ border-image: url(:/images/background.jpg)
                 <property name="text">
                  <string>Code room</string>
                 </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
                </widget>
               </item>
               <item row="1" column="1">
                <spacer name="horizontalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -373,6 +433,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item>
            <spacer name="verticalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -383,6 +446,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item>
            <spacer name="verticalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -393,6 +459,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item>
            <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -403,6 +472,9 @@ border-image: url(:/images/background.jpg)
           </item>
           <item>
            <spacer name="verticalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
@@ -661,6 +733,9 @@ border-image: url(:/images/background.jpg)
                </item>
                <item>
                 <spacer name="horizontalSpacer_9">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
                  <property name="sizeHint" stdset="0">
                   <size>
                    <width>40</width>
@@ -671,6 +746,9 @@ border-image: url(:/images/background.jpg)
                </item>
                <item>
                 <spacer name="horizontalSpacer_14">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
                  <property name="sizeHint" stdset="0">
                   <size>
                    <width>40</width>
