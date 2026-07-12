@@ -3,13 +3,13 @@ project(BattleshipServer)
 
 set(SERVER_SOURCES
     src/main.cpp
-    src/Server.cpp
-    src/ClientSession.cpp
-    src/SessionManager.cpp
-    src/Handler.cpp
-    src/MessageDispatcher.cpp
-    src/SignalHandler.cpp
-    src/LobbyManager.cpp
+    src/server.cpp
+    src/client_session.cpp
+    src/session_manager.cpp
+    src/handler.cpp
+    src/message_dispatcher.cpp
+    src/signal_handler.cpp
+    src/lobby_manager.cpp
     src/lobby.cpp
 
     ../common/Validator.cpp
