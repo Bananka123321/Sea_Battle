@@ -1,72 +1,72 @@
 #include "lobby.h"
-#include "ClientSession.h"
+#include "client_session.h"
 
 Lobby::Lobby(const std::string& code, std::shared_ptr<ClientSession> creator)
-    : code(code), player1(creator), player2(nullptr), player1Ready(false), player2Ready(false) {
+    : code_(code), player1_(creator), player2_(nullptr), player1_ready_(false), player2_ready_(false) {
 }
 
-const std::string& Lobby::getCode() const {
-    return code;
+const std::string& Lobby::GetCode() const {
+    return code_;
 }
 
-bool Lobby::addPlayer(std::shared_ptr<ClientSession> player) {
-    if (player1 == nullptr) {
-        player1 = player;
+bool Lobby::AddPlayer(const std::shared_ptr<ClientSession>& player) {
+    if (player1_ == nullptr) {
+        player1_ = player;
         return true;
     }
-    if (player2 == nullptr) {
-        player2 = player;
+    if (player2_ == nullptr) {
+        player2_ = player;
         return true;
     }
     return false;
 }
 
-void Lobby::removePlayer(std::shared_ptr<ClientSession> player) {
-    if (player1 == player) {
-        player1 = nullptr;
-        player1Ready = false;
-    } else if (player2 == player) {
-        player2 = nullptr;
-        player2Ready = false;
+void Lobby::RemovePlayer(const std::shared_ptr<ClientSession>& player) {
+    if (player1_ == player) {
+        player1_ = nullptr;
+        player1_ready_ = false;
+    } else if (player2_ == player) {
+        player2_ = nullptr;
+        player2_ready_ = false;
     }
 }
 
-bool Lobby::setReady(std::shared_ptr<ClientSession> player) {
-    if (player1 == player) {
-        player1Ready = !player1Ready;
-        return player1Ready;
+bool Lobby::SetReady(const std::shared_ptr<ClientSession>& player) {
+    if (player1_ == player) {
+        player1_ready_ = !player1_ready_;
+        return player1_ready_;
     }
-    else if (player2 == player) {
-        player2Ready = !player2Ready;
-        return player2Ready;
+    else if (player2_ == player) {
+        player2_ready_ = !player2_ready_;
+        return player2_ready_;
     }
     return false; //Игрок не найден
 }
 
-bool Lobby::isBothReady() const {
-    return player1Ready && player2Ready;
+bool Lobby::IsBothReady() const {
+    return player1_ready_ && player2_ready_;
 }
 
-std::shared_ptr<ClientSession> Lobby::getPlayer1() const {
-    return player1;
+std::shared_ptr<ClientSession> Lobby::GetPlayer1() const {
+    return player1_;
 }
 
-std::shared_ptr<ClientSession> Lobby::getPlayer2() const {
-    return player2;
+std::shared_ptr<ClientSession> Lobby::GetPlayer2() const {
+    return player2_;
 }
 
-bool Lobby::isFull() const {
-    return player2 != nullptr;
+bool Lobby::IsFull() const {
+    return player2_ != nullptr;
 }
 
-bool Lobby::containsPlayer(std::shared_ptr<ClientSession> player) const {
-    return player1 == player || player2 == player;
+bool Lobby::ContainsPlayer(const std::shared_ptr<ClientSession>& player) const {
+    return player1_ == player || player2_ == player;
 }
 
-bool Lobby::getPlayer1Ready() const {
-    return player1Ready;
+bool Lobby::GetPlayer1Ready() const {
+    return player1_ready_;
 }
 
-bool Lobby::getPlayer2Ready() const {
-    return player2Ready;
+bool Lobby::GetPlayer2Ready() const {
+    return player2_ready_;
 }

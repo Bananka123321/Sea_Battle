@@ -57,6 +57,8 @@ qt_add_executable(Sea_Battle_Client
     UI/mainwindow.ui
     App/gameshipitem.h App/gameshipitem.cpp
     App/clickablescene.h App/clickablescene.cpp
+    resources.qrc
+    App/graphicsboard.h App/graphicsboard.cpp
     # resources.qrc
 )
 

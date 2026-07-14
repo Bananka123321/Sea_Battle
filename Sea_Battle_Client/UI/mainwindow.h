@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <cmath>
 #include <QDebug>
+#include <QColor>
 
 #include "Message.h"
 #include "board.h"
@@ -61,7 +62,7 @@ private:
     GameBoard *enemyBoard_;
 
 
-    Board board_;
+    PlacementBoard* placementBoard_ = nullptr;
     Ui::PlayerState state_;
 
 private:
