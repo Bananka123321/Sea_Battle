@@ -22,7 +22,17 @@ void GameBoard::draw()
     {
         for(int col = 0; col < 10; col++)
         {
-            scene_->addRect(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE, CELL_SIZE, CELL_SIZE, pen);
+            cells_[row][col] = scene_->addRect(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE, CELL_SIZE, CELL_SIZE, pen);
+
+            cells_[row][col]->setBrush(QColor(0,0,139));
+
+            QPixmap pixmap(":/field/images/wave.png");
+
+            QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
+
+            item->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
+
+            images_[row][col] = item;
         }
     }
 
@@ -54,6 +64,71 @@ void GameBoard::addShip(int row, int col, int size, bool horizontal)
     ship->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
 
     scene_->addItem(ship);
+}
+
+void GameBoard::setCellColor(int row, int col, QColor color)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
+    }
+
+    cells_[row][col]->setBrush(QBrush(color));
+}
+
+void GameBoard::setCellColor(int row, int col, QRadialGradient color)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
+    }
+
+    cells_[row][col]->setBrush(QBrush(color));
+}
+
+void GameBoard::setCellImage(int row, int col, QString path)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
+    }
+
+    if(images_[row][col])
+    {
+        scene_->removeItem(images_[row][col]);
+
+        delete images_[row][col];
+    }
+
+    QPixmap pixmap(path);
+
+    QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
+
+    item->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
+
+    images_[row][col] = item;
+}
+
+void GameBoard::shootAtCell(int row, int col, Action type)
+{
+    if (type == Action::Miss)
+    {
+        setCellImage(row, col, ":/field/images/miss.png");
+    }
+    else
+    {
+        setCellImage(row, col, ":/field/images/hit.png");
+
+        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.7, QPointF(0.5, 0.5));
+
+        gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
+
+
+        gradhit.setColorAt(0.0, QColor(255,0,0,255));
+        gradhit.setColorAt(1.0, QColor(0,0,139, 0));
+
+        setCellColor(row, col, gradhit);
+    }
 }
 
 void GameBoard::onClick(QPointF pos)

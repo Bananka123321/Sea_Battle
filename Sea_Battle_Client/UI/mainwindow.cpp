@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 
+#include <QRadialGradient>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -26,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ownBoard_->draw();
     enemyBoard_->draw();
 
+    enemyBoard_->shootAtCell(5,5, Action::Miss);
+    enemyBoard_->shootAtCell(4,5, Action::Hit);
+    enemyBoard_->shootAtCell(4,4,Action::Hit);
+
     createField();
     createShips();
 
@@ -48,8 +53,6 @@ MainWindow::~MainWindow() {
 
 void MainWindow::createField() {
     QPen pen(Qt::black);
-
-    qDebug() << CELL_SIZE;
 
     for (int row = 0; row < 10; row++) {
         for (int col = 0; col < 10; col++) {

@@ -1,5 +1,13 @@
 <RCC>
+    <qresource prefix="/field">
+        <file>images/hit.png</file>
+        <file>images/wave.png</file>
+        <file>images/miss.png</file>
+        <file>images/ship.png</file>
+    </qresource>
+    <qresource prefix="/custom"/>
     <qresource prefix="/">
-        <file alias="MainBackground">images/background.svg</file>
+        <file>images/custom/wave.png</file>
+        <file>images/custom/hit.png</file>
     </qresource>
 </RCC>

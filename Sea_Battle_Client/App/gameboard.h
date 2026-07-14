@@ -6,12 +6,20 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
+#include <QColor>
+#include <QGraphicsPixmapItem>
 
 #include "board.h"
 #include "gameshipitem.h"
 #include "clickablescene.h"
 
 static const int OFFSET = 25;
+
+enum class Action
+{
+    Hit,
+    Miss
+};
 
 class GameBoard : public QObject
 {
@@ -23,6 +31,8 @@ public:
 
     void draw();
     void addShip(int row, int col, int size, bool horizontal);
+    void setCellImage(int row, int col, QString path);
+    void shootAtCell(int row, int col, Action type);
 
 private slots:
 
@@ -34,8 +44,13 @@ signals:
 
 private:
 
-    void addCoord();
     QGraphicsScene* scene_;
+    QGraphicsRectItem* cells_[10][10];
+    QGraphicsPixmapItem* images_[10][10];
+
+    void addCoord();
+    void setCellColor(int row, int col, QColor color);
+    void setCellColor(int row, int col, QRadialGradient);
 
 };
 #endif // GAMEBOARD_H

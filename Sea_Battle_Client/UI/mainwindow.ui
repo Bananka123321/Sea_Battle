@@ -161,6 +161,9 @@ border-image: url(:/images/background.jpg)
                   <height>28</height>
                  </size>
                 </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
                 <property name="placeholderText">
                  <string>Dimofee</string>
                 </property>
