@@ -62,7 +62,7 @@ private:
     GameBoard *enemyBoard_;
 
 
-    Board board_;
+    PlacementBoard* placementBoard_ = nullptr;
     Ui::PlayerState state_;
 
 private:

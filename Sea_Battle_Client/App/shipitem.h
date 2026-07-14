@@ -1,22 +1,23 @@
 #pragma once
-#include <QGraphicsRectItem>
+
+#include <QGraphicsObject>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
-#include <QObject>
-#include <QPointF>
-#include <QtMath>
-#include <QBrush>
-#include <QColor>
-#include <QKeyEvent>
+#include <QVector>
 
 static const int CELL_SIZE = 20;
+static const int OFFSET = 25;
 
-class ShipItem : public QObject, public QGraphicsRectItem
+class ShipItem : public QGraphicsObject
 {
     Q_OBJECT
 
 public:
     ShipItem(int size);
+
+    QRectF boundingRect() const override;
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *) override {}
 
     QPointF oldPosition();
     bool isHorizontal();
@@ -38,6 +39,9 @@ private:
     bool horizontal_ = true;
     QPointF oldPos_;
     bool oldHorizontal_;
+    QVector<QGraphicsPixmapItem*> parts_;
+
+    void updateParts();
 
 signals:
     void placed(ShipItem *ship, int row, int col, int size, bool horizontal);

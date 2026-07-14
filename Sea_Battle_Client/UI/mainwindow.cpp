@@ -8,6 +8,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene_ = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene_);
 
+    placementBoard_ = new PlacementBoard(scene_);
+    placementBoard_->draw();
+
     ownScene_ = new QGraphicsScene(this);
     ui->ownGraphicsView->setScene(ownScene_);
 
@@ -31,7 +34,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     enemyBoard_->shootAtCell(4,5, Action::Hit);
     enemyBoard_->shootAtCell(4,4,Action::Hit);
 
-    createField();
     createShips();
 
     connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
@@ -51,23 +53,23 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::createField() {
-    QPen pen(Qt::black);
+// void MainWindow::createField() {
+//     QPen pen(Qt::black);
 
-    for (int row = 0; row < 10; row++) {
-        for (int col = 0; col < 10; col++) {
-            scene_->addRect(
-                col * CELL_SIZE,
-                row * CELL_SIZE,
-                CELL_SIZE,
-                CELL_SIZE,
-                pen);
-        }
-    }
-}
+//     for (int row = 0; row < 10; row++) {
+//         for (int col = 0; col < 10; col++) {
+//             scene_->addRect(
+//                 col * CELL_SIZE,
+//                 row * CELL_SIZE,
+//                 CELL_SIZE,
+//                 CELL_SIZE,
+//                 pen);
+//         }
+//     }
+// }
 
-static int SPAWNX = 270;
-static int SPAWNY = 30;
+static int SPAWNX = OFFSET + 270;
+static int SPAWNY = OFFSET + 30;
 
 void MainWindow::addShip(ShipItem *ship, int x, int y)
 {
@@ -77,13 +79,17 @@ void MainWindow::addShip(ShipItem *ship, int x, int y)
 
         ship->rotate();
 
-        int row = qRound(ship->pos().y()/CELL_SIZE);
-        int col = qRound(ship->pos().x()/CELL_SIZE);
+        int row = qRound((ship->pos().y() - OFFSET)/CELL_SIZE);
+        int col = qRound((ship->pos().x() - OFFSET)/CELL_SIZE);
 
-        if(board_.canPlaceShip(ship, row, col, ship->size(), ship->isHorizontal()))
-            board_.addShip(ship, row, col, ship->size(), ship->isHorizontal());
+        if(placementBoard_->canPlaceShip(ship, row, col, ship->size(), ship->isHorizontal()))
+        {
+            placementBoard_->addShip(ship, row, col, ship->size(), ship->isHorizontal());
+        }
         else
+        {
             ship->setDirection(oldDirection);
+        }
     });
 
     ship->setPos(x,y);
@@ -114,10 +120,10 @@ void MainWindow::shipPlaced(ShipItem *ship, int row, int col, int size, bool hor
              << size
              << horizontal;
 
-    if (board_.canPlaceShip(ship, row, col, size, horizontal)) {
-        board_.addShip(ship, row, col, size, horizontal);
+    if (placementBoard_->canPlaceShip(ship, row, col, size, horizontal)) {
+        placementBoard_->addShip(ship, row, col, size, horizontal);
 
-        ship->setPos(col*CELL_SIZE, row*CELL_SIZE);
+        ship->setPos(OFFSET + col*CELL_SIZE, OFFSET + row*CELL_SIZE);
     } else {
         ship->restoreState();
     }
@@ -142,7 +148,7 @@ void MainWindow::on_ReadyPushButton_clicked() {
     else
         ui->ReadyPushButton->setText("Готов");
 
-    for(auto ship : board_.getShip())
+    for(auto ship : placementBoard_->getShip())
     {
         ownBoard_->addShip(
             ship.row,
