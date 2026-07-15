@@ -48,7 +48,6 @@ signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
-    void searchUser(const std::string& text);
     void playerReady();
 
 private:

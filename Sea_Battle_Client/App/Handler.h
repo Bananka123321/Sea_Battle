@@ -23,7 +23,6 @@ private:
     void onRegisterResponse(const bool& success, const int user_id, const std::string& login, const std::string& token, const std::string& reason);
     void onUserList(const std::unordered_map<int, std::string>& users);
     void onMessage(const int from, const int to, const std::string& text);
-    void onUserSearch(const std::vector<User>& users);
     void onError(const std::string& text);
     void onConnectionResponse(const bool& success);
 
@@ -42,8 +41,6 @@ signals:
 
     void S_Message(const int sender, const int receiver, const std::string& text);
     void S_userList(const std::unordered_map<int, std::string>& users);
-
-    void S_UserSearch(const std::vector<User>& users);
 
     void S_ConnectionSucess();
 

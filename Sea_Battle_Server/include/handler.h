@@ -9,6 +9,7 @@
 #include "session_manager.h"
 #include "message_dispatcher.h"
 #include "lobby_manager.h"
+#include "game_manager.h"
 
 class Handler {
 public:
@@ -32,6 +33,7 @@ private:
     SessionManager* session_manager_;
     MessageDispatcher dispatcher_;
     LobbyManager lobbyManager_;
+    GameManager gameManager_;
 
     std::unordered_map<std::string, MessageHandler> handlers_;
 
@@ -43,12 +45,15 @@ private:
     void Ping(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void ResumeConnectionRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     
-    void authSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_);
+    void AuthSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_);
 
-    std::string generateToken();
+    std::string GenerateToken();
 
     void CreateLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    void leaveLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    void joinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    void playerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void LeaveLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void JoinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+
+    void PlaceShips(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
 };
