@@ -11,23 +11,8 @@ void MessageRouter::setReconnecting(bool value) {
     isReconnecting.store(value);
 }
 
-void MessageRouter::loginRequest(const std::string& login, const std::string& password) {
-    std::string request = protocol::loginRequest(login, password);
-    sendPacket(request);
-}
-
-void MessageRouter::registerRequest(const std::string& login, const std::string& password) {
-    std::string request = protocol::registerRequest(login, password);
-    sendPacket(request);
-}
-
 void MessageRouter::sendMessage(const int& from, const int& to, const std::string& text) {
     std::string request = protocol::privateMessage(from, to, text);
-    sendPacket(request);
-}
-
-void MessageRouter::searchUser(const std::string& text) {
-    std::string request = protocol::searchUserRequest(text);
     sendPacket(request);
 }
 

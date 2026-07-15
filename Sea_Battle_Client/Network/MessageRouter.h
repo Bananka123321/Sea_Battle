@@ -17,10 +17,7 @@ public:
 
     void setSocket(int socket);
 
-    void loginRequest(const std::string& login, const std::string& password);
-    void registerRequest(const std::string& login, const std::string& password);
     void sendMessage(const int& from, const int& to, const std::string& text);
-    void searchUser(const std::string& text);
     void ping();
     void resumeConnectionRequest(const std::string& token);
 

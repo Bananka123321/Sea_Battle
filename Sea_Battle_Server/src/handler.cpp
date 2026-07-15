@@ -1,32 +1,40 @@
 #include "../include/handler.h"
 
 Handler::Handler(SessionManager* session_manager) : session_manager_(session_manager), dispatcher_(session_manager) {
-    handlers_["PrivateMessage"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+    handlers_["privateMessage"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         PrivateMessage(client, j);
     };
 
-    handlers_["Ping"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+    handlers_["ping"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         Ping(client, j);
     };
 
-    handlers_["ResumeConnectionRequest"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+    handlers_["resumeConnectionRequest"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         ResumeConnectionRequest(client, j);
     };
 
-    handlers_["CreateLobby"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
+    handlers_["createLobby"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         CreateLobby(client, j);
     };
 
-    handlers_["joinLobby"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
-        joinLobby(client, j);
+    handlers_["joinLobby"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        JoinLobby(client, j);
     };
 
-    handlers_["leaveLobby"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
-        leaveLobby(client, j);
+    handlers_["leaveLobby"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        LeaveLobby(client, j);
     };
 
     handlers_["playerReadyRequest"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
-        playerReadyRequest(client, j);
+        PlayerReadyRequest(client, j);
+    };
+
+    handlers_["placeShips"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        PlaceShips(client, j);
+    };
+    
+    handlers_["shoot"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        Shoot(client, j);
     };
 }
 
@@ -54,7 +62,7 @@ static std::mt19937& getGlobalRNG() {
     return gen;
 }
 
-std::string Handler::generateToken() {
+std::string Handler::GenerateToken() {
     static std::mutex rng_mutex;
     std::lock_guard<std::mutex> lock(rng_mutex);
 
@@ -72,7 +80,6 @@ std::string Handler::generateToken() {
 
 void Handler::CreateLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     std::string code_ = lobbyManager_.GenerateLobbyCode();
-    std::cerr << "LobbyCode: " << code_ << '\n';
     auto lobby = lobbyManager_.CreateLobby(code_, client);
 
     client->SetCurrentLobby(lobby);
@@ -82,7 +89,7 @@ void Handler::CreateLobby(const std::shared_ptr<ClientSession>& client, const nl
     session_manager_->Add(client);
 }
 
-void Handler::leaveLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+void Handler::LeaveLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     auto lobby = lobbyManager_.GetPlayerLobby(client);
     if(!lobby) return;
 
@@ -97,7 +104,7 @@ void Handler::leaveLobby(const std::shared_ptr<ClientSession>& client, const nlo
         lobbyManager_.RemoveLobby(lobby->GetCode());
 }
 
-void Handler::authSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_) {
+void Handler::AuthSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_) {
     // client->SetUser(id, username_);
     // client->SetIsAuthentificated(true);
     // std::string token = generateToken();
@@ -168,20 +175,25 @@ void Handler::ResumeConnectionRequest(const std::shared_ptr<ClientSession>& clie
     // dispatcher_.sendTo(client, protocol::resumeConnectionResponse(true));
 }
 
-void Handler::playerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+void Handler::PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     auto lobby = lobbyManager_.GetPlayerLobby(client);
-    if(!lobby) return;
+    if (!lobby) return;
 
-    auto secondPlayer = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
-    dispatcher_.SendTo(secondPlayer, protocol::playerReadyResponse(lobby->SetReady(client)));
+    lobby->SetReady(client);
 
-    if(lobby->IsBothReady()) {
+    if (lobby->IsBothReady()) {
+        gameManager_.createGame(lobby->GetCode(), lobby->GetPlayer1(), lobby->GetPlayer2());
+        
         dispatcher_.SendTo(lobby->GetPlayer1(), protocol::lobbyReady());
         dispatcher_.SendTo(lobby->GetPlayer2(), protocol::lobbyReady());
+    } else {
+        auto opponent = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
+        if (opponent)
+            dispatcher_.SendTo(opponent, protocol::playerReadyResponse(true));
     }
 }
 
-void Handler::joinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+void Handler::JoinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     std::string lobby_code = j["LobbyCode"];
     std::string username_ = j["username_"];
     client->SetUsername(username_);
@@ -204,7 +216,8 @@ void Handler::joinLobby(const std::shared_ptr<ClientSession>& client, const nloh
     auto secondPlayer = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
     bool secondPlayerReady = lobby->GetPlayer1() == client ? lobby->GetPlayer2Ready() : lobby->GetPlayer1Ready();
 
-    dispatcher_.SendTo(secondPlayer, protocol::playerJoined(username_));
+    if (secondPlayer)
+        dispatcher_.SendTo(secondPlayer, protocol::playerJoined(username_));
     
     dispatcher_.SendTo(client, protocol::lobbyJoined(secondPlayerReady, secondPlayer->GetUsername()));
 }
@@ -215,4 +228,64 @@ void Handler::NotifyPlayerLeft(const std::shared_ptr<ClientSession>& client, con
 
 void Handler::RemoveEmptyLobby(const std::string& code_) {
     lobbyManager_.RemoveLobby(code_);
+}
+
+void Handler::PlaceShips(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+    auto lobby = client->GetCurrentLobby();
+    if (!lobby) return;
+
+    auto game = gameManager_.getGame(lobby->GetCode());
+    if (!game) {
+        dispatcher_.SendTo(client, protocol::errorMessage("Game not started"));
+        return;
+    }
+
+    std::vector<ShipData> ships;
+    for (const auto& ship : j["ships"]) {
+        ships.push_back({
+            ship["row"],
+            ship["column"],
+            ship["size"],
+            ship["horizontal"]
+        });
+    }
+
+    if (game->placeShips(client, ships)) {
+        if (game->getState() == GameState::PLAYING) {
+            dispatcher_.SendTo(game->getPlayer1(), protocol::gameStarted(game->getCurrentTurn() == game->getPlayer1()));
+            dispatcher_.SendTo(game->getPlayer2(), protocol::gameStarted(game->getCurrentTurn() == game->getPlayer2()));
+        }
+    } else {
+        dispatcher_.SendTo(client, protocol::errorMessage("Invalid ship placement"));
+    }
+}
+
+void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+    auto lobby = client->GetCurrentLobby();
+    if (!lobby) return;
+
+    auto game = gameManager_.getGame(lobby->GetCode());
+    if (!game) return;
+
+    int row = j["row"];
+    int column = j["column"];
+
+    int result = game->makeShot(client, row, column);
+    if (result == -1) {
+        dispatcher_.SendTo(client, protocol::errorMessage("Invalid shot"));
+        return;
+    }
+
+    auto opponent = game->getOpponent(client);
+
+    dispatcher_.SendTo(client, protocol::shotResult(row, column, result, game->getCurrentTurn() == client));
+    dispatcher_.SendTo(opponent, protocol::shotResult(row, column, result, game->getCurrentTurn() == opponent));
+
+    if (result == 2) {
+        gameManager_.removeGame(lobby->GetCode());
+        
+        std::string winnerName = (client == game->getPlayer1()) ? game->getPlayer1()->GetUsername() : game->getPlayer2()->GetUsername();
+        dispatcher_.SendTo(game->getPlayer1(), protocol::gameOver(winnerName));
+        dispatcher_.SendTo(game->getPlayer2(), protocol::gameOver(winnerName));
+    }
 }

@@ -3,7 +3,9 @@
 #include <json.hpp>
 #include <string>
 #include <vector>
+
 #include "Message.h"
+#include "ship_coord.h"
 
 //======================== Message ===================================
 
@@ -84,6 +86,31 @@ inline std::string playerReadyRequest() {
     return j.dump();
 }
 
+inline std::string placeShips(const std::vector<ShipData>& ships) {
+    nlohmann::json j;
+    j["type"] = "placeShips";
+    nlohmann::json shipsArray = nlohmann::json::array();
+    for (const auto& ship : ships) {
+        shipsArray.push_back({
+            {"row", ship.row},
+            {"col", ship.column},
+            {"size", ship.size},
+            {"horizontal", ship.horizontal}
+        });
+    }
+    j["ships"] = shipsArray;
+    return j.dump();
+}
+
+inline std::string shoot(int row, int column) {
+    nlohmann::json j;
+    j["type"] = "shoot";
+    j["row"] = row;
+    j["column"] = column;
+    return j.dump();
+}
+
+
 //      SERVER --> CLIENT
 //=================================================================================================================================================================
 
@@ -140,6 +167,31 @@ inline std::string playerReadyResponse(bool success) {
 inline std::string lobbyReady() {
     nlohmann::json j;
     j["type"] = "lobbyReady";
+    return j.dump();
+}
+
+
+inline std::string gameStarted(bool yourTurn) {
+    nlohmann::json j;
+    j["type"] = "gameStarted";
+    j["yourTurn"] = yourTurn;
+    return j.dump();
+}
+
+inline std::string shotResult(int row, int column, int result, bool yourTurn) {
+    nlohmann::json j;
+    j["type"] = "shotResult";
+    j["row"] = row;
+    j["column"] = column;
+    j["result"] = result;
+    j["yourTurn"] = yourTurn;
+    return j.dump();
+}
+
+inline std::string gameOver(const std::string& winner) {
+    nlohmann::json j;
+    j["type"] = "gameOver";
+    j["winner"] = winner;
     return j.dump();
 }
 

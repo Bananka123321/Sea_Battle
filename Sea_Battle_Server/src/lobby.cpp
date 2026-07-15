@@ -36,10 +36,12 @@ bool Lobby::SetReady(const std::shared_ptr<ClientSession>& player) {
         player1_ready_ = !player1_ready_;
         return player1_ready_;
     }
+    
     else if (player2_ == player) {
         player2_ready_ = !player2_ready_;
         return player2_ready_;
     }
+
     return false; //Игрок не найден
 }
 
