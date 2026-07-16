@@ -5,6 +5,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QVector>
+#include <QGraphicsScene>
 
 static const int CELL_SIZE = 20;
 static const int OFFSET = 25;

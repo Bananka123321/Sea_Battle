@@ -30,9 +30,31 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ownBoard_->draw();
     enemyBoard_->draw();
 
-    enemyBoard_->shootAtCell(5,5, Action::Miss);
-    enemyBoard_->shootAtCell(4,5, Action::Hit);
-    enemyBoard_->shootAtCell(4,4,Action::Hit);
+    // enemyBoard_->shootAtCell(5,5, Action::Miss);
+    // enemyBoard_->setCellImage(6,5, ":/field/images/mis.png");
+    // enemyBoard_->setCellImage(7,5, ":/field/images/mi.png");
+    // enemyBoard_->setCellImage(8,5, ":/field/images/m.png");
+    // enemyBoard_->shootAtCell(4,5, Action::Hit);
+    // enemyBoard_->shootAtCell(4,4,Action::Hit);
+    // enemyBoard_->setCellImage(4,3, ":/ships/tail_H_ship.png");
+    // enemyBoard_->setCellImage(4,6, ":/ships/head_H_ship.png");
+    // enemyBoard_->setCellImage(0,0, ":/field/images/fog_1.png");
+    // enemyBoard_->setCellImage(0,1, ":/field/images/fog_1.png");
+    // enemyBoard_->setCellImage(1,0, ":/field/images/fog_1.png");
+    // enemyBoard_->setCellImage(1,1, ":/field/images/fog_1.png");
+    // enemyBoard_->setCellImage(2,0, ":/field/images/fog_2.png");
+    // enemyBoard_->setCellImage(2,1, ":/field/images/fog_2.png");
+    // enemyBoard_->setCellImage(3,0, ":/field/images/fog_2.png");
+    // enemyBoard_->setCellImage(3,1, ":/field/images/fog_2.png");
+    // enemyBoard_->setCellImage(4,0, ":/field/images/fog_3.png");
+    // enemyBoard_->setCellImage(4,1, ":/field/images/fog_3.png");
+    // enemyBoard_->setCellImage(5,0, ":/field/images/fog_3.png");
+    // enemyBoard_->setCellImage(5,1, ":/field/images/fog_3.png");
+    // enemyBoard_->setCellImage(6,0, ":/field/images/fog_4.png");
+    // enemyBoard_->setCellImage(6,1, ":/field/images/fog_4.png");
+    // enemyBoard_->setCellImage(7,0, ":/field/images/fog_4.png");
+    // enemyBoard_->setCellImage(7,1, ":/field/images/fog_4.png");
+
 
     createShips();
 
@@ -74,23 +96,51 @@ static int SPAWNY = OFFSET + 30;
 void MainWindow::addShip(ShipItem *ship, int x, int y)
 {
     connect(ship, &ShipItem::placed, this, &MainWindow::shipPlaced);
-    connect(ship, &ShipItem::requestRotate, this, [this](ShipItem* ship) {
-        bool oldDirection = ship->isHorizontal();
+    connect(ship, &ShipItem::requestRotate, this, [this](ShipItem *ship)
+            {
+                bool oldDir = ship->isHorizontal();
 
-        ship->rotate();
+                ship->rotate();
 
-        int row = qRound((ship->pos().y() - OFFSET)/CELL_SIZE);
-        int col = qRound((ship->pos().x() - OFFSET)/CELL_SIZE);
+                QPointF p = ship->pos();
 
-        if(placementBoard_->canPlaceShip(ship, row, col, ship->size(), ship->isHorizontal()))
-        {
-            placementBoard_->addShip(ship, row, col, ship->size(), ship->isHorizontal());
-        }
-        else
-        {
-            ship->setDirection(oldDirection);
-        }
-    });
+                int row = qRound((p.y() - OFFSET) / CELL_SIZE);
+                int col = qRound((p.x() - OFFSET) / CELL_SIZE);
+
+                if (row < -1 || row > 10 || col < -1 || col > 10)
+                    return;
+
+                row = qBound(0, row, 9);
+                col = qBound(0, col, 9);
+
+                if (ship->isHorizontal())
+                    col = qMin(col, 10 - ship->size());
+                else
+                    row = qMin(row, 10 - ship->size());
+
+                if (placementBoard_->canPlaceShip(
+                        ship,
+                        row,
+                        col,
+                        ship->size(),
+                        ship->isHorizontal()))
+                {
+                    placementBoard_->addShip(
+                        ship,
+                        row,
+                        col,
+                        ship->size(),
+                        ship->isHorizontal());
+
+                    ship->setPos(
+                        OFFSET + col * CELL_SIZE,
+                        OFFSET + row * CELL_SIZE);
+                }
+                else
+                {
+                    ship->setDirection(oldDir);
+                }
+            });
 
     ship->setPos(x,y);
 
@@ -119,6 +169,20 @@ void MainWindow::shipPlaced(ShipItem *ship, int row, int col, int size, bool hor
              << col
              << size
              << horizontal;
+
+    if (row < -1 || row > 10 || col < -1 || col > 10)
+    {
+        ship->restoreState();
+        return;
+    }
+
+    row = qBound(0, row, 9);
+    col = qBound(0, col, 9);
+
+    if (horizontal)
+        col = qMin(col, 10 - size);
+    else
+        row = qMin(row, 10 - size);
 
     if (placementBoard_->canPlaceShip(ship, row, col, size, horizontal)) {
         placementBoard_->addShip(ship, row, col, size, horizontal);
@@ -194,5 +258,6 @@ void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& userna
 
 void MainWindow::enemyCellClicked(int row, int col)
 {
+    // enemyBoard_->shootAtCell(row, col, Action::Miss);
     qDebug() << "Hit: " << row << " " << col;
 }

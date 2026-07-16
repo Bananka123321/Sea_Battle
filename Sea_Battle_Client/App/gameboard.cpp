@@ -69,19 +69,29 @@ void GameBoard::shootAtCell(int row, int col, Action type)
 {
     if (type == Action::Miss)
     {
-        setCellImage(row, col, ":/field/images/miss.png");
+        setCellImage(row, col, ":/field/images/missvortex.png");
+
+        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.4, QPointF(0.5, 0.5));
+
+        gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
+
+
+        gradhit.setColorAt(0.0, QColor(255,255,255,255));
+        gradhit.setColorAt(1.0, QColor(0,0,139, 255));
+
+        // setCellColor(row, col, gradhit);
     }
     else
     {
-        setCellImage(row, col, ":/field/images/hit.png");
+        setCellImage(row, col, ":/ships/hit_ship.png");
 
-        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.7, QPointF(0.5, 0.5));
+        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.6, QPointF(0.5, 0.5));
 
         gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
 
 
         gradhit.setColorAt(0.0, QColor(255,0,0,255));
-        gradhit.setColorAt(1.0, QColor(0,0,139, 0));
+        gradhit.setColorAt(1.0, QColor(0,0,139, 255));
 
         setCellColor(row, col, gradhit);
     }

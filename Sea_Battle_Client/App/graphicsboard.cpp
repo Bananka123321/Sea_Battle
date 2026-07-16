@@ -20,7 +20,7 @@ void GraphicsBoard::draw()
 
             cells_[row][col]->setBrush(QColor(0,0,139));
 
-            QPixmap pixmap(":/field/images/wave.png");
+            QPixmap pixmap(":/field/images/fog_1.png");
 
             QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
 

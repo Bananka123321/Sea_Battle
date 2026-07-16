@@ -62,25 +62,27 @@ void ShipItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsObject::mousePressEvent(event);
 }
 
-void ShipItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+void ShipItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
     QGraphicsObject::mouseReleaseEvent(event);
 
     int col = qRound((pos().x() - OFFSET) / CELL_SIZE);
     int row = qRound((pos().y() - OFFSET) / CELL_SIZE);
 
-    if(horizontal_)
+
+    if (!(row >= -3 && row <= 12 && col >= -3 && col <= 12))
     {
-        col = qBound(0, col, 10 - shipSize_);
-        row = qBound(0, row, 9);
-    } else
-    {
-        col = qBound(0, col, 9);
-        row = qBound(0, row, 10 - shipSize_);
+        restoreState();
+        return;
     }
 
-    setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
+    if (row >= -1 && row <= 10 && col >= -1 && col <= 10)
+    {
+        emit placed(this, row, col, shipSize_, horizontal_);
+        return;
+    }
 
-    emit placed(this, row, col, shipSize_, horizontal_);
+    restoreState();
 }
 
 void ShipItem::keyPressEvent(QKeyEvent *event) {
@@ -104,4 +106,10 @@ void ShipItem::rotate() {
 void ShipItem::restoreState() {
     setDirection(oldHorizontal_);
     setPos(oldPos_);
+}
+
+bool isPlacementArea(int row, int col)
+{
+    return row >= -3 && row <= 12 &&
+           col >= -3 && col <= 12;
 }

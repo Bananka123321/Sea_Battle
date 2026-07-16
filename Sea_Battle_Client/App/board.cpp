@@ -19,6 +19,7 @@ void PlacementBoard::clear()
 
 bool PlacementBoard::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
 {
+    qDebug() << row << col << size << horizontal;
     rebuildCells(ship);
 
     if (horizontal)
@@ -95,6 +96,12 @@ void PlacementBoard::rebuildCells(ShipItem* ignoreShip)
 
 void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
 {
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        qDebug() << "BAD ADD SHIP" << row << col;
+        return;
+    }
+
     for(auto &ship : ships_)
     {
         if(ship.item == item)
@@ -131,12 +138,24 @@ void PlacementBoard::updateBoardView()
         }
     }
 
+    qDebug() << images_[0][0];
+
     for (const auto &ship : ships_)
     {
         for (int i = 0; i < ship.size; i++)
         {
             int r = ship.horizontal ? ship.row : ship.row + i;
             int c = ship.horizontal ? ship.col + i : ship.col;
+
+            qDebug() << r << c;
+
+            if (r < 0 || r >= 10 || c < 0 || c >= 10)
+            {
+                qDebug() << "OUT OF RANGE!";
+                continue;
+            }
+
+            qDebug() << images_[r][c];
 
             images_[r][c]->setVisible(false);
         }
