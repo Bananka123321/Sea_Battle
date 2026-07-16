@@ -1,23 +1,23 @@
 #include "board.h"
 #include <QDebug>
 
-Board::Board()
+PlacementBoard::PlacementBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 {
     clear();
 }
 
-void Board::clear()
+void PlacementBoard::clear()
 {
     for (int row = 0; row < 10; row++)
     {
         for (int col = 0; col < 10; col++)
         {
-            cells[row][col] = 0;
+            shipCells_[row][col] = 0;
         }
     }
 }
 
-bool Board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
+bool PlacementBoard::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
 {
     rebuildCells(ship);
 
@@ -42,7 +42,7 @@ bool Board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizo
         {
             if (r >= 0 && r < 10 && c >= 0 && c < 10)
             {
-                if (cells[r][c] == 1)
+                if (shipCells_[r][c] == 1)
                     return false;
             }
         }
@@ -51,30 +51,31 @@ bool Board::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizo
     return true;
 }
 
-void Board::placeShip(int row, int col, int size, bool horizontal)
+void PlacementBoard::placeShip(int row, int col, int size, bool horizontal)
 {
     if (horizontal)
     {
         for(int i = 0; i < size; i++)
         {
-            cells[row][col + i] = 1;
+            shipCells_[row][col + i] = 1;
         }
     }
     else
     {
         for (int i = 0; i < size; i++)
         {
-            cells[row + i][col] = 1;
+            shipCells_[row + i][col] = 1;
         }
     }
-    qDebug() << cells[row][col];
+    qDebug() << shipCells_[row][col];
+
 }
 
-void Board::rebuildCells(ShipItem* ignoreShip)
+void PlacementBoard::rebuildCells(ShipItem* ignoreShip)
 {
     clear();
 
-    for(auto &ship : ships)
+    for(auto &ship : ships_)
     {
         if(ship.item == ignoreShip)
             continue;
@@ -82,19 +83,19 @@ void Board::rebuildCells(ShipItem* ignoreShip)
         if(ship.horizontal)
         {
             for(int i = 0; i < ship.size; i++)
-                cells[ship.row][ship.col+i] = 1;
+                shipCells_[ship.row][ship.col+i] = 1;
         }
         else
         {
             for(int i = 0; i < ship.size; i++)
-                cells[ship.row+i][ship.col] = 1;
+                shipCells_[ship.row+i][ship.col] = 1;
         }
     }
 }
 
-void Board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
+void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
 {
-    for(auto &ship : ships)
+    for(auto &ship : ships_)
     {
         if(ship.item == item)
         {
@@ -102,12 +103,12 @@ void Board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
             ship.col = col;
             ship.size = size;
             ship.horizontal = horizontal;
+            updateBoardView();
             return;
         }
     }
 
-
-    ships.append(
+    ships_.append(
         {
             item,
             row,
@@ -116,9 +117,33 @@ void Board::addShip(ShipItem* item, int row, int col, int size, bool horizontal)
             horizontal
         }
         );
+
+    updateBoardView();
 }
 
-const QList<Board::ShipData>& Board::getShip()
+void PlacementBoard::updateBoardView()
 {
-    return ships;
+    for (int row = 0; row < 10; row++)
+    {
+        for (int col = 0; col < 10; col++)
+        {
+            images_[row][col]->setVisible(true);
+        }
+    }
+
+    for (const auto &ship : ships_)
+    {
+        for (int i = 0; i < ship.size; i++)
+        {
+            int r = ship.horizontal ? ship.row : ship.row + i;
+            int c = ship.horizontal ? ship.col + i : ship.col;
+
+            images_[r][c]->setVisible(false);
+        }
+    }
+}
+
+const QList<PlacementBoard::ShipData>& PlacementBoard::getShip()
+{
+    return ships_;
 }

@@ -4,17 +4,19 @@
 #include <QList>
 
 #include "shipitem.h"
+#include "graphicsboard.h"
 
-class Board
+class PlacementBoard : public GraphicsBoard
 {
 public:
-    Board();
+    PlacementBoard(QGraphicsScene *scene);
 
     bool canPlaceShip(ShipItem *ship,int row, int col, int size, bool horizontal);
     void placeShip(int row, int col, int size, bool horizontal);
     void clear();
     void rebuildCells(ShipItem* ignoreShip = nullptr);
     void addShip(ShipItem* item, int row, int col, int size, bool horizontal);
+    void updateBoardView();
 
     struct ShipData
     {
@@ -28,8 +30,8 @@ public:
     const QList<ShipData>& getShip();
 
 private:
-    int cells[10][10];
-    QList<ShipData> ships;
+    int shipCells_[10][10];
+    QList<ShipData> ships_;
 };
 
 #endif // BOARD_H

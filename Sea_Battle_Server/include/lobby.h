@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <memory>
 
@@ -8,27 +9,30 @@ class Lobby {
 public:
     Lobby(const std::string& code, std::shared_ptr<ClientSession> creator);
 
-    const std::string& getCode() const;
+    Lobby(const Lobby&) = delete;
+    Lobby& operator=(const Lobby&) = delete;
 
-    bool addPlayer(std::shared_ptr<ClientSession> player);
-    void removePlayer(std::shared_ptr<ClientSession> player);
+    const std::string& GetCode() const;
 
-    bool setReady(std::shared_ptr<ClientSession> player);
-    bool isBothReady() const;
+    bool AddPlayer(const std::shared_ptr<ClientSession>& player);
+    void RemovePlayer(const std::shared_ptr<ClientSession>& player);
 
-    std::shared_ptr<ClientSession> getPlayer1() const;
-    std::shared_ptr<ClientSession> getPlayer2() const;
+    bool SetReady(const std::shared_ptr<ClientSession>& player);
+    bool IsBothReady() const;
 
-    bool isFull() const;
-    bool containsPlayer(std::shared_ptr<ClientSession> player) const;
+    std::shared_ptr<ClientSession> GetPlayer1() const;
+    std::shared_ptr<ClientSession> GetPlayer2() const;
 
-    bool getPlayer1Ready() const;
-    bool getPlayer2Ready() const;
+    bool IsFull() const;
+    bool ContainsPlayer(const std::shared_ptr<ClientSession>& player) const;
+
+    bool GetPlayer1Ready() const;
+    bool GetPlayer2Ready() const;
 
 private:
-    std::string code;
-    std::shared_ptr<ClientSession> player1;  //Создатель
-    std::shared_ptr<ClientSession> player2;  //Второй игрок
-    bool player1Ready;
-    bool player2Ready;
+    std::string code_;
+    std::shared_ptr<ClientSession> player1_;  //Создатель
+    std::shared_ptr<ClientSession> player2_;  //Второй игрок
+    bool player1_ready_;
+    bool player2_ready_;
 };
