@@ -8,10 +8,6 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->sendMessage(state_->getCurrentUserId(), to, text);
     });
 
-    connect(mainW, &MainWindow::searchUser, this, [this](const std::string& text){
-        router_->searchUser(text);
-    });
-
     connect(mainW, &MainWindow::createLobbyRequest, this, [this](const std::string& username){
         router_->createLobbyRequest(username);
     });

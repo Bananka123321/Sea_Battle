@@ -17,10 +17,6 @@ Handler::Handler() {
         onMessage(j["from"], j["to"], j["text"]);
     };
 
-    handlers["searchUserResponse"] = [this] (const nlohmann::json& j) {
-        onUserSearch(j["result"]);
-    };
-
     handlers["error"] = [this] (const nlohmann::json& j) {
         onError(j["message"]);
     };
@@ -89,10 +85,6 @@ void Handler::onUserList(const std::unordered_map<int, std::string>& users) {
 
 void Handler::onMessage(const int from, const int to, const std::string& text) {
     emit S_Message(from, to, text);
-}
-
-void Handler::onUserSearch(const std::vector<User>& users) {
-    emit S_UserSearch(users);
 }
 
 void Handler::onError(const std::string& text) {
