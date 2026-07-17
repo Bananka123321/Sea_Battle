@@ -83,7 +83,7 @@ void Handler::CreateLobby(const std::shared_ptr<ClientSession>& client, const nl
     auto lobby = lobbyManager_.CreateLobby(code_, client);
 
     client->SetCurrentLobby(lobby);
-    client->SetUsername(j["username_"]);
+    client->SetUsername(j["username"]);
 
     dispatcher_.SendTo(client, protocol::lobbyCreated(code_));
     session_manager_->Add(client);
@@ -195,7 +195,7 @@ void Handler::PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, c
 
 void Handler::JoinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     std::string lobby_code = j["LobbyCode"];
-    std::string username_ = j["username_"];
+    std::string username_ = j["username"];
     client->SetUsername(username_);
 
     auto lobby = lobbyManager_.GetLobby(lobby_code);
