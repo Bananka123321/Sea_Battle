@@ -222,7 +222,7 @@ void MainWindow::on_ReadyPushButton_clicked() {
             );
     }
 
-    ui->stackedWidget->setCurrentWidget(ui->GamePage);
+    // ui->stackedWidget->setCurrentWidget(ui->GamePage);
 }
 
 void MainWindow::tryJoinLobby() {
