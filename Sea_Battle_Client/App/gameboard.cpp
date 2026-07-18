@@ -1,6 +1,7 @@
 #include "gameboard.h"
 
 #include <QPen>
+#include <QRandomGenerator>
 
 GameBoard::GameBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 {
@@ -58,20 +59,17 @@ void GameBoard::setCellImage(int row, int col, QString path)
         return;
     }
 
-    if(images_[row][col])
-    {
-        scene_->removeItem(images_[row][col]);
+    images_[row][col]->setPixmap(QPixmap(path).scaled(CELL_SIZE, CELL_SIZE));
+}
 
-        delete images_[row][col];
+void GameBoard::setCellImage(int row, int col, const QPixmap &pixmap)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
     }
 
-    QPixmap pixmap(path);
-
-    QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
-
-    item->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
-
-    images_[row][col] = item;
+    images_[row][col]->setPixmap(pixmap.scaled(CELL_SIZE, CELL_SIZE));
 }
 
 void GameBoard::shootAtCell(int row, int col, Action type)
@@ -92,15 +90,21 @@ void GameBoard::shootAtCell(int row, int col, Action type)
     }
     else
     {
-        setCellImage(row, col, ":/ships/hit_ship.png");
+        QPixmap pix(":/ships/hit_ship.png");
+
+        QTransform transform;
+        transform.rotate(QRandomGenerator::global()->bounded(4) * 90);
+
+        pix = pix.transformed(transform, Qt::SmoothTransformation);
+
+        setCellImage(row, col, pix);
 
         QRadialGradient gradhit(QPointF(0.5, 0.5), 0.6, QPointF(0.5, 0.5));
 
         gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
 
-
         gradhit.setColorAt(0.0, QColor(255,0,0,255));
-        gradhit.setColorAt(1.0, QColor(0,0,139, 255));
+        gradhit.setColorAt(1.0, QColor(0,0,139,255));
 
         setCellColor(row, col, gradhit);
     }
