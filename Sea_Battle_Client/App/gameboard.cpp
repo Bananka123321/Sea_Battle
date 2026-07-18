@@ -4,8 +4,6 @@
 
 GameBoard::GameBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 {
-    qDebug() << "scene =" << scene;
-    qDebug() << "base scene =" << GraphicsBoard::scene_;
     ClickableScene* clickable = dynamic_cast<ClickableScene*>(scene_);
     if (clickable)
     {
@@ -15,6 +13,17 @@ GameBoard::GameBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 
 void GameBoard::addShip(int row, int col, int size, bool horizontal)
 {
+    for (int i = 0; i < size; i++)
+    {
+        int r = horizontal ? row : row + i;
+        int c = horizontal ? col + i : col;
+
+        if (images_[r][c])
+        {
+            images_[r][c]->setVisible(false);
+        }
+    }
+
     GameShipItem *ship = new GameShipItem(size, horizontal);
 
     ship->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);

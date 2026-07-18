@@ -14,7 +14,10 @@ public:
 
     virtual ~GraphicsBoard() = default;
 
-    void draw();
+    void drawField();
+    void drawImage();
+
+    void setCellBorder(int row, int col, const QPen &pen);
 
 protected:
 

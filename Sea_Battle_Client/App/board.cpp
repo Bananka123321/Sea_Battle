@@ -1,5 +1,8 @@
 #include "board.h"
+
 #include <QDebug>
+#include <QRandomGenerator>
+#include <algorithm>
 
 PlacementBoard::PlacementBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 {
@@ -19,7 +22,6 @@ void PlacementBoard::clear()
 
 bool PlacementBoard::canPlaceShip(ShipItem *ship, int row, int col, int size, bool horizontal)
 {
-    qDebug() << row << col << size << horizontal;
     rebuildCells(ship);
 
     if (horizontal)
@@ -68,7 +70,6 @@ void PlacementBoard::placeShip(int row, int col, int size, bool horizontal)
             shipCells_[row + i][col] = 1;
         }
     }
-    qDebug() << shipCells_[row][col];
 
 }
 
@@ -98,7 +99,6 @@ void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool ho
 {
     if (row < 0 || row >= 10 || col < 0 || col >= 10)
     {
-        qDebug() << "BAD ADD SHIP" << row << col;
         return;
     }
 
@@ -110,7 +110,6 @@ void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool ho
             ship.col = col;
             ship.size = size;
             ship.horizontal = horizontal;
-            updateBoardView();
             return;
         }
     }
@@ -124,42 +123,139 @@ void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool ho
             horizontal
         }
         );
-
-    updateBoardView();
 }
 
-void PlacementBoard::updateBoardView()
+void PlacementBoard::removeShip(ShipItem *item)
 {
-    for (int row = 0; row < 10; row++)
+    for (int i = 0; i < ships_.size(); i++)
     {
-        for (int col = 0; col < 10; col++)
+        if (ships_[i].item == item)
         {
-            images_[row][col]->setVisible(true);
+            ships_.removeAt(i);
+            return;
         }
     }
+}
 
-    qDebug() << images_[0][0];
+void PlacementBoard::showForbiddenZones(ShipItem *ignoreShip)
+{
+    for (int r = 0; r < 10; r++)
+    {
+        for (int c = 0; c < 10; c++)
+        {
+            cells_[r][c]->setBrush(QColor(0,0,139));
+        }
+    }
 
     for (const auto &ship : ships_)
     {
-        for (int i = 0; i < ship.size; i++)
+        if (ship.item == ignoreShip)
+            continue;
+
+        int r1 = ship.row - 1;
+        int c1 = ship.col - 1;
+
+        int r2 = ship.horizontal
+                     ? ship.row + 1
+                     : ship.row + ship.size;
+
+        int c2 = ship.horizontal
+                     ? ship.col + ship.size
+                     : ship.col + 1;
+
+        for (int r = r1; r <= r2; r++)
         {
-            int r = ship.horizontal ? ship.row : ship.row + i;
-            int c = ship.horizontal ? ship.col + i : ship.col;
-
-            qDebug() << r << c;
-
-            if (r < 0 || r >= 10 || c < 0 || c >= 10)
+            for (int c = c1; c <= c2; c++)
             {
-                qDebug() << "OUT OF RANGE!";
+                if (r < 0 || r >= 10 || c < 0 || c >= 10)
+                    continue;
+
+                cells_[r][c]->setBrush(QColor(255,0,0,120));
+            }
+        }
+    }
+}
+
+void PlacementBoard::hideForbiddenZones()
+{
+    for (int r = 0; r < 10; r++)
+    {
+        for (int c = 0; c < 10; c++)
+        {
+            cells_[r][c]->setBrush(QColor(0,0,139));
+        }
+    }
+}
+
+void PlacementBoard::registerShip(ShipItem *ship)
+{
+    allShips_.append(ship);
+}
+
+void PlacementBoard::randomPlacement()
+{
+    clear();
+    ships_.clear();
+
+    for (ShipItem *ship : allShips_)
+    {
+        while (true)
+        {
+            bool horizontal = QRandomGenerator::global()->bounded(2);
+
+            int row = QRandomGenerator::global()->bounded(10);
+            int col = QRandomGenerator::global()->bounded(10);
+
+            if (!canPlaceShip(nullptr,
+                              row,
+                              col,
+                              ship->size(),
+                              horizontal))
+            {
                 continue;
             }
 
-            qDebug() << images_[r][c];
+            ship->setDirection(horizontal);
 
-            images_[r][c]->setVisible(false);
+            ship->setPos(
+                OFFSET + col * CELL_SIZE,
+                OFFSET + row * CELL_SIZE
+                );
+
+            addShip(ship,
+                    row,
+                    col,
+                    ship->size(),
+                    horizontal);
+
+            break;
         }
     }
+}
+
+void PlacementBoard::reset()
+{
+    clear();
+    ships_.clear();
+}
+
+bool PlacementBoard::allShipPlaced()
+{
+    if (ships_.size() != 10)
+    {
+        return false;
+    }
+
+    for (const auto &ship : ships_)
+    {
+        if (ship.row < 0 || ship.row > 9)
+            return false;
+
+        if (ship.col < 0 || ship.col > 9)
+            return false;
+    }
+
+    return true;
 }
 
 const QList<PlacementBoard::ShipData>& PlacementBoard::getShip()
