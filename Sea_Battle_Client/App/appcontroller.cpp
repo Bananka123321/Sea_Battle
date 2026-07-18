@@ -22,11 +22,6 @@ void AppController::AttachUI(MainWindow* mainW) {
 
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
 
-    connect(handler_, &Handler::S_loginSuccess, this, [this](const std::string&, int, const std::string&){
-        router_->setReconnecting(false);
-        startPing();
-    });
-
     connect(client_, &TCPClient::connectionLose, this, [this](){
         stopPing();
         startReconnect();

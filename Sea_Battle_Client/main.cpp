@@ -2,7 +2,6 @@
 #include "tcp_client.h"
 #include "Handler.h"
 #include "appcontroller.h"
-#include "StateBinder.h"
 #include "mainwindow.h"
 #include "LobbyManager.h"
 #include "GameManager.h"
@@ -19,7 +18,6 @@ int main(int argc, char *argv[]) {
     Handler* handler = new Handler();
     TCPClient* client = new TCPClient(6767, router);
     AppController* AController = new AppController(router, state, handler, client);
-    StateChanger* binder = new StateChanger(handler, state);
 
     client->onMessage = [handler](const std::string& msg) {
         QMetaObject::invokeMethod(handler, [handler, msg]() {

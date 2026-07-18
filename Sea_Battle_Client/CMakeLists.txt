@@ -15,7 +15,6 @@ set(PROJECT_SOURCES
     App/AppState.cpp
     App/Handler.cpp
     App/appcontroller.cpp
-    App/StateBinder.cpp
     App/shipitem.cpp
     App/board.cpp
     App/GameManager.cpp
@@ -35,7 +34,6 @@ set(PROJECT_HEADERS
     App/AppState.h
     App/Handler.h
     App/appcontroller.h
-    App/StateBinder.h
     App/shipitem.h
     App/board.h
     App/GameManager.h
