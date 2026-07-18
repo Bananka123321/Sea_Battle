@@ -33,6 +33,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     enemyBoard_->drawField();
     enemyBoard_->drawImage();
 
+    enemyBoard_->setCellImage(4,4,":/ships/tail_H_ship.png");
+    enemyBoard_->setCellImage(4,5,":/ships/middle_H34_ship.png");
+    enemyBoard_->setCellImage(4,6,":/ships/middle_H4_ship.png");
+    enemyBoard_->setCellImage(4,7,":/ships/head_H_ship.png");
+
+
     createShips();
 
     connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
@@ -247,6 +253,6 @@ void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& userna
 
 void MainWindow::enemyCellClicked(int row, int col)
 {
-    enemyBoard_->shootAtCell(row, col, Action::Miss);
+    enemyBoard_->shootAtCell(row, col, Action::Hit);
     qDebug() << "Hit: " << row << " " << col;
 }

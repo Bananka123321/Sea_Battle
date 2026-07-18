@@ -6,12 +6,16 @@ ShipItem::ShipItem(int size) : shipSize_(size)
     qDeleteAll(parts_);
     parts_.clear();
 
+    setFlag(ItemIsMovable);
+    setFlag(ItemIsFocusable);
+
     if (shipSize_ == 1)
     {
         QGraphicsPixmapItem *part = new QGraphicsPixmapItem(this);
         part->setPixmap(QPixmap(":/ships/single_H.png").scaled(CELL_SIZE, CELL_SIZE));
 
         parts_.append(part);
+        updateParts();
         return;
     }
 
@@ -44,9 +48,6 @@ ShipItem::ShipItem(int size) : shipSize_(size)
     }
 
     updateParts();
-
-    setFlag(ItemIsMovable);
-    setFlag(ItemIsFocusable);
 }
 
 QRectF ShipItem::boundingRect() const

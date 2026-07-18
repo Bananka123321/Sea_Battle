@@ -30,6 +30,7 @@ public:
 
     void addShip(int row, int col, int size, bool horizontal);
     void setCellImage(int row, int col, QString path);
+    void setCellImage(int row, int col, const QPixmap &pixmap);
     void shootAtCell(int row, int col, Action type);
 
 private slots:
