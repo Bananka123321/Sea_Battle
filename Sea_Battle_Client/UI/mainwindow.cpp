@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
-    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {

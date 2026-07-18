@@ -19,9 +19,6 @@ private:
 
     std::unordered_map<std::string, std::function<void(const nlohmann::json&)>> handlers;
 
-    void onLoginResponse(const bool& success, const int user_id, const std::string& login, const std::string& token, const std::string& reason);
-    void onRegisterResponse(const bool& success, const int user_id, const std::string& login, const std::string& token, const std::string& reason);
-    void onUserList(const std::unordered_map<int, std::string>& users);
     void onMessage(const int from, const int to, const std::string& text);
     void onError(const std::string& text);
     void onConnectionResponse(const bool& success);
@@ -33,14 +30,7 @@ private:
     void onPlayerReadyResponse(bool success);
 
 signals:
-    void S_loginSuccess(const std::string& login, const int& user_id, const std::string& token);
-    void S_loginFailed(const std::string& reason);
-
-    void S_registerSuccess(const std::string& login, const int& user_id, const std::string& token);
-    void S_registerFailed(const std::string& reason);
-
     void S_Message(const int sender, const int receiver, const std::string& text);
-    void S_userList(const std::unordered_map<int, std::string>& users);
 
     void S_ConnectionSucess();
 
