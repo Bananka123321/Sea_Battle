@@ -9,7 +9,7 @@
 #include "session_manager.h"
 #include "message_dispatcher.h"
 #include "lobby_manager.h"
-#include "game_manager.h"
+#include "game_session.h"
 
 class Handler {
 public:
@@ -33,14 +33,11 @@ private:
     SessionManager* session_manager_;
     MessageDispatcher dispatcher_;
     LobbyManager lobbyManager_;
-    GameManager gameManager_;
 
     std::unordered_map<std::string, MessageHandler> handlers_;
 
 
 private:
-    void LoginRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    void RegisterRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void PrivateMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void Ping(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void ResumeConnectionRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
@@ -54,6 +51,5 @@ private:
     void JoinLobby(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
 
-    void PlaceShips(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
 };

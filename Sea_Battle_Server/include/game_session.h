@@ -3,8 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "client_session.h"
 #include "ship_coord.h"
+
+class ClientSession;
 
 enum class GameState {
     PLACING,
@@ -33,6 +34,8 @@ public:
     std::shared_ptr<ClientSession> getOpponent(std::shared_ptr<ClientSession> player) const;
     std::shared_ptr<ClientSession> getCurrentTurn() const;
     GameState getState() const;
+
+    void clearShips(std::shared_ptr<ClientSession> player);
 
 private:
     std::shared_ptr<ClientSession> player1_;

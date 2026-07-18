@@ -6,7 +6,8 @@
 #include <memory>
 
 #include "../common/PacketIO.h"
-#include "lobby.h"
+
+class Lobby;
 
 class ClientSession {
 public:

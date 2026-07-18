@@ -1,5 +1,6 @@
 #include "lobby.h"
 #include "client_session.h"
+#include "game_session.h"
 
 Lobby::Lobby(const std::string& code, std::shared_ptr<ClientSession> creator)
     : code_(code), player1_(creator), player2_(nullptr), player1_ready_(false), player2_ready_(false) {
@@ -71,4 +72,16 @@ bool Lobby::GetPlayer1Ready() const {
 
 bool Lobby::GetPlayer2Ready() const {
     return player2_ready_;
+}
+
+GameSession* Lobby::getGame() const {
+    return game_.get();
+}
+
+void Lobby::createGame() {
+    game_ = std::make_unique<GameSession>(player1_, player2_);
+}
+
+void Lobby::destroyGame() {
+    game_.reset();
 }

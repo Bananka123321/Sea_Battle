@@ -28,10 +28,6 @@ Handler::Handler(SessionManager* session_manager) : session_manager_(session_man
     handlers_["playerReadyRequest"] = [this](std::shared_ptr<ClientSession> client, const nlohmann::json& j) {
         PlayerReadyRequest(client, j);
     };
-
-    handlers_["placeShips"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-        PlaceShips(client, j);
-    };
     
     handlers_["shoot"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         Shoot(client, j);
@@ -179,17 +175,43 @@ void Handler::PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, c
     auto lobby = lobbyManager_.GetPlayerLobby(client);
     if (!lobby) return;
 
-    lobby->SetReady(client);
+    bool isReady = lobby->SetReady(client);
+    auto game = lobby->getGame();
 
-    if (lobby->IsBothReady()) {
-        gameManager_.createGame(lobby->GetCode(), lobby->GetPlayer1(), lobby->GetPlayer2());
-        
-        dispatcher_.SendTo(lobby->GetPlayer1(), protocol::lobbyReady());
-        dispatcher_.SendTo(lobby->GetPlayer2(), protocol::lobbyReady());
+    if (isReady) {
+        if (!game) {
+            lobby->createGame();
+            game = lobby->getGame();
+        }
+
+        std::vector<ShipData> ships;
+        if (j.contains("ships")) {
+            for (const auto& ship : j["ships"])
+                ships.push_back({ship["row"], ship["column"],ship["size"], ship["horizontal"]});
+        } else {
+            lobby->SetReady(client);
+            dispatcher_.SendTo(client, protocol::errorMessage("Not ships"));
+            return;
+        }
+
+        if (!game->placeShips(client, ships)) {
+            lobby->SetReady(client);
+            dispatcher_.SendTo(client, protocol::errorMessage("Invalid ship placement"));
+            return;
+        }
     } else {
-        auto opponent = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
-        if (opponent)
-            dispatcher_.SendTo(opponent, protocol::playerReadyResponse(true));
+        if (game)
+            game->clearShips(client);
+    }
+
+    auto opponent = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
+    if (opponent) {
+        dispatcher_.SendTo(opponent, protocol::playerReadyResponse(isReady));
+    }
+
+    if (lobby->IsBothReady() && game && game->getState() == GameState::PLAYING) {
+        dispatcher_.SendTo(lobby->GetPlayer1(), protocol::gameStarted(game->getCurrentTurn() == lobby->GetPlayer1()));
+        dispatcher_.SendTo(lobby->GetPlayer2(), protocol::gameStarted(game->getCurrentTurn() == lobby->GetPlayer2()));
     }
 }
 
@@ -230,47 +252,20 @@ void Handler::RemoveEmptyLobby(const std::string& code_) {
     lobbyManager_.RemoveLobby(code_);
 }
 
-void Handler::PlaceShips(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-    auto lobby = client->GetCurrentLobby();
-    if (!lobby) return;
-
-    auto game = gameManager_.getGame(lobby->GetCode());
-    if (!game) {
-        dispatcher_.SendTo(client, protocol::errorMessage("Game not started"));
-        return;
-    }
-
-    std::vector<ShipData> ships;
-    for (const auto& ship : j["ships"]) {
-        ships.push_back({
-            ship["row"],
-            ship["column"],
-            ship["size"],
-            ship["horizontal"]
-        });
-    }
-
-    if (game->placeShips(client, ships)) {
-        if (game->getState() == GameState::PLAYING) {
-            dispatcher_.SendTo(game->getPlayer1(), protocol::gameStarted(game->getCurrentTurn() == game->getPlayer1()));
-            dispatcher_.SendTo(game->getPlayer2(), protocol::gameStarted(game->getCurrentTurn() == game->getPlayer2()));
-        }
-    } else {
-        dispatcher_.SendTo(client, protocol::errorMessage("Invalid ship placement"));
-    }
-}
-
 void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     auto lobby = client->GetCurrentLobby();
     if (!lobby) return;
 
-    auto game = gameManager_.getGame(lobby->GetCode());
-    if (!game) return;
+    auto game = lobby->getGame();
+    if (!game) {
+        dispatcher_.SendTo(client, protocol::errorMessage("Game not found"));
+        return;
+    }
 
     int row = j["row"];
-    int column = j["column"];
+    int col = j["column"];
 
-    int result = game->makeShot(client, row, column);
+    int result = game->makeShot(client, row, col);
     if (result == -1) {
         dispatcher_.SendTo(client, protocol::errorMessage("Invalid shot"));
         return;
@@ -278,14 +273,14 @@ void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann
 
     auto opponent = game->getOpponent(client);
 
-    dispatcher_.SendTo(client, protocol::shotResult(row, column, result, game->getCurrentTurn() == client));
-    dispatcher_.SendTo(opponent, protocol::shotResult(row, column, result, game->getCurrentTurn() == opponent));
+    dispatcher_.SendTo(client, protocol::shotResult(row, col, result, game->getCurrentTurn() == client));
+    dispatcher_.SendTo(opponent, protocol::shotResult(row, col, result, game->getCurrentTurn() == opponent));
 
     if (result == 2) {
-        gameManager_.removeGame(lobby->GetCode());
-        
         std::string winnerName = (client == game->getPlayer1()) ? game->getPlayer1()->GetUsername() : game->getPlayer2()->GetUsername();
-        dispatcher_.SendTo(game->getPlayer1(), protocol::gameOver(winnerName));
-        dispatcher_.SendTo(game->getPlayer2(), protocol::gameOver(winnerName));
+        dispatcher_.SendTo(lobby->GetPlayer1(), protocol::gameOver(winnerName));
+        dispatcher_.SendTo(lobby->GetPlayer2(), protocol::gameOver(winnerName));
+        
+        lobby->destroyGame();
     }
 }

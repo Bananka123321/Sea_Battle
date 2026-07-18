@@ -1,4 +1,5 @@
 #include "game_session.h"
+#include "client_session.h"
 
 GameSession::GameSession(std::shared_ptr<ClientSession> p1, std::shared_ptr<ClientSession> p2) : player1_(p1), player2_(p2), currentTurn_(p1), state_(GameState::PLACING), player1Placed_(false), player2Placed_(false) {
     board1_ = board2_ = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
@@ -117,4 +118,16 @@ int GameSession::getShipsHealth(int playerIndex) const {
     }
 
     return health;
+}
+
+void GameSession::clearShips(std::shared_ptr<ClientSession> player) {
+    auto& board = (player == player1_) ? board1_ : board2_;
+    board = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
+    
+    if (player == player1_) player1Placed_ = false;
+    else player2Placed_ = false;
+    
+    if (state_ == GameState::PLAYING) {
+        state_ = GameState::PLACING;
+    }
 }
