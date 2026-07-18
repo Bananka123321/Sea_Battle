@@ -17,7 +17,6 @@ set(PROJECT_SOURCES
     App/appcontroller.cpp
     App/shipitem.cpp
     App/board.cpp
-    App/GameManager.cpp
     App/LobbyManager.cpp
     App/gameboard.cpp
     App/gameshipitem.cpp
@@ -39,7 +38,6 @@ set(PROJECT_HEADERS
     App/appcontroller.h
     App/shipitem.h
     App/board.h
-    App/GameManager.h
     App/LobbyManager.h
     App/gameboard.h
     App/gameshipitem.h

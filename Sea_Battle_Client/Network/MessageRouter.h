@@ -23,7 +23,7 @@ public:
 
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
-    void playerReady();
+    void playerReady(const std::vector<ShipData>& ships);
 
     void setReconnecting(bool value);
 

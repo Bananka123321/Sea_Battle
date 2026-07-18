@@ -48,7 +48,7 @@ signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
-    void playerReady();
+    void playerReady(const std::vector<PlacementBoard::ShipData>& ships);
 
 private:
     Ui::MainWindow *ui;
