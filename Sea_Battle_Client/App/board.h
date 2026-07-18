@@ -17,6 +17,16 @@ public:
     void rebuildCells(ShipItem* ignoreShip = nullptr);
     void addShip(ShipItem* item, int row, int col, int size, bool horizontal);
     void updateBoardView();
+    void removeShip(ShipItem *item);
+    void showForbiddenZones(ShipItem *ignoreShip);
+    void hideForbiddenZones();
+
+    void registerShip(ShipItem *ship);
+    void randomPlacement();
+    void reset();
+
+    bool allShipPlaced();
+
 
     struct ShipData
     {
@@ -31,6 +41,7 @@ public:
 
 private:
     int shipCells_[10][10];
+    QList<ShipItem*> allShips_;
     QList<ShipData> ships_;
 };
 

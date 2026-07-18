@@ -20,6 +20,9 @@ set(PROJECT_SOURCES
     App/GameManager.cpp
     App/LobbyManager.cpp
     App/gameboard.cpp
+    App/gameshipitem.cpp
+    App/clickablescene.cpp
+    App/graphicsboard.cpp
 
     UI/mainwindow.cpp
 
@@ -39,6 +42,9 @@ set(PROJECT_HEADERS
     App/GameManager.h
     App/LobbyManager.h
     App/gameboard.h
+    App/gameshipitem.h
+    App/clickablescene.h
+    App/graphicsboard.h
 
     UI/mainwindow.h
 
@@ -53,11 +59,7 @@ qt_add_executable(Sea_Battle_Client
     ${PROJECT_HEADERS}
 
     UI/mainwindow.ui
-    App/gameshipitem.h App/gameshipitem.cpp
-    App/clickablescene.h App/clickablescene.cpp
     resources.qrc
-    App/graphicsboard.h App/graphicsboard.cpp
-    # resources.qrc
 )
 
 target_include_directories(Sea_Battle_Client PRIVATE

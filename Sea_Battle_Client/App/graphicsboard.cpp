@@ -5,7 +5,7 @@ static const int OFFSET = 25;
 
 GraphicsBoard::GraphicsBoard(QGraphicsScene *scene) : QObject(scene), scene_(scene) {}
 
-void GraphicsBoard::draw()
+void GraphicsBoard::drawField()
 {
     scene_->setSceneRect(0, 0, OFFSET + 10 * CELL_SIZE, OFFSET + 10 * CELL_SIZE);
 
@@ -19,7 +19,18 @@ void GraphicsBoard::draw()
             cells_[row][col] = scene_->addRect(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE, CELL_SIZE, CELL_SIZE, pen);
 
             cells_[row][col]->setBrush(QColor(0,0,139));
+        }
+    }
 
+    addCoord();
+}
+
+void GraphicsBoard::drawImage()
+{
+    for(int row = 0; row < 10; row++)
+    {
+        for(int col = 0; col < 10; col++)
+        {
             QPixmap pixmap(":/field/images/fog_1.png");
 
             QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
@@ -30,7 +41,15 @@ void GraphicsBoard::draw()
         }
     }
 
-    addCoord();
+}
+
+void GraphicsBoard::setCellBorder(int row, int col, const QPen &pen)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
+    }
+    cells_[row][col]->setPen(pen);
 }
 
 void GraphicsBoard::addCoord()

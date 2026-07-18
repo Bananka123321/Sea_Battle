@@ -18,6 +18,7 @@ public:
     ShipItem(int size);
 
     QRectF boundingRect() const override;
+    QPainterPath shape() const override;
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *) override {}
 
     QPointF oldPosition();
@@ -29,6 +30,8 @@ public:
     void rotate();
 
     void restoreState();
+    void setSpawnPos(QPointF pos);
+    void returnSpawn();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -39,6 +42,7 @@ private:
     int shipSize_;
     bool horizontal_ = true;
     QPointF oldPos_;
+    QPointF spawnPos_;
     bool oldHorizontal_;
     QVector<QGraphicsPixmapItem*> parts_;
 
@@ -47,4 +51,7 @@ private:
 signals:
     void placed(ShipItem *ship, int row, int col, int size, bool horizontal);
     void requestRotate(ShipItem *ship);
+    void removedFromBoard(ShipItem *item);
+    void dragStarted(ShipItem*);
+    void dragFinished(ShipItem*);
 };
