@@ -1,4 +1,5 @@
 #include "../include/client_session.h"
+#include "lobby.h"
 
 ClientSession::ClientSession(int sock) : socket_(sock), isAuthentificated_(false), last_activity_time_(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) {}
 

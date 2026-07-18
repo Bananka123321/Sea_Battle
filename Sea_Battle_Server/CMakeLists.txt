@@ -12,7 +12,6 @@ set(SERVER_SOURCES
     src/lobby_manager.cpp
     src/lobby.cpp
     src/game_session.cpp
-    src/game_manager.cpp
 
     ../common/Validator.cpp
     ../common/PacketIO.cpp
