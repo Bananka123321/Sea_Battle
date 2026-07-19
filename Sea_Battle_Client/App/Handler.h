@@ -19,7 +19,7 @@ private:
 
     std::unordered_map<std::string, std::function<void(const nlohmann::json&)>> handlers;
 
-    void onMessage(const int from, const int to, const std::string& text);
+    void onMessage(const std::string& from, const std::string& text);
     void onError(const std::string& text);
     void onConnectionResponse(const bool& success);
 
@@ -33,7 +33,7 @@ private:
     void onGameOver(const std::string& winner);
 
 signals:
-    void S_Message(const int sender, const int receiver, const std::string& text);
+    void S_Message(const std::string& from, const std::string& text);
 
     void S_ConnectionSucess();
 

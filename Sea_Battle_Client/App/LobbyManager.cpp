@@ -23,16 +23,19 @@ void LobbyManager::lobbyJoined(bool success, const std::string& username) {
     UI_->graphicsView->scale(0.8, 0.8);
     success ? window_->setPlayerState(Ui::PlayerState::PLAYER_READY) : window_->setPlayerState(Ui::PlayerState::PLAYER_NOT_READY);
     UI_->NameOPLabel->setText(QString::fromStdString(username));
+    UI_->NameOPInGameLabel->setText(QString::fromStdString(username));
 }
 
 void LobbyManager::playerJoined(const std::string& username) {
     window_->setPlayerState(Ui::PlayerState::PLAYER_NOT_READY);
-    UI_->NameOPLabel->setText(QString::fromStdString(username));//Для смены ника в чате
+    UI_->NameOPLabel->setText(QString::fromStdString(username));
+    UI_->NameOPInGameLabel->setText(QString::fromStdString(username));
 }
 
 void LobbyManager::playerLeft() {
     window_->setPlayerState(Ui::PlayerState::NOT_PLAYER);
-    UI_->NameOPLabel->setText("???");//Для смены ника в чате
+    UI_->NameOPLabel->setText("???");
+    UI_->NameOPInGameLabel->setText("???");
 }
 
 void LobbyManager::playerReady(bool success) {

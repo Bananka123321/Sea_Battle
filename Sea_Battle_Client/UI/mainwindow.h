@@ -8,6 +8,8 @@
 #include <cmath>
 #include <QDebug>
 #include <QColor>
+#include <QDateTime>
+#include <QScrollBar>
 
 #include "Message.h"
 #include "board.h"
@@ -50,6 +52,8 @@ public:
 
     void shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
+public slots:
+    void onReceiveChatMessage(const std::string& from, const std::string& text);
 
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
@@ -57,7 +61,7 @@ private slots:
     void on_ReadyPushButton_clicked();
 
 signals:
-    void sendMessageRequest(const int& to, const std::string& text);
+    void sendMessageRequest(const std::string& text);
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
     void playerReady(const std::vector<ShipData>& ships);
@@ -94,11 +98,16 @@ private:
     QString formatTime(int64_t timestamp);
     QString buildMessageHtml(const Message& msg);
 
+    void onSendChatMessage();
+    void appendMessageToChat(QTextEdit* chatView, const QString& name, const std::string& text, bool isMe);
+
     void tryCreateLobby();
     void tryJoinLobby();
 
     void enemyCellClicked(int row,int col);
 
     std::vector<ShipData> convertShips();
+
+
 };
 

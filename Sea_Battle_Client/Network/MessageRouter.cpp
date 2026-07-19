@@ -11,8 +11,8 @@ void MessageRouter::setReconnecting(bool value) {
     isReconnecting.store(value);
 }
 
-void MessageRouter::sendMessage(const int& from, const int& to, const std::string& text) {
-    std::string request = protocol::privateMessage(from, to, text);
+void MessageRouter::sendMessage(const std::string& text) {
+    std::string request = protocol::chatMessage(text);
     sendPacket(request);
 }
 

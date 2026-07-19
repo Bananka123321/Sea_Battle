@@ -12,7 +12,6 @@ set(PROJECT_SOURCES
     Network/tcp_client.cpp
     Network/MessageRouter.cpp
 
-    App/AppState.cpp
     App/Handler.cpp
     App/appcontroller.cpp
     App/shipitem.cpp
@@ -33,7 +32,6 @@ set(PROJECT_HEADERS
     Network/tcp_client.h
     Network/MessageRouter.h
 
-    App/AppState.h
     App/Handler.h
     App/appcontroller.h
     App/shipitem.h
