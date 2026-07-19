@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
                             ui->graphicsView->scale(0.8, 0.8);
                        });
 
-    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
@@ -210,6 +210,26 @@ void MainWindow::tryCreateLobby() {
     emit createLobbyRequest(username);
 }
 
+std::vector<ShipData> MainWindow::convertShips() {
+    std::vector<PlacementBoard::ShipData> shipsToPlace(placementBoard_->getShips().constBegin(), placementBoard_->getShips().constEnd());
+
+    std::vector<ShipData> networkShips;
+
+    networkShips.reserve(shipsToPlace.size());
+
+    for (const auto& uiShip : shipsToPlace) {
+        ShipData netShip;
+
+        netShip.row = uiShip.row;
+        netShip.column = uiShip.col;
+        netShip.size = uiShip.size;
+        netShip.horizontal = uiShip.horizontal;
+
+        networkShips.push_back(netShip);
+    }
+
+    return networkShips;
+}
 
 void MainWindow::on_ReadyPushButton_clicked() {
     if (!placementBoard_->allShipPlaced())
@@ -221,9 +241,7 @@ void MainWindow::on_ReadyPushButton_clicked() {
     ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
     ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
 
-    std::vector<PlacementBoard::ShipData> shipsToPlace = placementBoard_->getShip().toVector();
-
-    emit playerReady(shipsToPlace);
+    emit playerReady(convertShips());
 
     if (ui->graphicsView->isEnabled() == false)
     {
@@ -240,17 +258,13 @@ void MainWindow::on_ReadyPushButton_clicked() {
     }
 
 
-
-    ui->stackedWidget->setCurrentWidget(ui->GamePage);
-
     QTimer::singleShot(0, this, [this]()
-                       {
-                           ui->ownGraphicsView->fitInView(ownScene_->sceneRect(), Qt::KeepAspectRatio);
-                           ui->enemyGraphicsView->fitInView(enemyScene_->sceneRect(), Qt::KeepAspectRatio);
-                           ui->ownGraphicsView->scale(0.8, 0.8);
-                           ui->enemyGraphicsView->scale(0.8, 0.8);
-                       });
-
+   {
+       ui->ownGraphicsView->fitInView(ownScene_->sceneRect(), Qt::KeepAspectRatio);
+       ui->enemyGraphicsView->fitInView(enemyScene_->sceneRect(), Qt::KeepAspectRatio);
+       ui->ownGraphicsView->scale(0.8, 0.8);
+       ui->enemyGraphicsView->scale(0.8, 0.8);
+   });
 }
 
 void MainWindow::tryJoinLobby() {
@@ -292,7 +306,29 @@ void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& userna
 
 void MainWindow::enemyCellClicked(int row, int col)
 {
+    if (!myTurn_) {
+        qDebug() << "Сейчас не твой ход!";
+        return;
+    }
+
+    emit shootRequest(row, col);
+
+    myTurn_ = false;
     ui->enemyGraphicsView->setEnabled(false);
-    enemyBoard_->shootAtCell(row, col, Action::Hit);
-    qDebug() << "Hit: " << row << " " << col;
+}
+
+void MainWindow::setYourTurn(bool yourTurn) {
+    myTurn_ = yourTurn;
+
+    ui->enemyGraphicsView->setEnabled(myTurn_);;
+
+    if (yourTurn) {
+        ui->MoveLabel->setText("Ваш ход!");
+    } else {
+        ui->MoveLabel->setText("Ход противника!");
+    }
+}
+
+void MainWindow::shootResult(int row, int column, int result) {
+
 }
