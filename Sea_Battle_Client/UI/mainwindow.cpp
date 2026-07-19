@@ -140,12 +140,6 @@ void MainWindow::addShip(ShipItem *ship, int x, int y)
             {
                 placementBoard_->hideForbiddenZones();
             });
-
-    ship->setPos(x, y);
-    ship->setSpawnPos(QPointF(x, y));
-    ship->clearFocus();
-
-    scene_->addItem(ship);
 }
 
 void MainWindow::createShips() {
@@ -330,5 +324,8 @@ void MainWindow::setYourTurn(bool yourTurn) {
 }
 
 void MainWindow::shootResult(int row, int column, int result) {
-
+    if(result)
+        enemyBoard_->shootAtCell(row, column, Action::Hit);
+    else
+        enemyBoard_->shootAtCell(row, column, Action::Miss);
 }
