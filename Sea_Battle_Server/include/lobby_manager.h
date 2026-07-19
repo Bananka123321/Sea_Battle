@@ -9,6 +9,9 @@
 
 #include "lobby.h"
 
+class ClientSession;
+class GameSession;
+
 class LobbyManager {
 public:
     LobbyManager() = default;

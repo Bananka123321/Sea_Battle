@@ -36,8 +36,8 @@ void MessageRouter::joinLobbyRequest(const std::string& username, const std::str
     sendPacket(request);
 }
 
-void MessageRouter::playerReady() {
-    std::string request = protocol::playerReadyRequest();
+void MessageRouter::playerReady(const std::vector<ShipData>& ships) {
+    std::string request = protocol::playerReadyRequest(ships);
     sendPacket(request);
 }
 

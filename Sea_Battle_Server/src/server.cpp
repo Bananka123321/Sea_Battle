@@ -1,6 +1,6 @@
 #include "server.h"
 
-TCPServer::TCPServer(int port_) : port_(port_), server_socket_(-1), session_manager_(), handler_(session_manager_) {}
+TCPServer::TCPServer(int port_) : port_(port_), server_socket_(-1), session_manager_(new SessionManager()), handler_(session_manager_) {}
 
 TCPServer::~TCPServer() {
     Stop();
@@ -30,7 +30,7 @@ void TCPServer::Stop() {
 bool TCPServer::SetupSocket() {
     server_socket_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (server_socket_ == -1) {
-        std::cerr << "Failed to create socket_\n";
+        std::cerr << "Failed to create socket\n";
         return false;
     }
 
@@ -57,7 +57,7 @@ bool TCPServer::SetupSocket() {
         return false;
     }
 
-    std::cout << "Server listening on port_ " << port_ << std::endl;
+    std::cout << "Server listening on port " << port_ << std::endl;
     return true;
 }
 

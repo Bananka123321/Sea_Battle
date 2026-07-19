@@ -16,16 +16,11 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->joinLobbyRequest(username, code);
     });
 
-    connect(mainW, &MainWindow::playerReady, this, [this](){
-        router_->playerReady();
+    connect(mainW, &MainWindow::playerReady, this, [this](const std::vector<ShipData>& ships){
+        router_->playerReady(ships);
     });
 
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
-
-    connect(handler_, &Handler::S_loginSuccess, this, [this](const std::string&, int, const std::string&){
-        router_->setReconnecting(false);
-        startPing();
-    });
 
     connect(client_, &TCPClient::connectionLose, this, [this](){
         stopPing();

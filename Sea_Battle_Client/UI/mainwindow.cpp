@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
-    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
@@ -196,7 +196,10 @@ void MainWindow::on_ReadyPushButton_clicked() {
     ui->graphicsView->setEnabled(!ui->graphicsView->isEnabled());
     ui->RandomSetPushButton->setEnabled(!ui->RandomSetPushButton->isEnabled());
 
-    emit playerReady();
+    std::vector<PlacementBoard::ShipData> shipsToPlace = placementBoard_->getShip().toVector();
+
+    emit playerReady(shipsToPlace);
+
     if (ui->graphicsView->isEnabled() == false)
     {
         ui->ReadyPushButton->setText("Отмена");

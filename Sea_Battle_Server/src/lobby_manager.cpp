@@ -1,4 +1,6 @@
 #include "lobby_manager.h"
+#include "client_session.h"
+#include "game_session.h"
 
 std::shared_ptr<Lobby> LobbyManager::CreateLobby(const std::string& code, std::shared_ptr<ClientSession> host) {
     std::lock_guard<std::mutex> lock(mutex_);

@@ -80,25 +80,22 @@ inline std::string leaveLobby() {
     return j.dump();
 }
 
-inline std::string playerReadyRequest() {
+inline std::string playerReadyRequest(const std::vector<ShipData>& ships) {
     nlohmann::json j;
     j["type"] = "playerReadyRequest";
-    return j.dump();
-}
 
-inline std::string placeShips(const std::vector<ShipData>& ships) {
-    nlohmann::json j;
-    j["type"] = "placeShips";
     nlohmann::json shipsArray = nlohmann::json::array();
     for (const auto& ship : ships) {
         shipsArray.push_back({
             {"row", ship.row},
-            {"col", ship.column},
+            {"column", ship.column},
             {"size", ship.size},
             {"horizontal", ship.horizontal}
         });
     }
+    
     j["ships"] = shipsArray;
+
     return j.dump();
 }
 

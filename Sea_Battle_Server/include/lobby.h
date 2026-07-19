@@ -4,7 +4,7 @@
 #include <memory>
 
 class ClientSession;
-
+class GameSession;
 class Lobby {
 public:
     Lobby(const std::string& code, std::shared_ptr<ClientSession> creator);
@@ -29,10 +29,16 @@ public:
     bool GetPlayer1Ready() const;
     bool GetPlayer2Ready() const;
 
+    GameSession* getGame() const;
+    void createGame();
+    void destroyGame();
+
 private:
     std::string code_;
     std::shared_ptr<ClientSession> player1_;  //Создатель
     std::shared_ptr<ClientSession> player2_;  //Второй игрок
     bool player1_ready_;
     bool player2_ready_;
+
+    std::unique_ptr<GameSession> game_;
 };

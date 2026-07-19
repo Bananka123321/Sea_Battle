@@ -1,18 +1,6 @@
 #include "Handler.h"
 
 Handler::Handler() {
-    handlers["loginResponse"] = [this] (const nlohmann::json& j) {
-        onLoginResponse(j["success"], j["user_id"], j["username"], j["token"], j["error"]);
-    };
-
-    handlers["registerResponse"] = [this] (const nlohmann::json& j) {
-        onRegisterResponse(j["success"], j["user_id"], j["username"], j["token"], j["error"]);
-    };
-
-    handlers["userList"] = [this] (const nlohmann::json& j) {
-        onUserList(j["users"]);
-    };
-
     handlers["privateMessage"] = [this] (const nlohmann::json& j) {
         onMessage(j["from"], j["to"], j["text"]);
     };
@@ -44,6 +32,18 @@ Handler::Handler() {
     handlers["playerReadyResponse"] = [this] (const nlohmann::json& j) {
         onPlayerReadyResponse(j["success"]);
     };
+
+    handlers["gameStarted"] = [this] (const nlohmann::json& j) {
+        onGameStarted(j["yourTurn"]);
+    };
+
+    handlers["shotResult"] = [this] (const nlohmann::json& j) {
+        onShotResult(j["row"], j["column"], j["result"], j["yourTurn"]);
+    };
+
+    handlers["gameOver"] = [this] (const nlohmann::json& j) {
+        onGameOver(j["winner"]);
+    };
 }
 
 
@@ -64,24 +64,6 @@ void Handler::handleMessage(const std::string& msg) {
 }
 
 //=============================================================================================
-
-void Handler::onLoginResponse(const bool& success, const int user_id, const std::string& login, const std::string& token, const std::string& reason) {
-    if (success) {
-        emit S_loginSuccess(login, user_id, token);
-    } else
-        emit S_loginFailed(reason);
-}
-
-void Handler::onRegisterResponse(const bool& success, const int user_id, const std::string& login, const std::string& token, const std::string& reason) {
-    if (success) {
-        emit S_registerSuccess(login, user_id, token);
-    } else
-        emit S_registerFailed(reason);
-}
-
-void Handler::onUserList(const std::unordered_map<int, std::string>& users) {
-    emit S_userList(users);
-}
 
 void Handler::onMessage(const int from, const int to, const std::string& text) {
     emit S_Message(from, to, text);
@@ -114,4 +96,16 @@ void Handler::onPlayerLeft() {
 
 void Handler::onPlayerReadyResponse(bool success) {
     emit S_EnemyReady(success);
+}
+
+void Handler::onGameStarted(bool yourTurn) {
+    emit S_GameStarted(yourTurn);
+}
+
+void Handler::onShotResult(int row, int column, int result, bool yourTurn) {
+    emit S_ShotResult(row, column, result, yourTurn);
+}
+
+void Handler::onGameOver(const std::string& winner) {
+    emit S_onGameOver(winner);
 }
