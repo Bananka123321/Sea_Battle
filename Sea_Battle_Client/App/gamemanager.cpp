@@ -8,7 +8,7 @@ gameManager::gameManager(Handler* handler, MainWindow* window) : handler_(handle
 }
 
 void gameManager::gameStarted(bool yourTurn) {
-    UI_->stackedWidget->setCurrentIndex(1);
+    UI_->stackedWidget->setCurrentIndex(2);
     window_->setYourTurn(yourTurn);
 }
 
