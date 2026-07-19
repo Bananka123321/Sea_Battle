@@ -38,7 +38,21 @@ Handler::Handler() {
     };
 
     handlers["shotResult"] = [this] (const nlohmann::json& j) {
-        onShotResult(j["row"], j["column"], j["result"], j["yourTurn"]);
+        int row = j["row"];
+        int column = j["column"];
+        int status = j["status"];
+        bool yourTurn = j["yourTurn"];
+
+        bool shipSunk = (status == 2);
+        std::vector<std::pair<int, int>> shipCells;
+
+        if (shipSunk && j.contains("shipCells") && j["shipCells"].is_array()) {
+            for (const auto& cell : j["shipCells"]) {
+                shipCells.push_back({cell["row"], cell["column"]});
+            }
+        }
+
+        onShotResult(row, column, status, yourTurn, shipSunk, shipCells);
     };
 
     handlers["gameOver"] = [this] (const nlohmann::json& j) {
@@ -102,8 +116,8 @@ void Handler::onGameStarted(bool yourTurn) {
     emit S_GameStarted(yourTurn);
 }
 
-void Handler::onShotResult(int row, int column, int result, bool yourTurn) {
-    emit S_ShotResult(row, column, result, yourTurn);
+void Handler::onShotResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
+    emit S_ShotResult(row, column, status, yourTurn, shipSunk, shipCells);
 }
 
 void Handler::onGameOver(const std::string& winner) {

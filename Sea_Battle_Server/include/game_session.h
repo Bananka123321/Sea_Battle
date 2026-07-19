@@ -13,12 +13,13 @@ enum class GameState {
     FINISHED
 };
 
-enum class CellState {
-    Empty = 0,
-    Ship = 1,
-    Miss = 2,
-    Hit = 3,
-    Kill = 4
+struct Ship {
+    int row;
+    int column;
+    int size;
+    bool horizontal;
+    int health;
+    std::vector<std::pair<int,int>> cells;
 };
 
 class GameSession {
@@ -27,7 +28,7 @@ public:
 
     bool placeShips(std::shared_ptr<ClientSession> player, const std::vector<ShipData>& ships);
     
-    int makeShot(std::shared_ptr<ClientSession> player, int row, int col);
+    ShotResult makeShot(std::shared_ptr<ClientSession> player, int row, int col);
 
     std::shared_ptr<ClientSession> getPlayer1() const;
     std::shared_ptr<ClientSession> getPlayer2() const;
@@ -42,16 +43,14 @@ private:
     std::shared_ptr<ClientSession> player2_;
     std::shared_ptr<ClientSession> currentTurn_;
 
-    std::vector<std::vector<CellState>> board1_;
-    std::vector<std::vector<CellState>> board2_;
-
-    std::vector<std::vector<CellState>> shots1_;
-    std::vector<std::vector<CellState>> shots2_;
+    std::vector<Ship> ships1_;
+    std::vector<Ship> ships2_;
 
     GameState state_;
     bool player1Placed_;
     bool player2Placed_;
 
     bool isValidPlacement(const std::vector<ShipData>& ships) const;
-    int getShipsHealth(int playerIndex) const;
+    Ship* findShipAt(std::vector<Ship>& ships, int row, int column);
+    std::vector<std::pair<int,int>> getSurroundingCells(const Ship& ship);
 };

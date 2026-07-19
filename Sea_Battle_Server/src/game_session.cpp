@@ -1,25 +1,29 @@
 #include "game_session.h"
 #include "client_session.h"
 
-GameSession::GameSession(std::shared_ptr<ClientSession> p1, std::shared_ptr<ClientSession> p2) : player1_(p1), player2_(p2), currentTurn_(p1), state_(GameState::PLACING), player1Placed_(false), player2Placed_(false) {
-    board1_ = board2_ = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
-    shots1_ = shots2_ = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
-}
+GameSession::GameSession(std::shared_ptr<ClientSession> p1, std::shared_ptr<ClientSession> p2) : player1_(p1), player2_(p2), currentTurn_(p1), state_(GameState::PLACING), player1Placed_(false), player2Placed_(false) {}
 
 bool GameSession::placeShips(std::shared_ptr<ClientSession> player, const std::vector<ShipData>& ships) {
     if (state_ != GameState::PLACING) return false;
     if (!isValidPlacement(ships)) return false;
 
-    auto& board = (player == player1_) ? board1_ : board2_;
-    
-    board = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
-    
-    for (const auto& ship : ships) {
-        for (int i = 0; i < ship.size; ++i) {
-            int r = ship.horizontal ? ship.row : ship.row + i;
-            int c = ship.horizontal ? ship.column + i : ship.column;
-            board[r][c] = CellState::Ship;
+    auto& myShips = (player == player1_) ? ships1_ : ships2_;
+    myShips.clear();
+
+    for (const auto& shipData : ships) {
+        Ship ship;
+        ship.row = shipData.row;
+        ship.column = shipData.column;
+        ship.size = shipData.size;
+        ship.horizontal = shipData.horizontal;
+        ship.health = shipData.size;
+
+        for (int i = 0; i < shipData.size; ++i) {
+            int r = ship.horizontal ? shipData.row : shipData.row + i;
+            int c = ship.horizontal ? shipData.column + i : shipData.column;
+            ship.cells.push_back({r, c});
         }
+        myShips.push_back(ship);
     }
 
     if (player == player1_) player1Placed_ = true;
@@ -33,31 +37,39 @@ bool GameSession::placeShips(std::shared_ptr<ClientSession> player, const std::v
     return true;
 }
 
-int GameSession::makeShot(std::shared_ptr<ClientSession> player, int row, int col) {
-    if (state_ != GameState::PLAYING) return -1;
-    if (currentTurn_ != player) return -1;
-    if (row < 0 || row >= 10 || col < 0 || col >= 10) return -1;
+ShotResult GameSession::makeShot(std::shared_ptr<ClientSession> player, int row, int column) {
+    ShotResult result{row, column, ShotStatus::Miss, 0, false, {}};
 
-    auto& opponentBoard = (player == player1_) ? board2_ : board1_;
-    auto& myShots = (player == player1_) ? shots1_ : shots2_;
+    if (state_ != GameState::PLAYING) return result;
+    if (currentTurn_ != player) return result;
+    if (row < 0 || row >= 10 || column < 0 || column >= 10) return result;
 
-    if (myShots[row][col] != CellState::Empty) return -1;
-
-    int result = 0;
+    auto& opponentShips = (player == player1_) ? ships2_ : ships1_;
     
-    if (opponentBoard[row][col] == CellState::Ship) {
-        result = 1;
-        myShots[row][col] = CellState::Hit;
+    Ship* hitShip = findShipAt(opponentShips, row, column);
+    
+    if (hitShip) {
+        hitShip->health--;
+        result.status = ShotStatus::Hit;
+        result.shipSize = hitShip->size;
+        result.shipHorizontal = hitShip->horizontal;
+
+        if (hitShip->health == 0) {
+            result.status = ShotStatus::Kill;
+            result.shipCells = hitShip->cells;
+        }
     } else {
-        result = 0;
-        myShots[row][col] = CellState::Miss;
+        result.status = ShotStatus::Miss;
         currentTurn_ = getOpponent(player);
     }
 
-    int opponentIndex = (player == player1_) ? 2 : 1;
-    if (getShipsHealth(opponentIndex) == 0) {
+    int opponentHealth = 0;
+    for (const auto& ship : opponentShips) {
+        opponentHealth += ship.health;
+    }
+    if (opponentHealth == 0) {
         state_ = GameState::FINISHED;
-        return 2;
+        result.status = ShotStatus::Win;
     }
 
     return result;
@@ -107,22 +119,47 @@ bool GameSession::isValidPlacement(const std::vector<ShipData>& ships) const {
     return true;
 }
 
-int GameSession::getShipsHealth(int playerIndex) const {
-    const auto& board = (playerIndex == 1) ? board1_ : board2_;
-    int health = 0;
-    for (int r = 0; r < 10; ++r) {
-        for (int c = 0; c < 10; ++c) {
-            if (board[r][c] == CellState::Ship)
-                health++;
+Ship* GameSession::findShipAt(std::vector<Ship>& ships, int row, int column) {
+    for (auto& ship : ships) {
+        for (auto& cell : ship.cells) {
+            if (cell.first == row && cell.second == column) {
+                return &ship;
+            }
         }
     }
+    return nullptr;
+}
 
-    return health;
+std::vector<std::pair<int,int>> GameSession::getSurroundingCells(const Ship& ship) {
+    std::vector<std::pair<int,int>> surrounding;
+    
+    int minR = ship.row - 1;
+    int maxR = ship.horizontal ? ship.row + 1 : ship.row + ship.size;
+    int minC = ship.column - 1;
+    int maxC = ship.horizontal ? ship.column + ship.size : ship.column + 1;
+
+    for (int r = minR; r <= maxR; ++r) {
+        for (int c = minC; c <= maxC; ++c) {
+            if (r < 0 || r >= 10 || c < 0 || c >= 10) continue;
+            
+            bool isShipCell = false;
+            for (auto& cell : ship.cells) {
+                if (cell.first == r && cell.second == c) {
+                    isShipCell = true;
+                    break;
+                }
+            }
+            if (!isShipCell) {
+                surrounding.push_back({r, c});
+            }
+        }
+    }
+    return surrounding;
 }
 
 void GameSession::clearShips(std::shared_ptr<ClientSession> player) {
-    auto& board = (player == player1_) ? board1_ : board2_;
-    board = std::vector<std::vector<CellState>>(10, std::vector<CellState>(10, CellState::Empty));
+    auto& myShips = (player == player1_) ? ships1_ : ships2_;
+    myShips.clear();
     
     if (player == player1_) player1Placed_ = false;
     else player2Placed_ = false;
