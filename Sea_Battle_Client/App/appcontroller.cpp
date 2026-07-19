@@ -20,6 +20,10 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->playerReady(ships);
     });
 
+    connect(mainW, &MainWindow::shootRequest, this, [this](int row, int column) {
+        router_->shootRequest(row, column);
+    });
+
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
 
     connect(client_, &TCPClient::connectionLose, this, [this](){

@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
     App/gameshipitem.cpp
     App/clickablescene.cpp
     App/graphicsboard.cpp
+    App/gamemanager.cpp
 
     UI/mainwindow.cpp
 
@@ -43,6 +44,7 @@ set(PROJECT_HEADERS
     App/gameshipitem.h
     App/clickablescene.h
     App/graphicsboard.h
+    App/gamemanager.h
 
     UI/mainwindow.h
 
