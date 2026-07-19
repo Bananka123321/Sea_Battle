@@ -15,6 +15,7 @@
 #include "gameboard.h"
 #include "Validator.h"
 #include "clickablescene.h"
+#include "ship_coord.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,6 +39,8 @@ public:
 
     Ui::MainWindow* getUI() const;
     void setPlayerState(Ui::PlayerState state, const std::string& username = "");
+    void setYourTurn(bool yourTurn);
+    void shootResult(int row, int column, int result);
 
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);
@@ -48,10 +51,8 @@ signals:
     void sendMessageRequest(const int& to, const std::string& text);
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
-    void playerReady(const std::vector<PlacementBoard::ShipData>& ships);
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void playerReady(const std::vector<ShipData>& ships);
+    void shootRequest(int row, int column);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -70,6 +71,8 @@ private:
     PlacementBoard* placementBoard_ = nullptr;
     Ui::PlayerState state_;
 
+    bool myTurn_ = false;
+
 private:
     void resizeWindow();
     void createShips();
@@ -86,5 +89,7 @@ private:
     void tryJoinLobby();
 
     void enemyCellClicked(int row,int col);
+
+    std::vector<ShipData> convertShips();
 };
 

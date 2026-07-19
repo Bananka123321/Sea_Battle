@@ -41,6 +41,11 @@ void MessageRouter::playerReady(const std::vector<ShipData>& ships) {
     sendPacket(request);
 }
 
+void MessageRouter::shootRequest(int row, int column) {
+    std::string request = protocol::shoot(row, column);
+    sendPacket(request);
+}
+
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
     if(!force && isReconnecting.load())
         return;
