@@ -50,6 +50,12 @@ signals:
     void joinLobbyRequest(const std::string& username, const std::string& code);
     void playerReady(const std::vector<PlacementBoard::ShipData>& ships);
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene_;
@@ -65,7 +71,7 @@ private:
     Ui::PlayerState state_;
 
 private:
-    void createField();
+    void resizeWindow();
     void createShips();
     void addShip(ShipItem *ship, int x, int y);
 

@@ -1,35 +1,21 @@
 <RCC>
     <qresource prefix="/field">
-        <file>images/hit.png</file>
-        <file>images/wave.png</file>
         <file>images/miss.png</file>
-        <file>images/ship.png</file>
-        <file>images/miss2.png</file>
-        <file>images/miss3.png</file>
-        <file>images/missvortex.png</file>
-        <file>images/missvortex2.png</file>
-        <file>images/miss_b.png</file>
-        <file>images/mis.png</file>
-        <file>images/mi.png</file>
-        <file>images/m.png</file>
         <file>images/fog_1.png</file>
         <file>images/fog_2.png</file>
         <file>images/fog_3.png</file>
         <file>images/fog_4.png</file>
+        <file>images/missvortex.png</file>
+        <file>images/missvortex_2.png</file>
     </qresource>
     <qresource prefix="/custom"/>
     <qresource prefix="/ship"/>
     <qresource prefix="/">
         <file>ships/single_H.png</file>
-        <file>ships/single_V.png</file>
         <file>ships/head_H_ship.png</file>
-        <file>ships/head_V_ship.png</file>
         <file>ships/hit_ship.png</file>
         <file>ships/middle_H4_ship.png</file>
         <file>ships/middle_H34_ship.png</file>
-        <file>ships/middle_V4_ship.png</file>
-        <file>ships/middle_V34_ship.png</file>
         <file>ships/tail_H_ship.png</file>
-        <file>ships/tail_V_ship.png</file>
     </qresource>
 </RCC>
