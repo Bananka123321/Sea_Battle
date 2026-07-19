@@ -175,13 +175,25 @@ inline std::string gameStarted(bool yourTurn) {
     return j.dump();
 }
 
-inline std::string shotResult(int row, int column, int result, bool yourTurn) {
+inline std::string shotResult(const ShotResult& result, bool yourTurn) {
     nlohmann::json j;
     j["type"] = "shotResult";
-    j["row"] = row;
-    j["column"] = column;
-    j["result"] = result;
+    j["row"] = result.row;
+    j["column"] = result.column;
+    j["status"] = static_cast<int>(result.status);
     j["yourTurn"] = yourTurn;
+    
+    if (result.status == ShotStatus::Kill) {
+        j["shipSize"] = result.shipSize;
+        j["shipHorizontal"] = result.shipHorizontal;
+        
+        nlohmann::json cellsArray = nlohmann::json::array();
+        for (const auto& cell : result.shipCells) {
+            cellsArray.push_back({{"row", cell.first}, {"column", cell.second}});
+        }
+        j["shipCells"] = cellsArray;
+    }
+    
     return j.dump();
 }
 

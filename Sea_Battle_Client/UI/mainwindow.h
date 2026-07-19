@@ -39,8 +39,13 @@ public:
 
     Ui::MainWindow* getUI() const;
     void setPlayerState(Ui::PlayerState state, const std::string& username = "");
+    bool getYourTurn();
     void setYourTurn(bool yourTurn);
-    void shootResult(int row, int column, int result);
+    void shootResultEnemy(int row, int column, int result);
+    void shootResultMe(int row, int column, int result);
+
+    void shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
+    void shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
 
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);

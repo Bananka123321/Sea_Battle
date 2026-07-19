@@ -12,7 +12,12 @@ void gameManager::gameStarted(bool yourTurn) {
     window_->setYourTurn(yourTurn);
 }
 
-void gameManager::shootResult(int row, int column, int result, bool yourTurn) {
+void gameManager::shootResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
+    if (window_->getYourTurn()) {
+        window_->shootResultEnemy(row, column, status, shipSunk, shipCells);
+    } else {
+        window_->shootResultMe(row, column, status, shipSunk, shipCells);
+    }
+
     window_->setYourTurn(yourTurn);
-    window_->shootResult(row, column, result);
 }
