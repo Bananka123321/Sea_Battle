@@ -29,7 +29,7 @@ private:
     void onPlayerLeft();
     void onPlayerReadyResponse(bool success);
     void onGameStarted(bool yourTurn);
-    void onShotResult(int row, int column, int result, bool yourTurn);
+    void onShotResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void onGameOver(const std::string& winner);
 
 signals:
@@ -43,7 +43,7 @@ signals:
     void S_PlayerLeft();
     void S_EnemyReady(bool success);
     void S_GameStarted(bool yourTurn);
-    void S_ShotResult(int row, int column, int result, bool yourTurn);
+    void S_ShotResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void S_onGameOver(const std::string& winner);
 
 };

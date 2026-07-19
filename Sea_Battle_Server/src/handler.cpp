@@ -263,20 +263,16 @@ void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann
     }
 
     int row = j["row"];
-    int col = j["column"];
+    int column = j["column"];
 
-    int result = game->makeShot(client, row, col);
-    if (result == -1) {
-        dispatcher_.SendTo(client, protocol::errorMessage("Invalid shot"));
-        return;
-    }
+    ShotResult shotResult = game->makeShot(client, row, column);
 
     auto opponent = game->getOpponent(client);
 
-    dispatcher_.SendTo(client, protocol::shotResult(row, col, result, game->getCurrentTurn() == client));
-    dispatcher_.SendTo(opponent, protocol::shotResult(row, col, result, game->getCurrentTurn() == opponent));
+    dispatcher_.SendTo(client, protocol::shotResult(shotResult, game->getCurrentTurn() == client));
+    dispatcher_.SendTo(opponent, protocol::shotResult(shotResult, game->getCurrentTurn() == opponent));
 
-    if (result == 2) {
+    if (shotResult.status == ShotStatus::Win) {
         std::string winnerName = (client == game->getPlayer1()) ? game->getPlayer1()->GetUsername() : game->getPlayer2()->GetUsername();
         dispatcher_.SendTo(lobby->GetPlayer1(), protocol::gameOver(winnerName));
         dispatcher_.SendTo(lobby->GetPlayer2(), protocol::gameOver(winnerName));

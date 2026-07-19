@@ -34,12 +34,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     enemyBoard_->drawField();
     enemyBoard_->drawImage();
 
-    enemyBoard_->setCellImage(4,4,":/ships/tail_H_ship.png");
-    enemyBoard_->setCellImage(4,5,":/ships/middle_H34_ship.png");
-    enemyBoard_->setCellImage(4,6,":/ships/middle_H4_ship.png");
-    enemyBoard_->setCellImage(4,7,":/ships/head_H_ship.png");
-
-
     createShips();
 
     connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
@@ -140,6 +134,12 @@ void MainWindow::addShip(ShipItem *ship, int x, int y)
             {
                 placementBoard_->hideForbiddenZones();
             });
+
+    ship->setPos(x, y);
+    ship->setSpawnPos(QPointF(x, y));
+    ship->clearFocus();
+
+    scene_->addItem(ship);
 }
 
 void MainWindow::createShips() {
@@ -311,6 +311,10 @@ void MainWindow::enemyCellClicked(int row, int col)
     ui->enemyGraphicsView->setEnabled(false);
 }
 
+bool MainWindow::getYourTurn() {
+    return myTurn_;
+}
+
 void MainWindow::setYourTurn(bool yourTurn) {
     myTurn_ = yourTurn;
 
@@ -323,9 +327,41 @@ void MainWindow::setYourTurn(bool yourTurn) {
     }
 }
 
-void MainWindow::shootResult(int row, int column, int result) {
-    if(result)
-        enemyBoard_->shootAtCell(row, column, Action::Hit);
-    else
+void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
+    if (status == 0) {
         enemyBoard_->shootAtCell(row, column, Action::Miss);
+    }
+    else if (status == 1) {
+        enemyBoard_->shootAtCell(row, column, Action::Hit);
+    }
+    else if (status == 2) {
+        enemyBoard_->shootAtCell(row, column, Action::Hit);
+
+        for (const auto& cell : shipCells) {
+            enemyBoard_->markCellAsKill(cell.first, cell.second);
+        }
+    }
+    else if (status == 3) {
+        enemyBoard_->shootAtCell(row, column, Action::Hit);
+        QMessageBox::information(this, "Победа!", "Вы потопили все корабли противника!");
+    }
+}
+
+void MainWindow::shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
+    if (status == 0) {
+        ownBoard_->shootAtCell(row, column, Action::Miss);
+    }
+    else if (status == 1) {
+        ownBoard_->shootAtCell(row, column, Action::Hit);
+    }
+    else if (status == 2) {
+        ownBoard_->shootAtCell(row, column, Action::Hit);
+        for (const auto& cell : shipCells) {
+            ownBoard_->markCellAsKill(cell.first, cell.second);
+        }
+    }
+    else if (status == 3) {
+        ownBoard_->shootAtCell(row, column, Action::Hit);
+        QMessageBox::information(this, "Поражение", "Противник потопил все ваши корабли!");
+    }
 }
