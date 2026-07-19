@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
                             ui->graphicsView->scale(0.8, 0.8);
                        });
 
-    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
@@ -250,15 +250,6 @@ void MainWindow::on_ReadyPushButton_clicked() {
     {
         ownBoard_->addShip(ship.row, ship.col, ship.size, ship.horizontal);
     }
-
-
-    QTimer::singleShot(0, this, [this]()
-   {
-       ui->ownGraphicsView->fitInView(ownScene_->sceneRect(), Qt::KeepAspectRatio);
-       ui->enemyGraphicsView->fitInView(enemyScene_->sceneRect(), Qt::KeepAspectRatio);
-       ui->ownGraphicsView->scale(0.8, 0.8);
-       ui->enemyGraphicsView->scale(0.8, 0.8);
-   });
 }
 
 void MainWindow::tryJoinLobby() {
@@ -283,6 +274,21 @@ Ui::MainWindow* MainWindow::getUI() const {
     return ui;
 }
 
+QGraphicsScene* MainWindow::getPlaceScene()
+{
+    return scene_;
+}
+
+QGraphicsScene* MainWindow::getOwnScene()
+{
+    return ownScene_;
+}
+
+ClickableScene* MainWindow::getEnemyScene()
+{
+    return enemyScene_;
+}
+
 void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& username) {
     QLabel* enemy = ui->OPConnectLabel;
     switch (state) {
@@ -302,6 +308,14 @@ void MainWindow::enemyCellClicked(int row, int col)
 {
     if (!myTurn_) {
         qDebug() << "Сейчас не твой ход!";
+        return;
+    }
+
+    qDebug() << enemyBoard_->getImage(row, col)->data(0).toString();
+
+    if (enemyBoard_->getImage(row, col)->data(0).toString() != "untouch")
+    {
+        qDebug() << "Эта клетка недоступна!";
         return;
     }
 
@@ -336,10 +350,8 @@ void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk
     }
     else if (status == 2) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
+        enemyBoard_->markCellAsKill(shipCells);
 
-        for (const auto& cell : shipCells) {
-            enemyBoard_->markCellAsKill(cell.first, cell.second);
-        }
     }
     else if (status == 3) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
@@ -355,13 +367,12 @@ void MainWindow::shootResultMe(int row, int column, int status, bool shipSunk, c
         ownBoard_->shootAtCell(row, column, Action::Hit);
     }
     else if (status == 2) {
-        ownBoard_->shootAtCell(row, column, Action::Hit);
-        for (const auto& cell : shipCells) {
-            ownBoard_->markCellAsKill(cell.first, cell.second);
-        }
+        ownBoard_->shootAtCell(row, column, Action::Hit);    
+        ownBoard_->markCellAsKill(shipCells);
     }
     else if (status == 3) {
         ownBoard_->shootAtCell(row, column, Action::Hit);
         QMessageBox::information(this, "Поражение", "Противник потопил все ваши корабли!");
     }
 }
+

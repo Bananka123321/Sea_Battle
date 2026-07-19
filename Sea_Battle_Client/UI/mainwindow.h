@@ -38,6 +38,10 @@ public:
     ~MainWindow();
 
     Ui::MainWindow* getUI() const;
+    QGraphicsScene* getPlaceScene();
+    QGraphicsScene* getOwnScene();
+    ClickableScene* getEnemyScene();
+
     void setPlayerState(Ui::PlayerState state, const std::string& username = "");
     bool getYourTurn();
     void setYourTurn(bool yourTurn);
