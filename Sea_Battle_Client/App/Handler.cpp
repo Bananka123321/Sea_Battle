@@ -1,8 +1,8 @@
 #include "Handler.h"
 
 Handler::Handler() {
-    handlers["privateMessage"] = [this] (const nlohmann::json& j) {
-        onMessage(j["from"], j["to"], j["text"]);
+    handlers["chatMessage"] = [this] (const nlohmann::json& j) {
+        onMessage(j["from"], j["text"]);
     };
 
     handlers["error"] = [this] (const nlohmann::json& j) {
@@ -79,8 +79,8 @@ void Handler::handleMessage(const std::string& msg) {
 
 //=============================================================================================
 
-void Handler::onMessage(const int from, const int to, const std::string& text) {
-    emit S_Message(from, to, text);
+void Handler::onMessage(const std::string& from, const std::string& text) {
+    emit S_Message(from, text);
 }
 
 void Handler::onError(const std::string& text) {

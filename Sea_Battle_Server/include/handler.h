@@ -38,7 +38,7 @@ private:
 
 
 private:
-    void PrivateMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void ChatMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void Ping(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void ResumeConnectionRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     

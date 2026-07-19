@@ -13,6 +13,7 @@ void gameManager::gameStarted(bool yourTurn) {
 }
 
 void gameManager::shootResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
+    std::cerr << window_->getYourTurn() << '\n';
     if (window_->getYourTurn()) {
         window_->shootResultEnemy(row, column, status, shipSunk, shipCells);
     } else {

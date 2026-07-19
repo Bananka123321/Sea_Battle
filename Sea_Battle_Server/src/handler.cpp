@@ -1,8 +1,8 @@
 #include "../include/handler.h"
 
 Handler::Handler(SessionManager* session_manager) : session_manager_(session_manager), dispatcher_(session_manager) {
-    handlers_["privateMessage"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-        PrivateMessage(client, j);
+    handlers_["chatMessage"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        ChatMessage(client, j);
     };
 
     handlers_["ping"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
@@ -103,44 +103,36 @@ void Handler::LeaveLobby(const std::shared_ptr<ClientSession>& client, const nlo
 void Handler::AuthSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_) {
     // client->SetUser(id, username_);
     // client->SetIsAuthentificated(true);
-    // std::string token = generateToken();
+    // std::string token = generateTok  en();
     // userManager->createSession(id, token);
     // dispatcher_.sendTo(client, protocol::loginResponse(true, id, username_, token, ""));
     // session_manager_.add(client);
 }
 
-void Handler::PrivateMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-    if (!client->GetIsAuthentificated()) {
-        std::cerr << "SORRY, not auth\n";
-        return;
-    }
-    
-    std::string error;
-    if(!Validator::valid_string_field(j, "text", Validator::message, error)) {
-        dispatcher_.SendTo(client, protocol::errorMessage(error));
+void Handler::ChatMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+    auto lobby = client->GetCurrentLobby();
+    if (!lobby) {
+        dispatcher_.SendTo(client, protocol::errorMessage("You are not in a lobby"));
         return;
     }
 
-    if(!Validator::valid_int_field(j, "to", 1, std::numeric_limits<long int>::max(), error)) {
+    std::string error;
+    if (!Validator::valid_string_field(j, "text", Validator::message, error)) {
         dispatcher_.SendTo(client, protocol::errorMessage(error));
         return;
     }
 
     std::string cleanText = Validator::sanitize(j["text"].get<std::string_view>());
     if (cleanText.empty()) {
-        dispatcher_.SendTo(client, protocol::errorMessage("Message is empty after sanitization"));
         return;
     }
 
-    int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    auto opponent = (lobby->GetPlayer1() == client) ? lobby->GetPlayer2() : lobby->GetPlayer1();
 
-    auto receiver = session_manager_->GetByUserId(j["to"]);
-    if (!receiver) return;
-
-    nlohmann::json out = j;
-    out["text"] = cleanText;
-    receiver->Send(out.dump());
-}
+    if (opponent) {
+        dispatcher_.SendTo(opponent, protocol::receiveChatMessage(client->GetUsername(), cleanText));
+    }
+} 
 
 void Handler::SetDisconnectHandler(DisconnectCallback callback) {
     dispatcher_.SetDisconnectCallback(callback);
