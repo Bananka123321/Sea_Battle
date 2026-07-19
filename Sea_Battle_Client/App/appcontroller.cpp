@@ -1,11 +1,11 @@
 #define NOMINMAX//Для функции max
 #include "appcontroller.h"
 
-AppController::AppController(MessageRouter* router, AppState* state, Handler* handler, TCPClient* client) : router_(router), state_(state),  handler_(handler), client_(client) {}
+AppController::AppController(MessageRouter* router, Handler* handler, TCPClient* client) : router_(router), handler_(handler), client_(client) {}
 
 void AppController::AttachUI(MainWindow* mainW) {
-    connect(mainW, &MainWindow::sendMessageRequest, this, [this](const int& to, const std::string& text) {
-        router_->sendMessage(state_->getCurrentUserId(), to, text);
+    connect(mainW, &MainWindow::sendMessageRequest, this, [this](const std::string& text) {
+        router_->sendMessage(text);
     });
 
     connect(mainW, &MainWindow::createLobbyRequest, this, [this](const std::string& username){
@@ -32,15 +32,16 @@ void AppController::AttachUI(MainWindow* mainW) {
     });
 
     connect(client_, &TCPClient::connected, this, [this](){
-        if(state_->getCurrentToken().empty())
-            return;
-        router_->resumeConnectionRequest(state_->getCurrentToken());
+        // router_->resumeConnectionRequest(state_->getCurrentToken());
     });
 
     connect(handler_, &Handler::S_ConnectionSucess, this, [this](){
         router_->setReconnecting(false);
         startPing();
     });
+
+
+    connect(handler_, &Handler::S_Message, mainW, &MainWindow::onReceiveChatMessage, Qt::QueuedConnection);
 }
 
 AppController::~AppController() {

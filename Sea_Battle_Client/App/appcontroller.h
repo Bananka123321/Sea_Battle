@@ -4,7 +4,6 @@
 #include <QTimer>
 
 #include "MessageRouter.h"
-#include "AppState.h"
 #include "mainwindow.h"
 #include "tcp_client.h"
 #include "Handler.h"
@@ -16,7 +15,7 @@ class AppController : public QObject {
     Q_OBJECT
 
 public:
-    AppController(MessageRouter* router, AppState* state, Handler* handler, TCPClient* client);
+    AppController(MessageRouter* router, Handler* handler, TCPClient* client);
     ~AppController();
 
     void AttachUI(MainWindow* mainW);
@@ -31,7 +30,6 @@ private:
     TCPClient* client_;
     Handler* handler_;
     MessageRouter* router_;
-    AppState* state_;
     QTimer* pingTimer = nullptr;
     QTimer* reconnectTimer = nullptr;
 

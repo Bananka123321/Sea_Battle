@@ -43,15 +43,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->ConnectLobbyPushButton, &QPushButton::clicked, this, [this](){
         tryJoinLobby();
     });
+
+    connect(ui->SendMessagePushButton, &QPushButton::clicked, this, &MainWindow::onSendChatMessage);
+    connect(ui->SendMessageLineEdit, &QLineEdit::returnPressed, this, &MainWindow::onSendChatMessage);
+    connect(ui->SendMessageInGamePushButton, &QPushButton::clicked, this, &MainWindow::onSendChatMessage);
+    connect(ui->SendMessageInGameLineEdit, &QLineEdit::returnPressed, this, &MainWindow::onSendChatMessage);
+
     connect(ui->RandomSetPushButton, &QPushButton::clicked, placementBoard_, &PlacementBoard::randomPlacement);
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
     QTimer::singleShot(0, this, [this]()
-                       {
-                            ui->graphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
-                            ui->graphicsView->scale(0.8, 0.8);
-                       });
+   {
+        ui->graphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
+        ui->graphicsView->scale(0.8, 0.8);
+   });
 
     ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
@@ -307,7 +313,6 @@ void MainWindow::enemyCellClicked(int row, int col)
 
     emit shootRequest(row, col);
 
-    myTurn_ = false;
     ui->enemyGraphicsView->setEnabled(false);
 }
 
@@ -338,7 +343,7 @@ void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk
         enemyBoard_->shootAtCell(row, column, Action::Hit);
 
         for (const auto& cell : shipCells) {
-            enemyBoard_->markCellAsKill(cell.first, cell.second);
+            // enemyBoard_->markCellAsKill(cell.first, cell.second);
         }
     }
     else if (status == 3) {
@@ -357,11 +362,89 @@ void MainWindow::shootResultMe(int row, int column, int status, bool shipSunk, c
     else if (status == 2) {
         ownBoard_->shootAtCell(row, column, Action::Hit);
         for (const auto& cell : shipCells) {
-            ownBoard_->markCellAsKill(cell.first, cell.second);
+            // ownBoard_->markCellAsKill(cell.first, cell.second);
         }
     }
     else if (status == 3) {
         ownBoard_->shootAtCell(row, column, Action::Hit);
         QMessageBox::information(this, "Поражение", "Противник потопил все ваши корабли!");
     }
+}
+
+void MainWindow::onSendChatMessage() {
+    QLineEdit* activeLineEdit = nullptr;
+
+    QObject* obj = sender();
+    if (obj == ui->SendMessageLineEdit || obj == ui->SendMessagePushButton) {
+        activeLineEdit = ui->SendMessageLineEdit;
+    }
+    else if (obj == ui->SendMessageInGameLineEdit || obj == ui->SendMessageInGamePushButton) {
+        activeLineEdit = ui->SendMessageInGameLineEdit;
+    }
+
+    if (!activeLineEdit) return;
+
+    QString text = activeLineEdit->text();
+    if (text.isEmpty()) return;
+
+    std::string cleanText = Validator::sanitize(text.toStdString());
+    if (cleanText.empty()) {
+        activeLineEdit->clear();
+        return;
+    }
+
+    emit sendMessageRequest(cleanText);
+
+    appendMessageToChat(ui->ChatInGameTextEdit, "Вы", cleanText, true);
+    appendMessageToChat(ui->ChatTextEdit, "Вы", cleanText, true);
+
+    activeLineEdit->clear();
+}
+
+void MainWindow::onReceiveChatMessage(const std::string& from, const std::string& text) {
+    QString fromStr = QString::fromStdString(from);
+
+    appendMessageToChat(ui->ChatTextEdit, fromStr, text, false);
+    appendMessageToChat(ui->ChatInGameTextEdit, fromStr, text, false);
+}
+
+void MainWindow::appendMessageToChat(QTextEdit* chatView, const QString& name, const std::string& text, bool isMe) {
+    if (!chatView) return;
+
+    QString align     = isMe ? "right" : "left";
+    QString bgColor   = isMe ? "#89b4fa" : "#313244";
+    QString textColor = isMe ? "#11111b" : "#cdd6f4";
+    QString timeColor = isMe ? "#45475a" : "#a6adc8";
+    QString timeStr   = QDateTime::currentDateTime().toString("HH:mm");
+
+    QString escapedText = QString::fromStdString(text).toHtmlEscaped();
+    escapedText.replace("\n", "<br>");
+
+    QString html = QString(
+                       "<table width='100%' style='margin: 4px 0px; border: none;'>"
+                       "  <tr>"
+                       "    <td align='%1' style='border: none; padding: 0px;'>"
+                       "      <div style='color: %5; font-size: 10px; margin-bottom: 2px;'>%7</div>"
+                       "      <table style='background-color: %2; border-radius: 12px; margin: 0px; border: none;' cellpadding='8' cellspacing='0'>"
+                       "        <tr>"
+                       "          <td style='border: none; padding: 6px 10px 4px 10px; max-width: 450px;'>"
+                       "            <span style='color: %3; font-size: 13px; font-family: \"Segoe UI\", sans-serif;'>%4</span>"
+                       "          </td>"
+                       "        </tr>"
+                       "        <tr>"
+                       "          <td align='right' style='border: none; padding: 0px 10px 4px 10px;'>"
+                       "            <span style='color: %5; font-size: 9px; font-family: \"Segoe UI\", sans-serif;'>%6</span>"
+                       "          </td>"
+                       "        </tr>"
+                       "      </table>"
+                       "    </td>"
+                       "  </tr>"
+                       "</table>"
+                       ).arg(align, bgColor, textColor, escapedText, timeColor, timeStr, name);
+
+    QTextCursor cursor(chatView->document());
+    cursor.movePosition(QTextCursor::End);
+    cursor.insertHtml(html);
+
+    chatView->verticalScrollBar()->setValue(chatView->verticalScrollBar()->maximum());
 }

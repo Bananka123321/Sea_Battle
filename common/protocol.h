@@ -34,12 +34,18 @@ namespace protocol {
 //      CHAT
 //=================================================================================================================================================================
 
-inline std::string privateMessage(const int& sender, const int& user, const std::string& text) {
+inline std::string chatMessage(const std::string& text) {
     nlohmann::json j;
-    j["type"] = "privateMessage";
+    j["type"] = "chatMessage";
     j["text"] = text;
-    j["from"] = sender;
-    j["to"] = user;
+    return j.dump();
+}
+
+inline std::string receiveChatMessage(const std::string& from, const std::string& text) {
+    nlohmann::json j;
+    j["type"] = "chatMessage";
+    j["from"] = from;
+    j["text"] = text;
     return j.dump();
 }
 

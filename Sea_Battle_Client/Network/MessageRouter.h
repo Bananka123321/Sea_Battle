@@ -17,7 +17,7 @@ public:
 
     void setSocket(int socket);
 
-    void sendMessage(const int& from, const int& to, const std::string& text);
+    void sendMessage(const std::string& text);
     void ping();
     void resumeConnectionRequest(const std::string& token);
 
