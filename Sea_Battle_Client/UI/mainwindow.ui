@@ -37,7 +37,7 @@ border-image: url(:/images/background.jpg)
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="ConnectPage">
        <layout class="QGridLayout" name="gridLayout_2">
@@ -858,6 +858,27 @@ border-image: url(:/images/background.jpg)
                 </property>
                 <property name="text">
                  <string>15</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="MoveLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>26</width>
+                  <height>63</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>25</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Ваш ход</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>

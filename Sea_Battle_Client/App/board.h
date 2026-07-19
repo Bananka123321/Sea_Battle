@@ -37,7 +37,7 @@ public:
         bool horizontal;
     };
 
-    const QList<ShipData>& getShip();
+    const QList<ShipData>& getShips();
 
 private:
     int shipCells_[10][10];

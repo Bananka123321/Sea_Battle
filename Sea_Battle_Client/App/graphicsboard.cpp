@@ -31,7 +31,7 @@ void GraphicsBoard::drawImage()
     {
         for(int col = 0; col < 10; col++)
         {
-            QPixmap pixmap(":/field/images/fog_1.png");
+            QPixmap pixmap(":/field/images/fog_4.png");
 
             QGraphicsPixmapItem* item = scene_->addPixmap(pixmap.scaled(CELL_SIZE,CELL_SIZE));
 

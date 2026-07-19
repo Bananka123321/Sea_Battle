@@ -2,6 +2,7 @@
 
 #include <QRadialGradient>
 #include <QMessageBox>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -52,11 +53,35 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
-    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    QTimer::singleShot(0, this, [this]()
+                       {
+                            ui->graphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
+                            ui->graphicsView->scale(0.8, 0.8);
+                       });
+
+    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    resizeWindow();
+}
+
+void MainWindow::resizeWindow()
+{
+    ui->graphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
+    ui->ownGraphicsView->fitInView(ownScene_->sceneRect(), Qt::KeepAspectRatio);
+    ui->enemyGraphicsView->fitInView(enemyScene_->sceneRect(), Qt::KeepAspectRatio);
+
+    ui->graphicsView->scale(0.8, 0.8);
+    ui->ownGraphicsView->scale(0.8, 0.8);
+    ui->enemyGraphicsView->scale(0.8, 0.8);
 }
 
 static int SPAWNX = OFFSET + 270;
@@ -209,12 +234,23 @@ void MainWindow::on_ReadyPushButton_clicked() {
         ui->ReadyPushButton->setText("Готов");
     }
 
-    for(auto ship : placementBoard_->getShip())
+    for(auto ship : placementBoard_->getShips())
     {
         ownBoard_->addShip(ship.row, ship.col, ship.size, ship.horizontal);
     }
 
+
+
     ui->stackedWidget->setCurrentWidget(ui->GamePage);
+
+    QTimer::singleShot(0, this, [this]()
+                       {
+                           ui->ownGraphicsView->fitInView(ownScene_->sceneRect(), Qt::KeepAspectRatio);
+                           ui->enemyGraphicsView->fitInView(enemyScene_->sceneRect(), Qt::KeepAspectRatio);
+                           ui->ownGraphicsView->scale(0.8, 0.8);
+                           ui->enemyGraphicsView->scale(0.8, 0.8);
+                       });
+
 }
 
 void MainWindow::tryJoinLobby() {
@@ -256,6 +292,7 @@ void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& userna
 
 void MainWindow::enemyCellClicked(int row, int col)
 {
+    ui->enemyGraphicsView->setEnabled(false);
     enemyBoard_->shootAtCell(row, col, Action::Hit);
     qDebug() << "Hit: " << row << " " << col;
 }

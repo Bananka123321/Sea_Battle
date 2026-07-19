@@ -46,7 +46,9 @@ bool PlacementBoard::canPlaceShip(ShipItem *ship, int row, int col, int size, bo
             if (r >= 0 && r < 10 && c >= 0 && c < 10)
             {
                 if (shipCells_[r][c] == 1)
+                {
                     return false;
+                }
             }
         }
     }
@@ -80,17 +82,23 @@ void PlacementBoard::rebuildCells(ShipItem* ignoreShip)
     for(auto &ship : ships_)
     {
         if(ship.item == ignoreShip)
+        {
             continue;
+        }
 
         if(ship.horizontal)
         {
             for(int i = 0; i < ship.size; i++)
+            {
                 shipCells_[ship.row][ship.col+i] = 1;
+            }
         }
         else
         {
             for(int i = 0; i < ship.size; i++)
+            {
                 shipCells_[ship.row+i][ship.col] = 1;
+            }
         }
     }
 }
@@ -121,8 +129,7 @@ void PlacementBoard::addShip(ShipItem* item, int row, int col, int size, bool ho
             col,
             size,
             horizontal
-        }
-        );
+        });
 }
 
 void PlacementBoard::removeShip(ShipItem *item)
@@ -150,7 +157,9 @@ void PlacementBoard::showForbiddenZones(ShipItem *ignoreShip)
     for (const auto &ship : ships_)
     {
         if (ship.item == ignoreShip)
+        {
             continue;
+        }
 
         int r1 = ship.row - 1;
         int c1 = ship.col - 1;
@@ -168,7 +177,9 @@ void PlacementBoard::showForbiddenZones(ShipItem *ignoreShip)
             for (int c = c1; c <= c2; c++)
             {
                 if (r < 0 || r >= 10 || c < 0 || c >= 10)
+                {
                     continue;
+                }
 
                 cells_[r][c]->setBrush(QColor(255,0,0,120));
             }
@@ -206,11 +217,7 @@ void PlacementBoard::randomPlacement()
             int row = QRandomGenerator::global()->bounded(10);
             int col = QRandomGenerator::global()->bounded(10);
 
-            if (!canPlaceShip(nullptr,
-                              row,
-                              col,
-                              ship->size(),
-                              horizontal))
+            if (!canPlaceShip(nullptr, row, col, ship->size(), horizontal))
             {
                 continue;
             }
@@ -249,16 +256,19 @@ bool PlacementBoard::allShipPlaced()
     for (const auto &ship : ships_)
     {
         if (ship.row < 0 || ship.row > 9)
+        {
             return false;
-
+        }
         if (ship.col < 0 || ship.col > 9)
+        {
             return false;
+        }
     }
 
     return true;
 }
 
-const QList<PlacementBoard::ShipData>& PlacementBoard::getShip()
+const QList<PlacementBoard::ShipData>& PlacementBoard::getShips()
 {
     return ships_;
 }
