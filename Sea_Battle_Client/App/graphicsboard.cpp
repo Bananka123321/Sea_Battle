@@ -38,6 +38,7 @@ void GraphicsBoard::drawImage()
             item->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
 
             images_[row][col] = item;
+            images_[row][col]->setData(0,"untouch");
         }
     }
 
@@ -69,3 +70,9 @@ void GraphicsBoard::addCoord()
         text->setPos(5, OFFSET + row * CELL_SIZE);
     }
 }
+
+QGraphicsPixmapItem *GraphicsBoard::getImage(int row, int col) const
+{
+    return images_[row][col];
+}
+

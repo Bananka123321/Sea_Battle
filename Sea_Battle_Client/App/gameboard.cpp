@@ -19,17 +19,43 @@ void GameBoard::addShip(int row, int col, int size, bool horizontal)
         int r = horizontal ? row : row + i;
         int c = horizontal ? col + i : col;
 
-        if (images_[r][c])
+        QString path;
+
+        if (size == 1)
         {
-            images_[r][c]->setVisible(false);
+            path = ":/ships/single_H.png";
         }
+        else if (i == 0)
+        {
+            path = ":/ships/tail_H_ship.png";
+        }
+        else if (i == size - 1)
+        {
+            path = ":/ships/head_H_ship.png";
+        }
+        else if (i == 2)
+        {
+            path = ":/ships/middle_H34_ship.png";
+        }
+        else
+        {
+            path = ":/ships/middle_H4_ship.png";
+        }
+
+        QPixmap pix(path);
+
+        if (!horizontal)
+        {
+            QTransform transform;
+            transform.rotate(90);
+            pix = pix.transformed(transform, Qt::SmoothTransformation);
+        }
+
+        images_[r][c]->setPixmap(
+            pix.scaled(CELL_SIZE, CELL_SIZE,
+                       Qt::KeepAspectRatio,
+                       Qt::SmoothTransformation));
     }
-
-    GameShipItem *ship = new GameShipItem(size, horizontal);
-
-    ship->setPos(OFFSET + col * CELL_SIZE, OFFSET + row * CELL_SIZE);
-
-    scene_->addItem(ship);
 }
 
 void GameBoard::setCellColor(int row, int col, QColor color)
@@ -72,41 +98,71 @@ void GameBoard::setCellImage(int row, int col, const QPixmap &pixmap)
     images_[row][col]->setPixmap(pixmap.scaled(CELL_SIZE, CELL_SIZE));
 }
 
+
+
 void GameBoard::shootAtCell(int row, int col, Action type)
 {
     if (type == Action::Miss)
     {
-        setCellImage(row, col, ":/field/images/missvortex.png");
-
-        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.4, QPointF(0.5, 0.5));
-
-        gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
-
-
-        gradhit.setColorAt(0.0, QColor(255,255,255,255));
-        gradhit.setColorAt(1.0, QColor(0,0,139, 255));
-
-        // setCellColor(row, col, gradhit);
+        setCellImage(row, col, ":/field");
+        images_[row][col]->setData(0,"miss");
     }
     else
     {
-        QPixmap pix(":/ships/hit_ship.png");
+        QPixmap pix(":/ships/hit_ship_2.png");
+        images_[row][col]->setData(0,"hit");
 
         QTransform transform;
-        transform.rotate(QRandomGenerator::global()->bounded(4) * 90);
+        transform.rotate(QRandomGenerator::global()->bounded(3) * 90);
 
         pix = pix.transformed(transform, Qt::SmoothTransformation);
 
         setCellImage(row, col, pix);
+    }
+}
 
-        QRadialGradient gradhit(QPointF(0.5, 0.5), 0.6, QPointF(0.5, 0.5));
+void GameBoard::markCellAsKill(std::vector<std::pair<int,int>> shipCells)
+{
+    std::pair<int,int> cell1 = shipCells[0];
+    std::pair<int,int> cell2 = shipCells[shipCells.size() - 1];
 
-        gradhit.setCoordinateMode(QGradient::ObjectBoundingMode);
+    bool horizontal = cell1.first == cell2.first ? true : false;
 
-        gradhit.setColorAt(0.0, QColor(255,0,0,255));
-        gradhit.setColorAt(1.0, QColor(0,0,139,255));
+    int r1 = cell1.first - 1;
+    int c1 = cell1.second - 1;
 
-        setCellColor(row, col, gradhit);
+    int r2 = horizontal
+                 ? cell1.first + 1
+                 : cell2.first + 1;
+
+    int c2 = horizontal
+                 ? cell2.second + 1
+                 : cell1.second + 1;
+
+    for (int r = r1; r <= r2; r++)
+    {
+        for (int c = c1; c <= c2; c++)
+        {
+            if (r < 0 || r >= 10 || c < 0 || c >= 10)
+            {
+                continue;
+            }
+            if (horizontal)
+            {
+                if (cell1.first == r && (c > c1 && c < c2))
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                if (cell1.second == c && (r > r1 && r < r2))
+                {
+                    continue;
+                }
+            }
+            setCellImage(r,c,":/f");
+        }
     }
 }
 

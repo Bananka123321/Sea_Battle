@@ -32,6 +32,7 @@ public:
     void setCellImage(int row, int col, QString path);
     void setCellImage(int row, int col, const QPixmap &pixmap);
     void shootAtCell(int row, int col, Action type);
+    void markCellAsKill(std::vector<std::pair<int,int>> shipCells);
 
 private slots:
 

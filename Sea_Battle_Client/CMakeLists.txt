@@ -18,7 +18,6 @@ set(PROJECT_SOURCES
     App/board.cpp
     App/LobbyManager.cpp
     App/gameboard.cpp
-    App/gameshipitem.cpp
     App/clickablescene.cpp
     App/graphicsboard.cpp
     App/gamemanager.cpp
@@ -39,7 +38,6 @@ set(PROJECT_HEADERS
     App/board.h
     App/LobbyManager.h
     App/gameboard.h
-    App/gameshipitem.h
     App/clickablescene.h
     App/graphicsboard.h
     App/gamemanager.h

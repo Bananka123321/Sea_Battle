@@ -19,6 +19,8 @@ public:
 
     void setCellBorder(int row, int col, const QPen &pen);
 
+    QGraphicsPixmapItem *getImage(int row, int col) const;
+
 protected:
 
     void addCoord();

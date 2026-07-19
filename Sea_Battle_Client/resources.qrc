@@ -17,5 +17,6 @@
         <file>ships/middle_H4_ship.png</file>
         <file>ships/middle_H34_ship.png</file>
         <file>ships/tail_H_ship.png</file>
+        <file>ships/hit_ship_2.png</file>
     </qresource>
 </RCC>
