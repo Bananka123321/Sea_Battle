@@ -52,4 +52,5 @@ private:
     void PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
 
     void Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
+    void Revenge(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
 };

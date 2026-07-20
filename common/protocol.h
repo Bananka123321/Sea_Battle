@@ -113,6 +113,11 @@ inline std::string shoot(int row, int column) {
     return j.dump();
 }
 
+inline std::string revenge() {
+    nlohmann::json j;
+    j["type"] = "revenge";
+    return j.dump();
+}
 
 //      SERVER --> CLIENT
 //=================================================================================================================================================================
@@ -210,4 +215,4 @@ inline std::string gameOver(const std::string& winner) {
     return j.dump();
 }
 
-}
+};

@@ -46,6 +46,12 @@ void MessageRouter::shootRequest(int row, int column) {
     sendPacket(request);
 }
 
+void MessageRouter::revengeRequest() {
+    std::string request = protocol::revenge();
+    sendPacket(request);
+}
+
+
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
     if(!force && isReconnecting.load())
         return;

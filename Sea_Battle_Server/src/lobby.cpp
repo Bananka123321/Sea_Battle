@@ -85,3 +85,10 @@ void Lobby::createGame() {
 void Lobby::destroyGame() {
     game_.reset();
 }
+
+void Lobby::resetGame() {
+    game_.reset();
+
+    player1_ready_ = false;
+    player2_ready_ = false;
+}

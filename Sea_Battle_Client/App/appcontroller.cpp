@@ -24,6 +24,10 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->shootRequest(row, column);
     });
 
+    connect(mainW, &MainWindow::revengeRequest, this, [this]() {
+        router_->revengeRequest();
+    });
+
     connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
 
     connect(client_, &TCPClient::connectionLose, this, [this](){
