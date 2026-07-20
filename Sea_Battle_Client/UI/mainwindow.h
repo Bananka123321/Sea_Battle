@@ -47,8 +47,6 @@ public:
     void setPlayerState(Ui::PlayerState state, const std::string& username = "");
     bool getYourTurn();
     void setYourTurn(bool yourTurn);
-    void shootResultEnemy(int row, int column, int result);
-    void shootResultMe(int row, int column, int result);
 
     void shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
@@ -66,6 +64,7 @@ signals:
     void joinLobbyRequest(const std::string& username, const std::string& code);
     void playerReady(const std::vector<ShipData>& ships);
     void shootRequest(int row, int column);
+    void revengeRequest();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -108,6 +107,6 @@ private:
 
     std::vector<ShipData> convertShips();
 
-
+    void revenge();
 };
 

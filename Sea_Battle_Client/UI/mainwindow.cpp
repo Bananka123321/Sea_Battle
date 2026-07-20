@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->SendMessageInGamePushButton, &QPushButton::clicked, this, &MainWindow::onSendChatMessage);
     connect(ui->SendMessageInGameLineEdit, &QLineEdit::returnPressed, this, &MainWindow::onSendChatMessage);
 
+    connect(ui->, &QPushButton::clicked, this, &MainWindow::revenge);
+
     connect(ui->RandomSetPushButton, &QPushButton::clicked, placementBoard_, &PlacementBoard::randomPlacement);
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
@@ -59,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->graphicsView->scale(0.8, 0.8);
    });
 
-    // ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+    ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
 
 MainWindow::~MainWindow() {
@@ -456,4 +458,8 @@ void MainWindow::appendMessageToChat(QTextEdit* chatView, const QString& name, c
     cursor.insertHtml(html);
 
     chatView->verticalScrollBar()->setValue(chatView->verticalScrollBar()->maximum());
+}
+
+void MainWindow::revenge() {
+    emit revengeRequest();
 }

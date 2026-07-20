@@ -32,6 +32,7 @@ public:
     GameSession* getGame() const;
     void createGame();
     void destroyGame();
+    void resetGame();
 
 private:
     std::string code_;

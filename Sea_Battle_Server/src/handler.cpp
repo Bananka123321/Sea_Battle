@@ -32,6 +32,10 @@ Handler::Handler(SessionManager* session_manager) : session_manager_(session_man
     handlers_["shoot"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         Shoot(client, j);
     };
+
+    handlers_["revenge"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+        Revenge(client, j);
+    };
 }
 
 Handler::~Handler() {}
@@ -271,4 +275,11 @@ void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann
         
         lobby->destroyGame();
     }
+}
+
+void Handler::Revenge(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
+    auto lobby = client->GetCurrentLobby();
+    if (!lobby) return;
+
+    lobby->resetGame();
 }
