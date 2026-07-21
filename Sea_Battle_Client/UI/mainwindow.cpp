@@ -34,6 +34,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     enemyBoard_->drawField();
     enemyBoard_->drawImage();
 
+    shootSound = new QSoundEffect(this);
+    killSound = new QSoundEffect(this);
+    missSound = new QSoundEffect(this);
+    hitSound = new QSoundEffect(this);
+    shootSound->setSource(QUrl::fromLocalFile(":/Effects/Sounds/shoot.wav"));
+    killSound->setSource(QUrl::fromLocalFile(":/Effects/Sounds/kill.wav"));
+    missSound->setSource(QUrl::fromLocalFile(":/Effects/Sounds/miss.wav"));
+    hitSound->setSource(QUrl::fromLocalFile(":/Effects/Sounds/hit.wav"));
+
     createShips();
 
 
@@ -323,6 +332,8 @@ void MainWindow::enemyCellClicked(int row, int col)
         return;
     }
 
+    shootSound->play();
+
     emit shootRequest(row, col);
 
     ui->enemyGraphicsView->setEnabled(false);
@@ -347,13 +358,16 @@ void MainWindow::setYourTurn(bool yourTurn) {
 void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
     if (status == 0) {
         enemyBoard_->shootAtCell(row, column, Action::Miss);
+        missSound->play();
     }
     else if (status == 1) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
+        hitSound->play();
     }
     else if (status == 2) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
         enemyBoard_->markCellAsKill(shipCells);
+        killSound->play();
     }
     else if (status == 3) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);

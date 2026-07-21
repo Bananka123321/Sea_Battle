@@ -17,4 +17,10 @@
         <file>ships/tail_H_ship.png</file>
         <file>ships/hit_ship_2.png</file>
     </qresource>
+    <qresource prefix="/Effects">
+        <file>Sounds/hit.wav</file>
+        <file>Sounds/kill.wav</file>
+        <file>Sounds/miss.wav</file>
+        <file>Sounds/shoot.wav</file>
+    </qresource>
 </RCC>

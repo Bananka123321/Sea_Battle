@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QDateTime>
 #include <QScrollBar>
+#include <QSoundEffect>
 #include <QMessageBox>
 
 #include "Message.h"
@@ -85,6 +86,11 @@ private:
     Ui::PlayerState state_;
 
     bool myTurn_ = false;
+
+    QSoundEffect* shootSound;
+    QSoundEffect* killSound;
+    QSoundEffect* missSound;
+    QSoundEffect* hitSound;
 
 private:
     void createShips();
