@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     createShips();
 
+
     connect(ui->CreateLobbyPushButton, &QPushButton::clicked, this, [this](){
         tryCreateLobby();
     });
@@ -58,16 +59,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->SendMessageInGamePushButton, &QPushButton::clicked, this, &MainWindow::onSendChatMessage);
     connect(ui->SendMessageInGameLineEdit, &QLineEdit::returnPressed, this, &MainWindow::onSendChatMessage);
 
-    // connect(ui->, &QPushButton::clicked, this, &MainWindow::revenge);
-
     connect(ui->RandomSetPushButton, &QPushButton::clicked, placementBoard_, &PlacementBoard::randomPlacement);
 
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
     QTimer::singleShot(0, this, [this]()
    {
-        ui->graphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
-        ui->graphicsView->scale(0.8, 0.8);
+        resizeWindow();
    });
 
     ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
@@ -328,8 +326,6 @@ void MainWindow::enemyCellClicked(int row, int col)
         return;
     }
 
-    qDebug() << enemyBoard_->getImage(row, col)->data(0).toString();
-
     if (enemyBoard_->getImage(row, col)->data(0).toString() != "untouch")
     {
         qDebug() << "Эта клетка недоступна!";
@@ -375,7 +371,26 @@ void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk
     }
     else if (status == 3) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
-        QMessageBox::information(this, "Победа!", "Вы потопили все корабли противника!");
+
+        QMessageBox msgBox(this);
+
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.button(QMessageBox::Yes)->setText("Реванш");
+        msgBox.button(QMessageBox::No)->setText("В меню");
+
+        msgBox.setWindowTitle("Победа!");
+        msgBox.setText("Вы потопили все корабли противника!");
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
+        {
+            revenge();
+        }
+        else
+        {
+
+        }
     }
 }
 
@@ -392,7 +407,26 @@ void MainWindow::shootResultMe(int row, int column, int status, bool shipSunk, c
     }
     else if (status == 3) {
         ownBoard_->shootAtCell(row, column, Action::Hit);
-        QMessageBox::information(this, "Поражение", "Противник потопил все ваши корабли!");
+
+        QMessageBox msgBox(this);
+
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.button(QMessageBox::Yes)->setText("Реванш");
+        msgBox.button(QMessageBox::No)->setText("В меню");
+
+        msgBox.setWindowTitle("Поражение");
+        msgBox.setText("Противник потопил все ваши корабли!");
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
+        {
+            revenge();
+        }
+        else
+        {
+
+        }
     }
 }
 
@@ -474,6 +508,25 @@ void MainWindow::appendMessageToChat(QTextEdit* chatView, const QString& name, c
     chatView->verticalScrollBar()->setValue(chatView->verticalScrollBar()->maximum());
 }
 
-void MainWindow::revenge() {
-    emit revengeRequest();
+void MainWindow::revenge()
+{
+    qDebug() << "revenge";
+    ownBoard_->clear();
+    enemyBoard_->clear();
+
+    for (ShipItem *ship : placementBoard_->getAllShips())
+    {
+        ship->returnSpawn();
+    }
+
+    placementBoard_->clear();
+
+
+    ui->stackedWidget->setCurrentWidget(ui->LobbyPage);
+    ui->graphicsView->setEnabled(true);
+    ui->RandomSetPushButton->setEnabled(true);
+    ui->ReadyPushButton->setText("Готов");
+    ui->OPConnectLabel->setText("Оппонент не готов");
+
+    // emit revengeRequest();
 }

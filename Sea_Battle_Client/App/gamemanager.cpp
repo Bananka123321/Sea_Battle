@@ -9,15 +9,11 @@ gameManager::gameManager(Handler* handler, MainWindow* window) : handler_(handle
 
 void gameManager::gameStarted(bool yourTurn) {
     UI_->stackedWidget->setCurrentIndex(2);
-    UI_->ownGraphicsView->fitInView(window_->getOwnScene()->sceneRect(), Qt::KeepAspectRatio);
-    UI_->enemyGraphicsView->fitInView(window_->getEnemyScene()->sceneRect(), Qt::KeepAspectRatio);
-    UI_->ownGraphicsView->scale(0.8, 0.8);
-    UI_->enemyGraphicsView->scale(0.8, 0.8);
+    window_->resizeWindow();
     window_->setYourTurn(yourTurn);
 }
 
 void gameManager::shootResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells) {
-    std::cerr << window_->getYourTurn() << '\n';
     if (window_->getYourTurn()) {
         window_->shootResultEnemy(row, column, status, shipSunk, shipCells);
     } else {

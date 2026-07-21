@@ -14,6 +14,8 @@ public:
 
     virtual ~GraphicsBoard() = default;
 
+    void clear();
+
     void drawField();
     void drawImage();
 

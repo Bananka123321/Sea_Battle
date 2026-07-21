@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     MessageRouter* router = new MessageRouter();
     Handler* handler = new Handler();
-    TCPClient* client = new TCPClient(6767, router);
+    TCPClient* client = new TCPClient(7070, router);
     AppController* AController = new AppController(router, handler, client);
 
     client->onMessage = [handler](const std::string& msg) {

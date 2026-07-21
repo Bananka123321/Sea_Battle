@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QScrollBar>
 #include <QSoundEffect>
+#include <QMessageBox>
 
 #include "Message.h"
 #include "board.h"
@@ -44,6 +45,7 @@ public:
     QGraphicsScene* getPlaceScene();
     QGraphicsScene* getOwnScene();
     ClickableScene* getEnemyScene();
+    void resizeWindow();
 
     void setPlayerState(Ui::PlayerState state, const std::string& username = "");
     bool getYourTurn();
@@ -80,7 +82,6 @@ private:
     GameBoard *ownBoard_;
     GameBoard *enemyBoard_;
 
-
     PlacementBoard* placementBoard_ = nullptr;
     Ui::PlayerState state_;
 
@@ -92,7 +93,6 @@ private:
     QSoundEffect* hitSound;
 
 private:
-    void resizeWindow();
     void createShips();
     void addShip(ShipItem *ship, int x, int y);
 
