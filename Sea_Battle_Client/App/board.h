@@ -11,9 +11,11 @@ class PlacementBoard : public GraphicsBoard
 public:
     PlacementBoard(QGraphicsScene *scene);
 
+    void clear();
+
     bool canPlaceShip(ShipItem *ship,int row, int col, int size, bool horizontal);
     void placeShip(int row, int col, int size, bool horizontal);
-    void clear();
+    void clearField();
     void rebuildCells(ShipItem* ignoreShip = nullptr);
     void addShip(ShipItem* item, int row, int col, int size, bool horizontal);
     void updateBoardView();
@@ -23,7 +25,6 @@ public:
 
     void registerShip(ShipItem *ship);
     void randomPlacement();
-    void reset();
 
     bool allShipPlaced();
 
@@ -38,6 +39,7 @@ public:
     };
 
     const QList<ShipData>& getShips();
+    const QList<ShipItem*>& getAllShips();
 
 private:
     int shipCells_[10][10];

@@ -4,7 +4,7 @@
 int main(int argc, char* argv[]) {
     SignalHandler::Setup();
     
-    TCPServer server(6767);//В будущем хотел бы сделать выбор порта через аргументы консоли или с помощью конфига как у меня в мессенджере
+    TCPServer server(7070);//В будущем хотел бы сделать выбор порта через аргументы консоли или с помощью конфига как у меня в мессенджере
 
     std::thread serverThread([&server](){
         if (!server.Start())

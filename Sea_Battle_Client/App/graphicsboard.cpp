@@ -5,6 +5,13 @@ static const int OFFSET = 25;
 
 GraphicsBoard::GraphicsBoard(QGraphicsScene *scene) : QObject(scene), scene_(scene) {}
 
+void GraphicsBoard::clear()
+{
+    scene_->clear();
+    drawField();
+    drawImage();
+}
+
 void GraphicsBoard::drawField()
 {
     scene_->setSceneRect(0, 0, OFFSET + 10 * CELL_SIZE, OFFSET + 10 * CELL_SIZE);

@@ -8,8 +8,6 @@
         <file>images/missvortex.png</file>
         <file>images/missvortex_2.png</file>
     </qresource>
-    <qresource prefix="/custom"/>
-    <qresource prefix="/ship"/>
     <qresource prefix="/">
         <file>ships/single_H.png</file>
         <file>ships/head_H_ship.png</file>

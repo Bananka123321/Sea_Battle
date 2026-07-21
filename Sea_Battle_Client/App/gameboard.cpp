@@ -162,6 +162,7 @@ void GameBoard::markCellAsKill(std::vector<std::pair<int,int>> shipCells)
                 }
             }
             setCellImage(r,c,":/f");
+            images_[r][c]->setData(0,"miss");
         }
     }
 }

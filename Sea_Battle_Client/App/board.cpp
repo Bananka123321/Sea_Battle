@@ -6,10 +6,17 @@
 
 PlacementBoard::PlacementBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 {
-    clear();
+    clearField();
 }
 
 void PlacementBoard::clear()
+{
+    ships_.clear();
+
+    clearField();
+}
+
+void PlacementBoard::clearField()
 {
     for (int row = 0; row < 10; row++)
     {
@@ -77,7 +84,7 @@ void PlacementBoard::placeShip(int row, int col, int size, bool horizontal)
 
 void PlacementBoard::rebuildCells(ShipItem* ignoreShip)
 {
-    clear();
+    clearField();
 
     for(auto &ship : ships_)
     {
@@ -205,7 +212,7 @@ void PlacementBoard::registerShip(ShipItem *ship)
 
 void PlacementBoard::randomPlacement()
 {
-    clear();
+    clearField();
     ships_.clear();
 
     for (ShipItem *ship : allShips_)
@@ -240,12 +247,6 @@ void PlacementBoard::randomPlacement()
     }
 }
 
-void PlacementBoard::reset()
-{
-    clear();
-    ships_.clear();
-}
-
 bool PlacementBoard::allShipPlaced()
 {
     if (ships_.size() != 10)
@@ -271,4 +272,9 @@ bool PlacementBoard::allShipPlaced()
 const QList<PlacementBoard::ShipData>& PlacementBoard::getShips()
 {
     return ships_;
+}
+
+const QList<ShipItem*>& PlacementBoard::getAllShips()
+{
+    return allShips_;
 }
