@@ -14,6 +14,7 @@ GameBoard::GameBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 
 void GameBoard::addShip(int row, int col, int size, bool horizontal)
 {
+    qDebug() << row << col << size << horizontal;
     for (int i = 0; i < size; i++)
     {
         int r = horizontal ? row : row + i;
@@ -98,13 +99,21 @@ void GameBoard::setCellImage(int row, int col, const QPixmap &pixmap)
     images_[row][col]->setPixmap(pixmap.scaled(CELL_SIZE, CELL_SIZE));
 }
 
+void GameBoard::clearCellImage(int row, int col)
+{
+    if (row < 0 || row >= 10 || col < 0 || col >= 10)
+    {
+        return;
+    }
 
+    images_[row][col]->setPixmap(QPixmap());
+}
 
 void GameBoard::shootAtCell(int row, int col, Action type)
 {
     if (type == Action::Miss)
     {
-        setCellImage(row, col, ":/field");
+        clearCellImage(row, col);
         images_[row][col]->setData(0,"miss");
     }
     else

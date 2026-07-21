@@ -9,6 +9,7 @@ gameManager::gameManager(Handler* handler, MainWindow* window) : handler_(handle
 
 void gameManager::gameStarted(bool yourTurn) {
     UI_->stackedWidget->setCurrentIndex(2);
+    window_->drawShipsOnOwnBoard();
     window_->resizeWindow();
     window_->setYourTurn(yourTurn);
 }
