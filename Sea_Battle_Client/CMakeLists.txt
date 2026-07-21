@@ -5,7 +5,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Multimedia)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -65,9 +65,7 @@ target_include_directories(Sea_Battle_Client PRIVATE
     ../common
 )
 
-target_link_libraries(Sea_Battle_Client PRIVATE
-    Qt6::Widgets
-)
+target_link_libraries(Sea_Battle_Client PRIVATE Qt6::Widgets Qt6::Multimedia)
 
 if (WIN32)
     target_link_libraries(Sea_Battle_Client PRIVATE ws2_32)
