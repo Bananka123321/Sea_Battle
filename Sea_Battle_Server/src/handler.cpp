@@ -90,6 +90,7 @@ void Handler::LeaveLobby(const std::shared_ptr<ClientSession>& client, const nlo
     if(!lobby) return;
 
     auto secondPlayer = lobby->GetPlayer1() == client ? lobby->GetPlayer2() : lobby->GetPlayer1();
+    
     if(secondPlayer)
         dispatcher_.SendTo(secondPlayer, protocol::playerLeft());
     
@@ -255,4 +256,5 @@ void Handler::Revenge(const std::shared_ptr<ClientSession>& client, const nlohma
     if (!lobby) return;
 
     lobby->resetGame();
+    bool isReady = lobby->SetReady(client);
 }

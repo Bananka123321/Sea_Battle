@@ -525,5 +525,6 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
         ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
         emit leaveLobbyRequest();
     }
+
     clear();
 }
