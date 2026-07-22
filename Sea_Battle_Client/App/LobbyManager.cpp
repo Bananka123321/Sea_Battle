@@ -6,7 +6,9 @@ LobbyManager::LobbyManager(Handler* handler, MainWindow* window) : handler_(hand
     connect(handler_, &Handler::S_PlayerJoined, this, &LobbyManager::playerJoined, Qt::QueuedConnection);
     connect(handler_, &Handler::S_PlayerLeft, this, &LobbyManager::playerLeft, Qt::QueuedConnection);
     connect(handler_, &Handler::S_EnemyReady, this, &LobbyManager::playerReady, Qt::QueuedConnection);
-    connect(window_, &MainWindow::revengeRequest, this, &LobbyManager::playerReady, Qt::QueuedConnection);
+    connect(window_, &MainWindow::revengeRequest, this, [this]() {
+        playerReady(false);
+    });
 
     UI_ = window_->getUI();
 }
