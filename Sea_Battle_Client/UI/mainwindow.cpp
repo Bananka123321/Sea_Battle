@@ -307,7 +307,7 @@ ClickableScene* MainWindow::getEnemyScene()
     return enemyScene_;
 }
 
-void MainWindow::setPlayerState(Ui::PlayerState state, const std::string& username) {
+void MainWindow::setPlayerState(Ui::PlayerState state) {
     QLabel* enemy = ui->OPConnectLabel;
     switch (state) {
     case Ui::PlayerState::NOT_PLAYER:
@@ -516,7 +516,6 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
     }
     msgBox.exec();
 
-    clear();
 
     if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
     {
@@ -525,5 +524,7 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
     else
     {
         ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
+        emit leaveLobbyRequest();
     }
+    clear();
 }
