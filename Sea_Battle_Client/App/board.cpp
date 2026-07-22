@@ -1,6 +1,5 @@
 #include "board.h"
 
-#include <QDebug>
 #include <QRandomGenerator>
 #include <algorithm>
 

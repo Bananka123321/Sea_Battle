@@ -28,7 +28,6 @@ public:
 
     bool allShipPlaced();
 
-
     struct ShipData
     {
         ShipItem* item;

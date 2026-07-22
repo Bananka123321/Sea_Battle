@@ -838,33 +838,6 @@ border-image: url(:/images/background.jpg)
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
-               <widget class="QLabel" name="TimerLabel">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>100</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>300</width>
-                  <height>100</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>55</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>15</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QLabel" name="MoveLabel">
                 <property name="minimumSize">
                  <size>

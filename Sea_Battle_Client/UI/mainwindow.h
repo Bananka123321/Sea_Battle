@@ -6,7 +6,6 @@
 #include <QResizeEvent>
 #include <QGraphicsScene>
 #include <cmath>
-#include <QDebug>
 #include <QColor>
 #include <QDateTime>
 #include <QScrollBar>
@@ -53,6 +52,8 @@ public:
 
     void shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
+    void drawShipsOnOwnBoard();
+
 public slots:
     void onReceiveChatMessage(const std::string& from, const std::string& text);
     void gameOver(const std::string& winner, std::vector<ShipData> opponentShips);
@@ -93,6 +94,8 @@ private:
     QSoundEffect* killSound;
     QSoundEffect* missSound;
     QSoundEffect* hitSound;
+
+    QString nameClient_;
 
 private:
     void createShips();
