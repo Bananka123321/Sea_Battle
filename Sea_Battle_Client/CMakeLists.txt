@@ -58,7 +58,7 @@ qt_add_executable(Sea_Battle_Client
     resources.qrc
 )
 
-set_target_properties(Sea_Battle_Client PROPERTIES OUTPUT_NAME "Client")
+set_target_properties(Sea_Battle_Client PROPERTIES OUTPUT_NAME "Client" WIN32_EXECUTABLE TRUE)
 
 target_include_directories(Sea_Battle_Client PRIVATE
     Network
