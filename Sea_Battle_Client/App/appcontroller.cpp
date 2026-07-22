@@ -16,6 +16,10 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->joinLobbyRequest(username, code);
     });
 
+    connect(mainW, &MainWindow::leaveLobbyRequest, this, [this](){
+        router_->leaveLobbyRequest();
+    });
+
     connect(mainW, &MainWindow::playerReady, this, [this](const std::vector<ShipData>& ships){
         router_->playerReady(ships);
     });

@@ -47,7 +47,7 @@ public:
     ClickableScene* getEnemyScene();
     void resizeWindow();
 
-    void setPlayerState(Ui::PlayerState state, const std::string& username = "");
+    void setPlayerState(Ui::PlayerState state);
     bool getYourTurn();
     void setYourTurn(bool yourTurn);
 
@@ -66,6 +66,7 @@ signals:
     void sendMessageRequest(const std::string& text);
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
+    void leaveLobbyRequest();
     void playerReady(const std::vector<ShipData>& ships);
     void shootRequest(int row, int column);
     void revengeRequest();
