@@ -18,8 +18,8 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            qt_version: '6.5.3'
-            qt_arch: 'win64_msvc2019_64'
+            qt_version: '6.8.1'
+            qt_arch: 'win64_msvc2022_64'
             artifact_name: SeaBattleClient_Windows
             binary_name: Client.exe
             suffix: .zip
@@ -42,6 +42,7 @@ jobs:
           version: ${{ matrix.qt_version }}
           arch: ${{ matrix.qt_arch }}
           modules: 'qtmultimedia'
+          cache: true
 
       - name: Install Qt6 & Dependencies (Linux)
         if: runner.os == 'Linux'
@@ -56,6 +57,13 @@ jobs:
             libgl1-mesa-dev \
             libxkbcommon-x11-0 \
             libxcb-cursor0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render-util0 \
+            libxcb-shape0 \
+            libxcb-xinerama0 \
             libssl-dev
           
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
