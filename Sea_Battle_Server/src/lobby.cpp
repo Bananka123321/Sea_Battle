@@ -59,7 +59,7 @@ std::shared_ptr<ClientSession> Lobby::GetPlayer2() const {
 }
 
 bool Lobby::IsFull() const {
-    return player2_ != nullptr;
+    return player2_ != nullptr && player1_ != nullptr;
 }
 
 bool Lobby::ContainsPlayer(const std::shared_ptr<ClientSession>& player) const {
