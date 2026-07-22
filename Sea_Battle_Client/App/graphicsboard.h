@@ -23,14 +23,6 @@ public:
 
     QGraphicsPixmapItem *getImage(int row, int col) const;
 
-    struct ShipData
-    {
-        int row;
-        int col;
-        int size;
-        bool horizontal;
-    };
-
 protected:
 
     void addCoord();

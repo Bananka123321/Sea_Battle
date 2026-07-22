@@ -209,14 +209,6 @@ void MainWindow::shipPlaced(ShipItem *ship, int row, int col, int size, bool hor
     }
 }
 
-void MainWindow::tryCreateLobby() {
-    std::string username = ui->ConnectUserNameLineEdit->text().toStdString();
-
-    if(auto err = Validator::username(username)) return;
-
-    emit createLobbyRequest(username);
-}
-
 std::vector<ShipData> MainWindow::convertShips() {
     std::vector<PlacementBoard::ShipData> shipsToPlace(placementBoard_->getShips().constBegin(), placementBoard_->getShips().constEnd());
 
@@ -268,6 +260,15 @@ void MainWindow::drawShipsOnOwnBoard()
     }
 }
 
+void MainWindow::tryCreateLobby() {
+    std::string username = ui->ConnectUserNameLineEdit->text().toStdString();
+
+    if(auto err = Validator::username(username)) return;
+
+    nameClient_ = QString::fromStdString(username);
+    emit createLobbyRequest(username);
+}
+
 void MainWindow::tryJoinLobby() {
     std::string username = ui->ConnectUserNameLineEdit->text().toStdString();
     std::string code = ui->ConnectCodeRoomLineEdit->text().toStdString();
@@ -283,6 +284,7 @@ void MainWindow::tryJoinLobby() {
 
     ui->CodeRoomLabel->setText(QString::fromStdString(code));
 
+    nameClient_ = QString::fromStdString(username);
     emit joinLobbyRequest(username, code);
 }
 
@@ -372,27 +374,6 @@ void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk
     }
     else if (status == 3) {
         enemyBoard_->shootAtCell(row, column, Action::Hit);
-
-        QMessageBox msgBox(this);
-
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.button(QMessageBox::Yes)->setText("Реванш");
-        msgBox.button(QMessageBox::No)->setText("В меню");
-
-        msgBox.setWindowTitle("Победа!");
-        msgBox.setText("Вы потопили все корабли противника!");
-
-        msgBox.exec();
-
-        if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
-        {
-            revenge();
-        }
-        else
-        {
-            clear();
-            ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
-        }
     }
 }
 
@@ -492,7 +473,6 @@ void MainWindow::appendMessageToChat(QTextEdit* chatView, const QString& name, c
 
 void MainWindow::revenge()
 {
-    clear();
     ui->stackedWidget->setCurrentWidget(ui->LobbyPage);
     emit revengeRequest();
 }
@@ -523,10 +503,20 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
     msgBox.button(QMessageBox::Yes)->setText("Реванш");
     msgBox.button(QMessageBox::No)->setText("В меню");
 
-    msgBox.setWindowTitle("Поражение");
-    msgBox.setText("Противник потопил все ваши корабли!");
-
+    if (winner == nameClient_)
+    {
+        msgBox.setWindowTitle("Победа!");
+        msgBox.setText("Вы потопили все корабли противника!");
+    }
+    else
+    {
+        enemyBoard_->showAllShips(opponentShips);
+        msgBox.setWindowTitle("Поражение");
+        msgBox.setText("Противник потопил все ваши корабли!");
+    }
     msgBox.exec();
+
+    clear();
 
     if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
     {
@@ -534,6 +524,6 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
     }
     else
     {
-
+        ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
     }
 }

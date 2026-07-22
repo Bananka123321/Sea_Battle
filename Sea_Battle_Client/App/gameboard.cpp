@@ -177,7 +177,7 @@ void GameBoard::showAllShips(std::vector<ShipData> allShips)
     for (const auto& ship : allShips)
     {
         int row = ship.row;
-        int col = ship.col;
+        int col = ship.column;
         for (int i = 0; i < ship.size; i++)
         {
             if (ship.horizontal)

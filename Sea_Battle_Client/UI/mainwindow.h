@@ -94,6 +94,8 @@ private:
     QSoundEffect* missSound;
     QSoundEffect* hitSound;
 
+    QString nameClient_;
+
 private:
     void createShips();
     void addShip(ShipItem *ship, int x, int y);

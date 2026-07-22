@@ -12,6 +12,7 @@
 #include "board.h"
 #include "clickablescene.h"
 #include "graphicsboard.h"
+#include "ship_coord.h"
 
 enum class Action
 {
