@@ -64,9 +64,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(enemyBoard_, &GameBoard::cellClicked, this, &MainWindow::enemyCellClicked);
 
     QTimer::singleShot(0, this, [this]()
-   {
+    {
         resizeWindow();
-   });
+    });
 
     ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
 }
@@ -389,7 +389,8 @@ void MainWindow::shootResultEnemy(int row, int column, int status, bool shipSunk
         }
         else
         {
-
+            clear();
+            ui->stackedWidget->setCurrentWidget(ui->ConnectPage);
         }
     }
 }
@@ -490,7 +491,13 @@ void MainWindow::appendMessageToChat(QTextEdit* chatView, const QString& name, c
 
 void MainWindow::revenge()
 {
-    qDebug() << "revenge";
+    clear();
+    ui->stackedWidget->setCurrentWidget(ui->LobbyPage);
+    emit revengeRequest();
+}
+
+void MainWindow::clear()
+{
     ownBoard_->clear();
     enemyBoard_->clear();
 
@@ -502,13 +509,10 @@ void MainWindow::revenge()
     placementBoard_->clear();
 
 
-    ui->stackedWidget->setCurrentWidget(ui->LobbyPage);
     ui->graphicsView->setEnabled(true);
     ui->RandomSetPushButton->setEnabled(true);
     ui->ReadyPushButton->setText("Готов");
     ui->OPConnectLabel->setText("Оппонент не готов");
-
-    // emit revengeRequest();
 }
 
 void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> opponentShips) {

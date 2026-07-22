@@ -31,6 +31,7 @@ public:
     void addShip(int row, int col, int size, bool horizontal);
     void setCellImage(int row, int col, QString path);
     void setCellImage(int row, int col, const QPixmap &pixmap);
+    void clearCellImage(int row, int col);
     void shootAtCell(int row, int col, Action type);
     void markCellAsKill(std::vector<std::pair<int,int>> shipCells);
 

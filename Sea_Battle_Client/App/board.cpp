@@ -212,8 +212,7 @@ void PlacementBoard::registerShip(ShipItem *ship)
 
 void PlacementBoard::randomPlacement()
 {
-    clearField();
-    ships_.clear();
+    clear();
 
     for (ShipItem *ship : allShips_)
     {

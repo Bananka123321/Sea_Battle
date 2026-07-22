@@ -115,5 +115,6 @@ private:
     std::vector<ShipData> convertShips();
 
     void revenge();
+    void clear();
 };
 
