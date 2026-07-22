@@ -493,7 +493,6 @@ void MainWindow::clear()
     ui->graphicsView->setEnabled(true);
     ui->RandomSetPushButton->setEnabled(true);
     ui->ReadyPushButton->setText("Готов");
-    ui->OPConnectLabel->setText("Оппонент не готов");
 }
 
 void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> opponentShips) {
