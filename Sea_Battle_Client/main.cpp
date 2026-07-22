@@ -36,5 +36,8 @@ int main(int argc, char *argv[]) {
     a.exec();
     delete client;
     delete handler;
+    delete lManager;
+    delete gManager;
+    delete mainW;
     return 0;
 }

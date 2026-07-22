@@ -270,8 +270,15 @@ void Handler::Shoot(const std::shared_ptr<ClientSession>& client, const nlohmann
 
     if (shotResult.status == ShotStatus::Win) {
         std::string winnerName = (client == game->getPlayer1()) ? game->getPlayer1()->GetUsername() : game->getPlayer2()->GetUsername();
-        dispatcher_.SendTo(lobby->GetPlayer1(), protocol::gameOver(winnerName));
-        dispatcher_.SendTo(lobby->GetPlayer2(), protocol::gameOver(winnerName));
+        
+        auto p1 = lobby->GetPlayer1();
+        auto p2 = lobby->GetPlayer2();
+
+        if (p1)
+            dispatcher_.SendTo(p1, protocol::gameOver(winnerName, game->getOpponentShips(p1)));
+        
+        if (p2)
+            dispatcher_.SendTo(p2, protocol::gameOver(winnerName, game->getOpponentShips(p2)));
         
         lobby->destroyGame();
     }

@@ -208,10 +208,22 @@ inline std::string shotResult(const ShotResult& result, bool yourTurn) {
     return j.dump();
 }
 
-inline std::string gameOver(const std::string& winner) {
+inline std::string gameOver(const std::string& winner, const std::vector<ShipData>& opponentShips) {
     nlohmann::json j;
     j["type"] = "gameOver";
     j["winner"] = winner;
+    
+    nlohmann::json shipsArray = nlohmann::json::array();
+    for (const auto& ship : opponentShips) {
+        shipsArray.push_back({
+            {"row", ship.row},
+            {"column", ship.column},
+            {"size", ship.size},
+            {"horizontal", ship.horizontal}
+        });
+    }
+    j["opponentShips"] = shipsArray;
+    
     return j.dump();
 }
 

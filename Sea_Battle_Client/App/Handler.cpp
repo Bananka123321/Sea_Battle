@@ -56,7 +56,18 @@ Handler::Handler() {
     };
 
     handlers["gameOver"] = [this] (const nlohmann::json& j) {
-        onGameOver(j["winner"]);
+        std::vector<ShipData> revealedShips;
+
+        for (const auto& shipJson : j["opponentShips"]) {
+            ShipData ship;
+            ship.row = shipJson["row"];
+            ship.column = shipJson["column"];
+            ship.size = shipJson["size"];
+            ship.horizontal = shipJson["horizontal"];
+            revealedShips.push_back(ship);
+        }
+
+        onGameOver(j["winner"], revealedShips);
     };
 }
 
@@ -120,6 +131,6 @@ void Handler::onShotResult(int row, int column, int status, bool yourTurn, bool 
     emit S_ShotResult(row, column, status, yourTurn, shipSunk, shipCells);
 }
 
-void Handler::onGameOver(const std::string& winner) {
-    emit S_onGameOver(winner);
+void Handler::onGameOver(const std::string& winner, std::vector<ShipData> ships) {
+    emit S_onGameOver(winner, ships);
 }

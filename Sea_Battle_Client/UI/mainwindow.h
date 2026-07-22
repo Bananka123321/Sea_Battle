@@ -56,6 +56,7 @@ public:
 
 public slots:
     void onReceiveChatMessage(const std::string& from, const std::string& text);
+    void gameOver(const std::string& winner, std::vector<ShipData> opponentShips);
 
 private slots:
     void shipPlaced(ShipItem *ship, int row, int col, int size, bool horizotnal);

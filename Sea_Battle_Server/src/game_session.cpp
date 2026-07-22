@@ -168,3 +168,13 @@ void GameSession::clearShips(std::shared_ptr<ClientSession> player) {
         state_ = GameState::PLACING;
     }
 }
+
+std::vector<ShipData> GameSession::getOpponentShips(std::shared_ptr<ClientSession> player) const {
+    const auto& ships = (player == player1_) ? ships2_ : ships1_;
+    
+    std::vector<ShipData> result;
+    for (const auto& ship : ships)
+        result.push_back({ship.row, ship.column, ship.size, ship.horizontal});
+        
+    return result;
+}

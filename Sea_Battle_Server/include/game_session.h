@@ -38,6 +38,8 @@ public:
 
     void clearShips(std::shared_ptr<ClientSession> player);
 
+    std::vector<ShipData> getOpponentShips(std::shared_ptr<ClientSession> player) const;
+
 private:
     std::shared_ptr<ClientSession> player1_;
     std::shared_ptr<ClientSession> player2_;
@@ -50,6 +52,7 @@ private:
     bool player1Placed_;
     bool player2Placed_;
 
+private:
     bool isValidPlacement(const std::vector<ShipData>& ships) const;
     Ship* findShipAt(std::vector<Ship>& ships, int row, int column);
     std::vector<std::pair<int,int>> getSurroundingCells(const Ship& ship);
