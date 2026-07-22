@@ -53,6 +53,8 @@ public:
 
     void shootResultEnemy(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
     void shootResultMe(int row, int column, int status, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
+    void drawShipsOnOwnBoard();
+
 public slots:
     void onReceiveChatMessage(const std::string& from, const std::string& text);
 

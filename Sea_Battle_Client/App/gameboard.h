@@ -10,7 +10,6 @@
 #include <QGraphicsPixmapItem>
 
 #include "board.h"
-#include "gameshipitem.h"
 #include "clickablescene.h"
 #include "graphicsboard.h"
 
@@ -34,6 +33,7 @@ public:
     void clearCellImage(int row, int col);
     void shootAtCell(int row, int col, Action type);
     void markCellAsKill(std::vector<std::pair<int,int>> shipCells);
+    void showAllShips(std::vector<ShipData> allShips);
 
 private slots:
 

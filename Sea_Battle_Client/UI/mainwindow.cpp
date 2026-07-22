@@ -260,7 +260,10 @@ void MainWindow::on_ReadyPushButton_clicked() {
     {
         ui->ReadyPushButton->setText("Готов");
     }
+}
 
+void MainWindow::drawShipsOnOwnBoard()
+{
     for(auto ship : placementBoard_->getShips())
     {
         ownBoard_->addShip(ship.row, ship.col, ship.size, ship.horizontal);

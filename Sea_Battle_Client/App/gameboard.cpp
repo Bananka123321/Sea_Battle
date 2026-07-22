@@ -14,7 +14,6 @@ GameBoard::GameBoard(QGraphicsScene *scene) : GraphicsBoard(scene)
 
 void GameBoard::addShip(int row, int col, int size, bool horizontal)
 {
-    qDebug() << row << col << size << horizontal;
     for (int i = 0; i < size; i++)
     {
         int r = horizontal ? row : row + i;
@@ -52,10 +51,7 @@ void GameBoard::addShip(int row, int col, int size, bool horizontal)
             pix = pix.transformed(transform, Qt::SmoothTransformation);
         }
 
-        images_[r][c]->setPixmap(
-            pix.scaled(CELL_SIZE, CELL_SIZE,
-                       Qt::KeepAspectRatio,
-                       Qt::SmoothTransformation));
+        images_[r][c]->setPixmap(pix.scaled(CELL_SIZE, CELL_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
@@ -170,9 +166,69 @@ void GameBoard::markCellAsKill(std::vector<std::pair<int,int>> shipCells)
                     continue;
                 }
             }
-            setCellImage(r,c,":/f");
+            clearCellImage(r,c);
             images_[r][c]->setData(0,"miss");
         }
+    }
+}
+
+void GameBoard::showAllShips(std::vector<ShipData> allShips)
+{
+    for (const auto& ship : allShips)
+    {
+        int row = ship.row;
+        int col = ship.col;
+        for (int i = 0; i < ship.size; i++)
+        {
+            if (ship.horizontal)
+            {
+                col += 1;
+            }
+            else
+            {
+                row += 1;
+            }
+
+            if (images_[row][col]->data(0).toString() != "untouch")
+            {
+                continue;
+            }
+
+            QString path;
+
+            if (ship.size == 1)
+            {
+                path = ":/ships/single_H.png";
+            }
+            else if (i == 0)
+            {
+                path = ":/ships/tail_H_ship.png";
+            }
+            else if (i == ship.size - 1)
+            {
+                path = ":/ships/head_H_ship.png";
+            }
+            else if (i == 2)
+            {
+                path = ":/ships/middle_H34_ship.png";
+            }
+            else
+            {
+                path = ":/ships/middle_H4_ship.png";
+            }
+
+            QPixmap pix(path);
+
+            if (!ship.horizontal)
+            {
+                QTransform transform;
+                transform.rotate(90);
+                pix = pix.transformed(transform, Qt::SmoothTransformation);
+            }
+
+            images_[row][col]->setPixmap(pix.scaled(CELL_SIZE, CELL_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        }
+
     }
 }
 
