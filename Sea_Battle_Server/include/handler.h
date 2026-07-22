@@ -40,9 +40,6 @@ private:
 private:
     void ChatMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
     void Ping(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    void ResumeConnectionRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j);
-    
-    void AuthSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_);
 
     std::string GenerateToken();
 

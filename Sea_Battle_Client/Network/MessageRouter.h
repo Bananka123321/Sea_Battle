@@ -18,8 +18,6 @@ public:
     void setSocket(int socket);
 
     void sendMessage(const std::string& text);
-    void ping();
-    void resumeConnectionRequest(const std::string& token);
 
     void createLobbyRequest(const std::string& username);
     void joinLobbyRequest(const std::string& username, const std::string& code);
@@ -28,12 +26,10 @@ public:
     void shootRequest(int row, int column);
     void revengeRequest();
 
-    void setReconnecting(bool value);
 
 private:
     int socket_;
     std::mutex mutex;
-    std::atomic<bool> isReconnecting{false};
 
 private:
     void sendPacket(const std::string& msg, bool force = false);
