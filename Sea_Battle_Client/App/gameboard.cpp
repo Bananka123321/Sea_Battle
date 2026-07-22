@@ -180,14 +180,6 @@ void GameBoard::showAllShips(std::vector<ShipData> allShips)
         int col = ship.column;
         for (int i = 0; i < ship.size; i++)
         {
-            if (ship.horizontal)
-            {
-                col += 1;
-            }
-            else
-            {
-                row += 1;
-            }
 
             if (images_[row][col]->data(0).toString() != "untouch")
             {
@@ -227,6 +219,15 @@ void GameBoard::showAllShips(std::vector<ShipData> allShips)
             }
 
             images_[row][col]->setPixmap(pix.scaled(CELL_SIZE, CELL_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+            if (ship.horizontal)
+            {
+                col += 1;
+            }
+            else
+            {
+                row += 1;
+            }
         }
 
     }

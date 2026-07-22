@@ -12,6 +12,7 @@ LobbyManager::LobbyManager(Handler* handler, MainWindow* window) : handler_(hand
 
 void LobbyManager::lobbyCreated(const std::string& code) {
     UI_->stackedWidget->setCurrentIndex(1);
+    window_->setPlayerState(Ui::PlayerState::NOT_PLAYER);
     UI_->graphicsView->fitInView(window_->getPlaceScene()->sceneRect(), Qt::KeepAspectRatio);
     UI_->graphicsView->scale(0.8, 0.8);
     UI_->CodeRoomLabel->setText(QString::fromStdString(code));
