@@ -51,6 +51,10 @@ void MessageRouter::revengeRequest() {
     sendPacket(request);
 }
 
+void MessageRouter::leaveLobbyRequest() {
+    std::string request = protocol::leaveLobby();
+    sendPacket(request);
+}
 
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
     if(!force && isReconnecting.load())
