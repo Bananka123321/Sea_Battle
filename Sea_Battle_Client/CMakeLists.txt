@@ -58,6 +58,8 @@ qt_add_executable(Sea_Battle_Client
     resources.qrc
 )
 
+set_target_properties(Sea_Battle_Client PROPERTIES OUTPUT_NAME "Client")
+
 target_include_directories(Sea_Battle_Client PRIVATE
     Network
     App
