@@ -72,6 +72,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() {
+    delete placementBoard_;
+    delete ownBoard_;
+    delete enemyBoard_;
     delete ui;
 }
 
@@ -174,11 +177,6 @@ void MainWindow::createShips() {
 }
 
 void MainWindow::shipPlaced(ShipItem *ship, int row, int col, int size, bool horizontal) {
-    qDebug() << "Ship placed:"
-             << row
-             << col
-             << size
-             << horizontal;
 
     if (row < -1 || row > 10 || col < -1 || col > 10)
     {

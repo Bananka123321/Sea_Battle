@@ -6,7 +6,6 @@
 #include <QResizeEvent>
 #include <QGraphicsScene>
 #include <cmath>
-#include <QDebug>
 #include <QColor>
 #include <QDateTime>
 #include <QScrollBar>
