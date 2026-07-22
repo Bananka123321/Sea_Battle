@@ -18,7 +18,7 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            qt_version: '6.8.0'
+            qt_version: '6.7.3'
             qt_arch: 'win64_msvc2022_64'
             artifact_name: SeaBattleClient_Windows
             binary_name: Client.exe
@@ -26,7 +26,7 @@ jobs:
             source_dir: Sea_Battle_Client
 
           - os: ubuntu-22.04
-            qt_version: '6.8.0'
+            qt_version: '6.7.3'
             qt_arch: 'gcc_64'
             artifact_name: SeaBattleClient_Linux
             binary_name: Client
