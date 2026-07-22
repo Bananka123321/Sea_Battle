@@ -407,26 +407,6 @@ void MainWindow::shootResultMe(int row, int column, int status, bool shipSunk, c
     }
     else if (status == 3) {
         ownBoard_->shootAtCell(row, column, Action::Hit);
-
-        QMessageBox msgBox(this);
-
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.button(QMessageBox::Yes)->setText("Реванш");
-        msgBox.button(QMessageBox::No)->setText("В меню");
-
-        msgBox.setWindowTitle("Поражение");
-        msgBox.setText("Противник потопил все ваши корабли!");
-
-        msgBox.exec();
-
-        if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
-        {
-            revenge();
-        }
-        else
-        {
-
-        }
     }
 }
 
@@ -529,4 +509,26 @@ void MainWindow::revenge()
     ui->OPConnectLabel->setText("Оппонент не готов");
 
     // emit revengeRequest();
+}
+
+void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> opponentShips) {
+    QMessageBox msgBox(this);
+
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.button(QMessageBox::Yes)->setText("Реванш");
+    msgBox.button(QMessageBox::No)->setText("В меню");
+
+    msgBox.setWindowTitle("Поражение");
+    msgBox.setText("Противник потопил все ваши корабли!");
+
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == msgBox.button(QMessageBox::Yes))
+    {
+        revenge();
+    }
+    else
+    {
+
+    }
 }

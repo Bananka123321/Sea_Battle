@@ -46,6 +46,8 @@ void AppController::AttachUI(MainWindow* mainW) {
 
 
     connect(handler_, &Handler::S_Message, mainW, &MainWindow::onReceiveChatMessage, Qt::QueuedConnection);
+
+    connect(handler_, &Handler::S_onGameOver, mainW, &MainWindow::gameOver, Qt::QueuedConnection);
 }
 
 AppController::~AppController() {

@@ -30,7 +30,7 @@ private:
     void onPlayerReadyResponse(bool success);
     void onGameStarted(bool yourTurn);
     void onShotResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
-    void onGameOver(const std::string& winner);
+    void onGameOver(const std::string& winner, std::vector<ShipData> ships);
 
 signals:
     void S_Message(const std::string& from, const std::string& text);
@@ -44,6 +44,6 @@ signals:
     void S_EnemyReady(bool success);
     void S_GameStarted(bool yourTurn);
     void S_ShotResult(int row, int column, int status, bool yourTurn, bool shipSunk, const std::vector<std::pair<int, int>>& shipCells);
-    void S_onGameOver(const std::string& winner);
+    void S_onGameOver(const std::string& winner, std::vector<ShipData> opponentShips);
 
 };
