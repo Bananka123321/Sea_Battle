@@ -7,23 +7,9 @@ void MessageRouter::setSocket(int socket) {
     socket_ = socket;
 }
 
-void MessageRouter::setReconnecting(bool value) {
-    isReconnecting.store(value);
-}
-
 void MessageRouter::sendMessage(const std::string& text) {
     std::string request = protocol::chatMessage(text);
     sendPacket(request);
-}
-
-void MessageRouter::ping() {
-    std::string request = protocol::ping();
-    sendPacket(request);
-}
-
-void MessageRouter::resumeConnectionRequest(const std::string& token) {
-    std::string request = protocol::resumeConnectionRequest(token);
-    sendPacket(request, true);
 }
 
 void MessageRouter::createLobbyRequest(const std::string& username) {
@@ -57,13 +43,6 @@ void MessageRouter::leaveLobbyRequest() {
 }
 
 void MessageRouter::sendPacket(const std::string& msg, bool force) {
-    if(!force && isReconnecting.load())
-        return;
-
-    std::lock_guard<std::mutex> lock(mutex);
-    if(!force && isReconnecting.load())
-        return;
-
     if(!socket_)
         return;
 

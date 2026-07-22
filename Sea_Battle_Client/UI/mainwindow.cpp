@@ -503,7 +503,7 @@ void MainWindow::gameOver(const std::string& winner, std::vector<ShipData> oppon
     msgBox.button(QMessageBox::Yes)->setText("Реванш");
     msgBox.button(QMessageBox::No)->setText("В меню");
 
-    if (winner == nameClient_)
+    if (QString::fromStdString(winner) == nameClient_)
     {
         msgBox.setWindowTitle("Победа!");
         msgBox.setText("Вы потопили все корабли противника!");
