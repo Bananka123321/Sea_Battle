@@ -42,7 +42,6 @@ jobs:
         with:
           version: ${{ matrix.qt_version }}
           arch: ${{ matrix.qt_arch }}
-          modules: 'qtmultimedia'
           cache: true
 
       - name: Install Linux dependencies
