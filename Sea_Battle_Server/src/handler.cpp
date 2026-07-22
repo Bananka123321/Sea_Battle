@@ -9,10 +9,6 @@ Handler::Handler(SessionManager* session_manager) : session_manager_(session_man
         Ping(client, j);
     };
 
-    handlers_["resumeConnectionRequest"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-        ResumeConnectionRequest(client, j);
-    };
-
     handlers_["createLobby"] = [this](const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
         CreateLobby(client, j);
     };
@@ -104,15 +100,6 @@ void Handler::LeaveLobby(const std::shared_ptr<ClientSession>& client, const nlo
         lobbyManager_.RemoveLobby(lobby->GetCode());
 }
 
-void Handler::AuthSuccess(const std::shared_ptr<ClientSession>& client, int id, const std::string& username_) {
-    // client->SetUser(id, username_);
-    // client->SetIsAuthentificated(true);
-    // std::string token = generateTok  en();
-    // userManager->createSession(id, token);
-    // dispatcher_.sendTo(client, protocol::loginResponse(true, id, username_, token, ""));
-    // session_manager_.add(client);
-}
-
 void Handler::ChatMessage(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     auto lobby = client->GetCurrentLobby();
     if (!lobby) {
@@ -144,27 +131,6 @@ void Handler::SetDisconnectHandler(DisconnectCallback callback) {
 
 void Handler::Ping(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
     session_manager_->UpdateActivity(client);
-}
-
-void Handler::ResumeConnectionRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {
-    // std::string token = j["token"];
-    // if (token.empty()) {
-    //     std::cerr << "token empty\n";
-    //     dispatcher_.SendTo(client, protocol::resumeConnectionResponse(false));
-    //     return;
-    // }
-
-    // auto user_id_ = userManager.getUserIdByToken(token);
-    // if(!user_id_.has_value()) {
-    //     dispatcher_.sendTo(client, protocol::resumeConnectionResponse(false));
-    //     return;
-    // }
-
-    // int id = user_id_.value();
-    // client->SetUser(id, "hz");
-    // client->SetIsAuthentificated(true);
-    // session_manager_.add(client);
-    // dispatcher_.sendTo(client, protocol::resumeConnectionResponse(true));
 }
 
 void Handler::PlayerReadyRequest(const std::shared_ptr<ClientSession>& client, const nlohmann::json& j) {

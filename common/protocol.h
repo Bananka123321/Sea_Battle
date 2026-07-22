@@ -52,19 +52,6 @@ inline std::string receiveChatMessage(const std::string& from, const std::string
 //      CLIENT --> SERVER
 //=================================================================================================================================================================
 
-inline std::string ping() {
-    nlohmann::json j;
-    j["type"] = "ping";
-    return j.dump();
-}
-
-inline std::string resumeConnectionRequest(const std::string& token) {
-    nlohmann::json j;
-    j["type"] = "resumeConnectionRequest";
-    j["token"] = token;
-    return j.dump();
-}
-
 inline std::string createLobby(const std::string& username) {
     nlohmann::json j;
     j["type"] = "createLobby";
@@ -127,13 +114,6 @@ inline std::string errorMessage(const std::string& reason) {
     nlohmann::json j;
     j["type"] = "error";
     j["message"] = reason;
-    return j.dump();
-}
-
-inline std::string resumeConnectionResponse(bool success) {
-    nlohmann::json j;
-    j["type"] = "resumeConnectionResponse";
-    j["success"] = success;
     return j.dump();
 }
 

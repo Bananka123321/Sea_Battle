@@ -32,74 +32,9 @@ void AppController::AttachUI(MainWindow* mainW) {
         router_->revengeRequest();
     });
 
-    connect(this, &AppController::ping, router_, &MessageRouter::ping, Qt::QueuedConnection);
-
-    connect(client_, &TCPClient::connectionLose, this, [this](){
-        stopPing();
-        startReconnect();
-    });
-
-    connect(client_, &TCPClient::connected, this, [this](){
-        // router_->resumeConnectionRequest(state_->getCurrentToken());
-    });
-
-    connect(handler_, &Handler::S_ConnectionSucess, this, [this](){
-        router_->setReconnecting(false);
-        startPing();
-    });
-
-
     connect(handler_, &Handler::S_Message, mainW, &MainWindow::onReceiveChatMessage, Qt::QueuedConnection);
 
     connect(handler_, &Handler::S_onGameOver, mainW, &MainWindow::gameOver, Qt::QueuedConnection);
 }
 
-AppController::~AppController() {
-    stopPing();
-}
-
-void AppController::startPing() {
-    if(pingTimer) return;
-
-    pingTimer = new QTimer(this);
-    connect(pingTimer, &QTimer::timeout, this, [this](){
-        emit ping();
-    });
-    pingTimer->start(PING_TIME_MS);
-}
-
-void AppController::stopPing() {
-    if(!pingTimer) return;
-    pingTimer->stop();
-    pingTimer->deleteLater();
-    pingTimer = nullptr;
-}
-
-///Функция экспоненциальной проверки переподключения к серверу
-///После 10 попыток перестаём подключаться(можно убрать это)
-void AppController::startReconnect() {
-    router_->setReconnecting(true);
-
-    if(reconnectTimer && reconnectTimer->isActive()) return;
-    if(!reconnectTimer) {
-        reconnectTimer = new QTimer(this);
-        reconnectTimer->setSingleShot(true);
-
-        connect(reconnectTimer, &QTimer::timeout, this, [this](){
-            bool ok = client_->start();
-            if(ok) {
-                reconnectAttempts = 0;
-            } else {
-                reconnectAttempts++;
-                if(reconnectAttempts <= 10) {
-                    int delay = std::min(1000 * (1 << reconnectAttempts), MAX_RECONNECT_TIME_MS);
-                    reconnectTimer->start(delay);
-                } else {
-                    router_->setReconnecting(false);
-                }
-            }
-        });
-    }
-
-    reconnectTimer->start(1000);
-}
+AppController::~AppController() {}
