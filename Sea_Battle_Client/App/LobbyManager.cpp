@@ -6,6 +6,7 @@ LobbyManager::LobbyManager(Handler* handler, MainWindow* window) : handler_(hand
     connect(handler_, &Handler::S_PlayerJoined, this, &LobbyManager::playerJoined, Qt::QueuedConnection);
     connect(handler_, &Handler::S_PlayerLeft, this, &LobbyManager::playerLeft, Qt::QueuedConnection);
     connect(handler_, &Handler::S_EnemyReady, this, &LobbyManager::playerReady, Qt::QueuedConnection);
+    connect(window_, &MainWindow::revengeRequest, this, &LobbyManager::playerReady, Qt::QueuedConnection);
 
     UI_ = window_->getUI();
 }
@@ -39,6 +40,6 @@ void LobbyManager::playerLeft() {
     UI_->NameOPInGameLabel->setText("???");
 }
 
-void LobbyManager::playerReady(bool success) {
+void LobbyManager::playerReady(bool success = false) {
     success ? window_->setPlayerState(Ui::PlayerState::PLAYER_READY) : window_->setPlayerState(Ui::PlayerState::PLAYER_NOT_READY);
 }
