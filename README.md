@@ -11,13 +11,13 @@
 ### Вариант 1: Windows
 - ОС: Windows 10 / 11 (64-bit)
 - Компилятор: MSVC 2022 (v143) или MSVC 2019 (v142)
-- Среда разработки: Qt Creator и Visual Studio 2022
+- Среда разработки: Qt Creator и Visual Studio Code
 - Система сборки: CMake версии 3.16 или выше
 
 ### Вариант 2: Linux
 - ОС: Ubuntu 24.04 LTS или новее
 - Компилятор: GCC 11+ или Clang 14+
-- Среда разработки: Qt Creator и VS Code
+- Среда разработки: Qt Creator и Visual Studio Code
 - Система сборки: CMake версии 3.16 или выше
 
 ---
