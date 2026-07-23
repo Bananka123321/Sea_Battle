@@ -97,5 +97,5 @@
    См. файл [LICENSE](./LICENSE)
 
 ## Авторы
-- Bananka123321 ([Иван](https://t.me/M1CROmash))
-- pomidorchik03 ([Буда](https://t.me/Shark766))
+- Bananka123321 ([Иван](https://github.com/Bananka123321))
+- pomidorchik03 ([Буда](https://github.com/pomidorchik03))
